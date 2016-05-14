@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 2.0.0
+Version: 1.0.0
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -45,6 +45,8 @@ if ( $options['mfo_module_woocommerce_enabled_boolean'] ) {
 
 General todo:
  - Remove form id dependent functions?
+ - multi-year
+ 	- Append year to exhibit links? https://wp-types.com/forums/topic/custom-taxonomies-not-showing-on-permalink/
  
 
 Changelog:
@@ -62,7 +64,30 @@ Changelog:
 05-07-2016: Added log-level setting and modified all mfo_log calls to use level
 05-09-2016: Updated settings page explanation of shortcodes, etc
 05-10-2016: MAJOR settings additions; tabbed interface; admin notifications for missing settings
+05-14-2016: New exhibits without a year are set to mfo_event_year() (thought this was already done...)
+05-14-2016: Exhibits now at /exhibits/%year%/slug; requires modification to exhibit type
+
 */
+
+// custom exhibit permalinks with year
+// NOTE THIS REQUIRES EXHIBIT CUSTOM POST TYPE MOD
+// "Use a custom URL format" -> exhibit/%year%
+// modify "AllTypes Row" content template to use [wpv-post-type show="single"]
+// still have 404 on fireball :(
+add_filter('post_link', 'year_permalink', 10, 3);
+
+add_filter('post_type_link', 'year_permalink', 10, 3);
+
+function year_permalink($permalink, $post, $leavename) {
+	mfo_log(4, "year_permalink", $permalink . "; " . $post->ID);
+
+        if (strpos($permalink, '%year%') === FALSE) return $permalink;
+
+	$appr_year =  get_post_meta($post->ID, 'wpcf-approval-year', TRUE);
+        return str_replace('%year%', $appr_year, $permalink);
+}
+
+
 
 
 
@@ -930,7 +955,8 @@ function update_maker_stats ($post_id) {
 			}
 		$year = get_post_meta($post_id, 'wpcf-approval-year', TRUE);
 		if (empty($year)) {
-                        update_post_meta($post_id, 'wpcf-approval-year', 2015);
+			mfo_log(2, "update_maker_stats", "no approval-year, setting to " . mfo_event_year());
+                        update_post_meta($post_id, 'wpcf-approval-year', mfo_event_year());
 			}
 
 		$parent = wpcf_pr_post_get_belongs($post_id, 'maker');
