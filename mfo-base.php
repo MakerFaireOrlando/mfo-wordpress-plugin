@@ -47,7 +47,8 @@ General todo:
  - Remove form id dependent functions?
  - multi-year
  	- Append year to exhibit links? https://wp-types.com/forums/topic/custom-taxonomies-not-showing-on-permalink/
- 
+ - Remove 2015 badges from those that were not "approved" for 2015...See "Ability3D" as example exhibit
+ - ^^^ Should 2015+ badge be calculated instead of category?
 
 Changelog:
 
@@ -66,8 +67,11 @@ Changelog:
 05-10-2016: MAJOR settings additions; tabbed interface; admin notifications for missing settings
 05-14-2016: New exhibits without a year are set to mfo_event_year() (thought this was already done...)
 05-14-2016: Exhibits now at /exhibits/%year%/slug; requires modification to exhibit type
-
+05-15-2016: 
 */
+
+
+
 
 // custom exhibit permalinks with year
 // NOTE THIS REQUIRES EXHIBIT CUSTOM POST TYPE MOD
@@ -79,9 +83,9 @@ add_filter('post_link', 'year_permalink', 10, 3);
 add_filter('post_type_link', 'year_permalink', 10, 3);
 
 function year_permalink($permalink, $post, $leavename) {
-	mfo_log(4, "year_permalink", $permalink . "; " . $post->ID);
 
         if (strpos($permalink, '%year%') === FALSE) return $permalink;
+	mfo_log(4, "year_permalink", $permalink . "; " . $post->ID);
 
 	$appr_year =  get_post_meta($post->ID, 'wpcf-approval-year', TRUE);
         return str_replace('%year%', $appr_year, $permalink);
@@ -94,6 +98,7 @@ function year_permalink($permalink, $post, $leavename) {
 //add variable for load-in page template and slack
 function add_query_vars_filter($vars) {
 	$vars[] = "li-exhibit";
+	$vars[] = "dup-exhibit";
 	$vars[] = "post_ids";
 	$vars[] = "token";
 	$vars[] = "text";
@@ -1196,6 +1201,92 @@ function setup_cred_recipients($recipients, $notification, $form_id, $post_id)
     // do some with $recipients
     return $new_recipients;
 }
+
+
+function mfo_duplicate_post ($post_id) {
+	//core code from here: http://rudrastyh.com/wordpress/duplicate-post.html
+
+	global $wpdb;
+	mfo_log(4, "mfo_duplicate_post", "post_id=" . $post_id);
+
+	//todo: can current user edit the post (security check)
+
+	/* get all the original post data then
+	 */
+
+	$post = get_post( $post_id );
+
+	/*
+	 * if you don't want current user to be the new post author,
+	 * then change next couple of lines to this: $new_post_author = $post->post_author;
+	 */
+	//$current_user = wp_get_current_user();
+	$new_post_author = $post->post_author;
+
+	/*
+	 * if post data exists, create the post duplicate
+	 */
+	if (isset( $post ) && $post != null) {
+
+		/*
+		 * new post data array
+		 */
+		$args = array(
+			'comment_status' => $post->comment_status,
+			'ping_status'    => $post->ping_status,
+			'post_author'    => $new_post_author,
+			'post_content'   => $post->post_content,
+			'post_excerpt'   => $post->post_excerpt,
+			'post_name'      => $post->post_name,
+			'post_parent'    => $post->post_parent,
+			'post_password'  => $post->post_password,
+			'post_status'    => $post->post_status,
+			'post_title'     => $post->post_title,
+			'post_type'      => $post->post_type,
+			'to_ping'        => $post->to_ping,
+			'menu_order'     => $post->menu_order,
+		);
+
+
+		$appr_year =  get_post_meta($post->ID, 'wpcf-approval-year', TRUE);
+
+		$post->post_name = $post->post_name. '-' . $appr_year;
+		wp_update_post ($post);
+
+		/*
+		 * insert the post by wp_insert_post() function
+		 */
+		$new_post_id = wp_insert_post( $args );
+
+
+		/*
+		 * get all current post terms ad set them to the new post draft
+		 */
+		$taxonomies = get_object_taxonomies($post->post_type); // returns array of taxonomy names for post type, ex array("category", "post_tag");
+		foreach ($taxonomies as $taxonomy) {
+			$post_terms = wp_get_object_terms($post_id, $taxonomy, array('fields' => 'slugs'));
+			wp_set_object_terms($new_post_id, $post_terms, $taxonomy, false);
+		}
+
+		/*
+		 * duplicate all post meta just in two SQL queries
+		 */
+		$post_meta_infos = $wpdb->get_results("SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id=$post_id");
+		if (count($post_meta_infos)!=0) {
+			$sql_query = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) ";
+			foreach ($post_meta_infos as $meta_info) {
+				$meta_key = $meta_info->meta_key;
+				$meta_value = addslashes($meta_info->meta_value);
+				$sql_query_sel[]= "SELECT $new_post_id, '$meta_key', '$meta_value'";
+			}
+			$sql_query.= implode(" UNION ALL ", $sql_query_sel);
+			$wpdb->query($sql_query);
+		}
+
+	}
+}
+
+
 
 
 ?>

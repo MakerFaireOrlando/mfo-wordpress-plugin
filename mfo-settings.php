@@ -12,6 +12,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 General todo:
 UPDATE MAIN TODO
 
+
 Changelog:
 UPDATE MAIN CHANGELOG
 */
@@ -65,34 +66,41 @@ return $link;
 add_shortcode('mfo-notification-email-link', 'mfo_notification_email_link');
 
 function mfo_agreements_enabled() {
-	$options = get_option('mfo_options_main');
+	$options = get_option('mfo_options_features');
  	return $options[mfo_agreements_enabled_boolean];
 }
 add_shortcode('mfo-agreements-enabled', 'mfo_agreements_enabled');
 
-function mfo_exhibit_helpers_enabled() {
-	$options = get_option('mfo_options_functions');
+function mfo_exhibithelpers_enabled() {
+	$options = get_option('mfo_options_features');
  	return $options[mfo_exhibithelpers_enabled_boolean];
 }
 add_shortcode('mfo-exhibithelpers-enabled', 'mfo_exhibithelpers_enabled');
 
-function mfo_exhibit_helpers_default() {
-	$options = get_option('mfo_options_functions');
+function mfo_exhibithelpers_default() {
+	$options = get_option('mfo_options_features');
  	return $options[mfo_exhibithelpers_default_number];
 }
 add_shortcode('mfo-exhibithelpers-default', 'mfo_exhibithelpers_default');
 
 function mfo_orientationrsvp_enabled() {
-	$options = get_option('mfo_options_functions');
+	$options = get_option('mfo_options_features');
  	return $options[mfo_orientationrsvp_enabled_boolean];
 }
 add_shortcode('mfo-orientationrsvp-enabled', 'mfo_orientationrsvp_enabled');
 
 function mfo_loadin_enabled() {
-	$options = get_option('mfo_options_functions');
+	$options = get_option('mfo_options_features');
  	return $options[mfo_loadin_enabled_boolean];
 }
 add_shortcode('mfo-loadin-enabled', 'mfo_loadin_enabled');
+
+function mfo_tablesigns_enabled() {
+	$options = get_option('mfo_options_features');
+ 	return $options[mfo_tablesigns_enabled_boolean];
+}
+add_shortcode('mfo-tablesigns-enabled', 'mfo_tablesigns_enabled');
+
 
 function mfo_exhibit_location_enabled() {
 	$options = get_option('mfo_options_display');
@@ -105,6 +113,24 @@ function mfo_maker_badges_enabled() {
  	return $options[mfo_maker_badges_enabled_boolean];
 }
 add_shortcode('mfo-maker-badges-enabled', 'mfo_maker_badges_enabled');
+
+function mfo_maker_color() {
+	$options = get_option('mfo_options_display');
+ 	return $options[mfo_maker_color_string];
+}
+add_shortcode('mfo-maker-color', 'mfo_maker_color');
+
+function mfo_exhibit_color() {
+	$options = get_option('mfo_options_display');
+ 	return $options[mfo_exhibit_color_string];
+}
+add_shortcode('mfo-exhibit-color', 'mfo_exhibit_color');
+
+function mfo_exhibit_prioryear_color() {
+	$options = get_option('mfo_options_display');
+ 	return $options[mfo_exhibit_prioryear_color_string];
+}
+add_shortcode('mfo-exhibit-prioryear-color', 'mfo_exhibit_prioryear_color');
 
 
 
@@ -231,21 +257,24 @@ add_settings_field('mfo_warning_email_string', 'System Warning Email Address', '
 add_settings_field('mfo_module_eventbrite_enabled_boolean', 'Eventbrite Integration Enabled?', 'mfo_module_eventbrite_enabled_setting_boolean', 'mfo_module_tab', 'mfo_modules');
 add_settings_field('mfo_module_sensei_enabled_boolean', 'Sensei Integration Enabled?', 'mfo_module_sensei_enabled_setting_boolean', 'mfo_module_tab', 'mfo_modules');
 add_settings_field('mfo_module_woocommerce_enabled_boolean', 'WooCommerce Integration Enabled?', 'mfo_module_woocommerce_enabled_setting_boolean', 'mfo_module_tab', 'mfo_modules');
-
-//eventbrite
 add_settings_field('mfo_eventbrite_token_string', 'Eventbrite API Token', 'mfo_eventbrite_token_setting_string', 'mfo_module_tab', 'mfo_eventbrite');
 
 //features
 add_settings_field('mfo_agreements_enabled_boolean', 'Maker Agreements Enabled?', 'mfo_agreements_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
+add_settings_field('mfo_orientationrsvp_enabled_boolean', 'Maker Orientation RSVP Enabled?', 'mfo_orientationrsvp_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
 add_settings_field('mfo_feepayments_enabled_boolean', 'Exhibit Seller Fees Enabled?', 'mfo_feepayments_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
 add_settings_field('mfo_exhibithelpers_enabled_boolean', 'Exhibit Helper Entry Enabled?', 'mfo_exhibithelpers_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
 add_settings_field('mfo_exhibithelpers_default_number', 'Exhibit Helper Default Quantity?', 'mfo_exhibithelpers_default_setting_number', 'mfo_features_tab', 'mfo_features');
-add_settings_field('mfo_orientationrsvp_enabled_boolean', 'Maker Orientation RSVP Enabled?', 'mfo_orientationrsvp_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
-add_settings_field('mfo_loadin_enabled_boolean', 'Maker Load-In Selection Enabled?', 'mfo_loadin_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
+add_settings_field('mfo_loadin_enabled_boolean', 'Exhibit Load-In Selection Enabled?', 'mfo_loadin_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
+add_settings_field('mfo_tablesigns_enabled_boolean', 'Exhibit Table Sign Preview Enabled?', 'mfo_tablesigns_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
+
 
 //display
 add_settings_field('mfo_exhibit_location_enabled_boolean', 'Show Exhibit Location?', 'mfo_exhibit_location_enabled_setting_boolean', 'mfo_display_tab', 'mfo_display');
 add_settings_field('mfo_maker_badges_enabled_boolean', 'Show Maker Badges?', 'mfo_maker_badges_enabled_setting_boolean', 'mfo_display_tab', 'mfo_display');
+add_settings_field('mfo_maker_color_string', 'Maker Color', 'mfo_maker_color_setting_string', 'mfo_display_tab', 'mfo_display');
+add_settings_field('mfo_exhibit_color_string', 'Exhibit Color', 'mfo_exhibit_color_setting_string', 'mfo_display_tab', 'mfo_display');
+add_settings_field('mfo_exhibit_prioryear_color_string', 'Exhibit(Prior Years) Color', 'mfo_exhibit_prioryear_color_setting_string', 'mfo_display_tab', 'mfo_display');
 
 
 }
@@ -408,6 +437,16 @@ function mfo_loadin_enabled_setting_boolean() {
 	echo "<br>&nbsp&nbspShortcode: <b>[mfo-loadin-enabled]</b> for use in Toolset Views conditional logic (make sure Toolset Settings include this shortcode.";
 }
 
+function mfo_tablesigns_enabled_setting_boolean() {
+	$options = get_option('mfo_options_features');
+	$html = '<input type="checkbox" id="mfo_tablesigns_enabled_boolean" name="mfo_options_features[mfo_tablesigns_enabled_boolean]" value="1"' . checked( 1, $options['mfo_tablesigns_enabled_boolean'], false ) . '/>';
+	echo $html;
+	echo "<br>&nbsp&nbspThis feature enables a user to preview the tablesign for their exhibit..";
+	echo "<br>&nbsp&nbspThis checkbox controls the display of the tablesign preview link on the Maker Dashboard for an APPROVED EXHIBIT.";
+	echo "<br>&nbsp&nbspShortcode: <b>[mfo-tablesigns-enabled]</b> for use in Toolset Views conditional logic (make sure Toolset Settings include this shortcode).";
+}
+
+
 function mfo_exhibit_location_enabled_setting_boolean() {
 	$options = get_option('mfo_options_display');
 	$html = '<input type="checkbox" id="mfo_exhibit_location_enabled_boolean" name="mfo_options_display[mfo_exhibit_location_enabled_boolean]" value="1"' . checked( 1, $options['mfo_exhibit_location_enabled_boolean'], false ) . '/>';
@@ -422,6 +461,26 @@ function mfo_maker_badges_enabled_setting_boolean() {
 	echo $html;
 	echo "<br>&nbsp&nbspThis feature enables the display of Maker Badges on the the public Maker and Exhibit pages.";
 	echo "<br>&nbsp&nbspShortcode: <b>[mfo-maker-badges-enabled]</b> for use in Toolset Views conditional logic (make sure Toolset Settings include this shortcode.";
+}
+
+function mfo_maker_color_setting_string() {
+	$options = get_option('mfo_options_display');
+	echo "<input id='mfo_maker_color_string' name='mfo_options_display[mfo_maker_color_string]' size='60' type='text' value='{$options['mfo_maker_color_string']}' />";
+	echo "<br>&nbsp&nbspExample: #00AEEF";
+	echo "<br>&nbsp&nbspShortcode: <b>[mfo-maker-color]</b> for use in posts / pages / views / forms, etc.";
+}
+
+function mfo_exhibit_color_setting_string() {
+	$options = get_option('mfo_options_display');
+	echo "<input id='mfo_exhibit_color_string' name='mfo_options_display[mfo_exhibit_color_string]' size='60' type='text' value='{$options['mfo_exhibit_color_string']}' />";
+	echo "<br>&nbsp&nbspExample: #B1CC51";
+	echo "<br>&nbsp&nbspShortcode: <b>[mfo-exhibit-color]</b> for use in posts / pages / views / forms, etc.";
+}
+
+function mfo_exhibit_prioryear_color_setting_string() {
+	$options = get_option('mfo_options_display');
+	echo "<input id='mfo_exhibit_prioryear_color_string' name='mfo_options_display[mfo_exhibit_prioryear_color_string]' size='60' type='text' value='{$options['mfo_exhibit_prioryear_color_string']}' />";
+	echo "<br>&nbsp&nbspShortcode: <b>[mfo-exhibit-prioryear-color]</b> for use in posts / pages / views / forms, etc.";
 }
 
 
@@ -461,6 +520,7 @@ function mfo_options_features_validate($input) {
 	$newinput['mfo_exhibithelpers_default_number'] = trim($input['mfo_exhibithelpers_default_number']);
 	$newinput['mfo_orientationrsvp_enabled_boolean'] = ( isset( $input['mfo_orientationrsvp_enabled_boolean'] ) && true == $input['mfo_orientationrsvp_enabled_boolean'] ? true : false );
 	$newinput['mfo_loadin_enabled_boolean'] = ( isset( $input['mfo_loadin_enabled_boolean'] ) && true == $input['mfo_loadin_enabled_boolean'] ? true : false );
+	$newinput['mfo_tablesigns_enabled_boolean'] = ( isset( $input['mfo_tablesigns_enabled_boolean'] ) && true == $input['mfo_tablesigns_enabled_boolean'] ? true : false );
 	mfo_log(1, "MFO Settings" , "mfo_options_features changed");
 	return $newinput;
 }
@@ -469,6 +529,9 @@ function mfo_options_display_validate($input) {
 
 	$newinput['mfo_exhibit_location_enabled_boolean'] = ( isset( $input['mfo_exhibit_location_enabled_boolean'] ) && true == $input['mfo_exhibit_location_enabled_boolean'] ? true : false );
 	$newinput['mfo_maker_badges_enabled_boolean'] = ( isset( $input['mfo_maker_badges_enabled_boolean'] ) && true == $input['mfo_maker_badges_enabled_boolean'] ? true : false );
+	$newinput['mfo_maker_color_string'] = trim($input['mfo_maker_color_string']);
+	$newinput['mfo_exhibit_color_string'] = trim($input['mfo_exhibit_color_string']);
+	$newinput['mfo_exhibit_prioryear_color_string'] = trim($input['mfo_exhibit_prioryear_color_string']);
 	mfo_log(1, "MFO Settings" , "mfo_options_display changed");
 	return $newinput;
 }
