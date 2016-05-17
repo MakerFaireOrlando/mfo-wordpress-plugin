@@ -40,6 +40,15 @@ if ( $options['mfo_module_woocommerce_enabled_boolean'] ) {
 
 }
 
+add_filter( 'page_template', 'mfo_page_template' );
+function mfo_page_template( $page_template )
+{
+    if ( is_page( 'duplicate-exhibit' ) ) {
+        $page_template = dirname( __FILE__ ) . '/templates/duplicate-exhibit.php';
+    }
+    return $page_template;
+}
+
 
 /*
 
@@ -70,6 +79,8 @@ Changelog:
 05-15-2016: Feature: duplicate exhibit: requires maker-dashboard mods and pages
 05-16-2016: Added options to turn on / off exhibit editing
 05-16-2016: Added mfo_toolset_add_shortcodes function to automatically register shortcodes with Toolset
+05-17-2016: Updates to duplicate exhibit functionality
+05-17-2016: Moved duplicate-exhibit.php into plugin from theme
 */
 
 
@@ -1205,11 +1216,12 @@ function setup_cred_recipients($recipients, $notification, $form_id, $post_id)
 }
 
 
-function mfo_duplicate_post ($post_id) {
+function mfo_duplicate_post ($post_id, $old_name, $new_name) {
 	//core code from here: http://rudrastyh.com/wordpress/duplicate-post.html
+	$ret = 0;
 
 	global $wpdb;
-	mfo_log(4, "mfo_duplicate_post", "post_id=" . $post_id);
+	mfo_log(2, "mfo_duplicate_post", "post_id=" . $post_id .  "; old_name=" . $old_name . "; new_name=" .$new_name);
 
 	//todo: can current user edit the post (security check)
 
@@ -1239,7 +1251,7 @@ function mfo_duplicate_post ($post_id) {
 			'post_author'    => $new_post_author,
 			'post_content'   => $post->post_content,
 			'post_excerpt'   => $post->post_excerpt,
-			'post_name'      => $post->post_name,
+			'post_name'      => $new_name,
 			'post_parent'    => $post->post_parent,
 			'post_password'  => $post->post_password,
 			'post_status'    => $post->post_status,
@@ -1252,7 +1264,7 @@ function mfo_duplicate_post ($post_id) {
 
 		$appr_year =  get_post_meta($post->ID, 'wpcf-approval-year', TRUE);
 
-		$post->post_name = $post->post_name. '-' . $appr_year;
+		$post->post_name = $old_name;
 		wp_update_post ($post);
 
 		/*
@@ -1285,7 +1297,9 @@ function mfo_duplicate_post ($post_id) {
 			$wpdb->query($sql_query);
 		}
 
+	$ret = 1;
 	}
+	return $ret;
 }
 
 
