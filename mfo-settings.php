@@ -65,6 +65,18 @@ return $link;
 }
 add_shortcode('mfo-notification-email-link', 'mfo_notification_email_link');
 
+function mfo_edit_makers_enabled() {
+	$options = get_option('mfo_options_features');
+ 	return $options[mfo_edit_makers_enabled_boolean];
+}
+add_shortcode('mfo-edit-makers-enabled', 'mfo_edit_makers_enabled');
+
+function mfo_edit_exhibits_enabled() {
+	$options = get_option('mfo_options_features');
+ 	return $options[mfo_edit_exhibits_enabled_boolean];
+}
+add_shortcode('mfo-edit-exhibits-enabled', 'mfo_edit_exhibits_enabled');
+
 function mfo_agreements_enabled() {
 	$options = get_option('mfo_options_features');
  	return $options[mfo_agreements_enabled_boolean];
@@ -260,6 +272,8 @@ add_settings_field('mfo_module_woocommerce_enabled_boolean', 'WooCommerce Integr
 add_settings_field('mfo_eventbrite_token_string', 'Eventbrite API Token', 'mfo_eventbrite_token_setting_string', 'mfo_module_tab', 'mfo_eventbrite');
 
 //features
+add_settings_field('mfo_edit_makers_enabled_boolean', 'Maker Editing Enabled?', 'mfo_edit_makers_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
+add_settings_field('mfo_edit_exhibits_enabled_boolean', 'Exhibit Editing Enabled?', 'mfo_edit_exhibits_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
 add_settings_field('mfo_agreements_enabled_boolean', 'Maker Agreements Enabled?', 'mfo_agreements_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
 add_settings_field('mfo_orientationrsvp_enabled_boolean', 'Maker Orientation RSVP Enabled?', 'mfo_orientationrsvp_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
 add_settings_field('mfo_feepayments_enabled_boolean', 'Exhibit Seller Fees Enabled?', 'mfo_feepayments_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
@@ -391,6 +405,24 @@ function mfo_feepayments_enabled_setting_boolean() {
 	echo "<br>&nbsp&nbspShortcode: <b>[mfo-feepayments-enabled]</b> for use in Toolset Views conditional logic (make sure Toolset Settings include this shortcode).";
 }
 
+function mfo_edit_makers_enabled_setting_boolean() {
+	$options = get_option('mfo_options_features');
+	$html = '<input type="checkbox" id="mfo_edit_makers_enabled_boolean" name="mfo_options_features[mfo_edit_makers_enabled_boolean]" value="1"' . checked( 1, $options['mfo_edit_makers_enabled_boolean'], false ) . '/>';
+	echo $html;
+	echo "<br>&nbsp&nbspThis feature enables a user to add or edit Makers.";
+	echo "<br>&nbsp&nbspNote: Other features like Maker Agreements, etc. are turned on / off separately.";
+	echo "<br>&nbsp&nbspShortcode: <b>[mfo-edit-makers-enabled]</b> for use in Toolset Views conditional logic (make sure Toolset Settings include this shortcode).";
+}
+
+function mfo_edit_exhibits_enabled_setting_boolean() {
+	$options = get_option('mfo_options_features');
+	$html = '<input type="checkbox" id="mfo_edit_exhibits_enabled_boolean" name="mfo_options_features[mfo_edit_exhibits_enabled_boolean]" value="1"' . checked( 1, $options['mfo_edit_exhibits_enabled_boolean'], false ) . '/>';
+	echo $html;
+	echo "<br>&nbsp&nbspThis feature enables a user to add or edit Exhibits.";
+	echo "<br>&nbsp&nbspNote: Other features like Exhibit Helpers, etc. are turned on / off separately.";
+	echo "<br>&nbsp&nbspShortcode: <b>[mfo-edit-exhibits-enabled]</b> for use in Toolset Views conditional logic (make sure Toolset Settings include this shortcode).";
+}
+
 function mfo_agreements_enabled_setting_boolean() {
 	$options = get_option('mfo_options_features');
 	$html = '<input type="checkbox" id="mfo_agreements_enabled_boolean" name="mfo_options_features[mfo_agreements_enabled_boolean]" value="1"' . checked( 1, $options['mfo_agreements_enabled_boolean'], false ) . '/>';
@@ -514,6 +546,8 @@ function mfo_options_modules_validate($input) {
 }
 
 function mfo_options_features_validate($input) {
+	$newinput['mfo_edit_makers_enabled_boolean'] = ( isset( $input['mfo_edit_makers_enabled_boolean'] ) && true == $input['mfo_edit_makers_enabled_boolean'] ? true : false );
+	$newinput['mfo_edit_exhibits_enabled_boolean'] = ( isset( $input['mfo_edit_exhibits_enabled_boolean'] ) && true == $input['mfo_edit_exhibits_enabled_boolean'] ? true : false );
 	$newinput['mfo_feepayments_enabled_boolean'] = ( isset( $input['mfo_feepayments_enabled_boolean'] ) && true == $input['mfo_feepayments_enabled_boolean'] ? true : false );
 	$newinput['mfo_agreements_enabled_boolean'] = ( isset( $input['mfo_agreements_enabled_boolean'] ) && true == $input['mfo_agreements_enabled_boolean'] ? true : false );
 	$newinput['mfo_exhibithelpers_enabled_boolean'] = ( isset( $input['mfo_exhibithelpers_enabled_boolean'] ) && true == $input['mfo_exhibithelpers_enabled_boolean'] ? true : false );
