@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.2.1
+Version: 3.3.0
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
