@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.2.0
+Version: 3.2.1
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -69,6 +69,7 @@ Changelog:
 05-14-2016: Exhibits now at /exhibits/%year%/slug; requires modification to exhibit type
 05-15-2016: Feature: duplicate exhibit: requires maker-dashboard mods and pages
 05-16-2016: Added options to turn on / off exhibit editing
+05-16-2016: Added mfo_toolset_add_shortcodes function to automatically register shortcodes with Toolset
 */
 
 
@@ -1288,6 +1289,36 @@ function mfo_duplicate_post ($post_id) {
 }
 
 
+add_filter( 'wpv_custom_inner_shortcodes', 'mfo_toolset_add_shortcodes' );
 
+function mfo_toolset_add_shortcodes( $shortcodes ) {
+
+	array_push( $shortcodes,
+		'current-user-can-edit-others-posts',
+		'current-user-can-edit-post',
+		'decode',
+		'mfo-agreements-enabled',
+		'mfo-edit-exhibits-enabled',
+		'mfo-edit-makers-enabled',
+		'mfo-exhibit-color',
+		'mfo-exhibit-location-enabled',
+		'mfo-exhibithelpers-enabled',
+		'mfo-event-year',
+		'mfo-loadin-enabled',
+		'mfo-maker-color',
+		'mfo-orientationrsvp-enabled',
+		'mfo-prioryear-color',
+		'mfo-tablesigns-enabled',
+		'stripcrlf',
+		'striptags',
+		'taxonomy-level',
+		'wpv-current-user',
+		'wpv-found-count',
+		'wpv-post-author',
+		'wpv-post-param',
+		'wpv-search-term' );
+
+    return $shortcodes;
+}
 
 ?>
