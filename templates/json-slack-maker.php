@@ -87,12 +87,17 @@ foreach ($exhibits_array as $exhibit) {
 		);
 
 
+	 if (get_post_type($exhibit) == "exhibit") {
+                $yearstr = get_post_meta($exhibit->ID, "wpcf-approval-year", true) . " ";
+        }
+        else $yearstr ="";
+
 	//create the array for the exhibit
 	$e_output[]= array (
 			//'exhibit_category' => strip_tags(get_the_term_list($exhibit->ID, "exhibit-category","",", ")),
 			//'hidden_exhibit_category' => strip_tags(get_the_term_list($exhibit->ID, "hidden-exhibit-category","",", ")),
 			//'hidden_maker_category' => strip_tags(get_the_term_list($maker_id, "hidden-maker-category","",", ")),
-			'title' => html_entity_decode($exhibit->post_title." (". get_post_type($exhibit) .")"),
+			'title' => html_entity_decode($exhibit->post_title." (". $yearstr .get_post_type($exhibit) .")"),
 			//'description' => html_entity_decode(get_post_meta($exhibit->ID, "wpcf-long-description", true)),
 			'title_link' => get_permalink($exhibit),
 			'text' => html_entity_decode($exhibit->post_excerpt),
