@@ -249,6 +249,7 @@ add_settings_section('mfo_features', 'MFO Feature Settings', 'mfo_features_secti
 add_settings_section('mfo_display', 'MFO Display Settings', 'mfo_display_section_text', 'mfo_display_tab');
 add_settings_section('mfo_modules', 'MFO Module Settings', 'mfo_modules_section_text', 'mfo_module_tab');
 add_settings_section('mfo_eventbrite', 'MFO Eventbrite Settings', 'mfo_eventbrite_section_text', 'mfo_module_tab');
+add_settings_section('mfo_slack', 'MFO Slack Settings', 'mfo_slack_section_text', 'mfo_module_tab');
 add_settings_section('mfo_debug', 'MFO Debug Settings', 'mfo_debug_section_text', 'mfo_debug_tab');
 
 
@@ -266,10 +267,14 @@ add_settings_field('mfo_warning_email_string', 'System Warning Email Address', '
 
 
 //modules
-add_settings_field('mfo_module_eventbrite_enabled_boolean', 'Eventbrite Integration Enabled?', 'mfo_module_eventbrite_enabled_setting_boolean', 'mfo_module_tab', 'mfo_modules');
 add_settings_field('mfo_module_sensei_enabled_boolean', 'Sensei Integration Enabled?', 'mfo_module_sensei_enabled_setting_boolean', 'mfo_module_tab', 'mfo_modules');
 add_settings_field('mfo_module_woocommerce_enabled_boolean', 'WooCommerce Integration Enabled?', 'mfo_module_woocommerce_enabled_setting_boolean', 'mfo_module_tab', 'mfo_modules');
+
+add_settings_field('mfo_module_eventbrite_enabled_boolean', 'Eventbrite Integration Enabled?', 'mfo_module_eventbrite_enabled_setting_boolean', 'mfo_module_tab', 'mfo_eventbrite');
 add_settings_field('mfo_eventbrite_token_string', 'Eventbrite API Token', 'mfo_eventbrite_token_setting_string', 'mfo_module_tab', 'mfo_eventbrite');
+
+add_settings_field('mfo_slack_enabled_boolean', 'Slack Integration Enabled?', 'mfo_slack_enabled_setting_boolean', 'mfo_module_tab', 'mfo_slack');
+add_settings_field('mfo_slack_token_string', 'Eventbrite API Token', 'mfo_slack_token_setting_string', 'mfo_module_tab', 'mfo_slack');
 
 //features
 add_settings_field('mfo_edit_makers_enabled_boolean', 'Maker Editing Enabled?', 'mfo_edit_makers_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
@@ -310,6 +315,10 @@ echo '<p>Module Settings for the MFO System</p>';
 
 function mfo_eventbrite_section_text() {
 echo '<p>Eventbrite Settings for the MFO System</p>';
+}
+
+function mfo_slack_section_text() {
+echo '<p>Slack Settings for the MFO System</p>';
 }
 
 function mfo_features_section_text() {
@@ -393,6 +402,17 @@ function mfo_module_woocommerce_enabled_setting_boolean() {
 function mfo_eventbrite_token_setting_string() {
 $options = get_option('mfo_options_modules');
 echo "<input id='mfo_eventbrite_token_string' name='mfo_options_modules[mfo_eventbrite_token_string]' size='30' type='text' value='{$options['mfo_eventbrite_token_string']}' />";
+}
+
+function mfo_slack_enabled_setting_boolean() {
+	$options = get_option('mfo_options_modules');
+	$html = '<input type="checkbox" id="mfo_slack_enabled_boolean" name="mfo_options_modules[mfo_slack_enabled_boolean]" value="1"' . checked( 1, $options['mfo_slack_enabled_boolean'], false ) . '/>';
+	echo $html;
+}
+
+function mfo_slack_token_setting_string() {
+$options = get_option('mfo_options_modules');
+echo "<input id='mfo_slack_token_string' name='mfo_options_modules[mfo_slack_token_string]' size='30' type='text' value='{$options['mfo_slack_token_string']}' />";
 }
 
 
@@ -541,7 +561,9 @@ function mfo_options_modules_validate($input) {
 	$newinput['mfo_module_sensei_enabled_boolean'] = ( isset( $input['mfo_module_sensei_enabled_boolean'] ) && true == $input['mfo_module_sensei_enabled_boolean'] ? true : false );
 	$newinput['mfo_module_woocommerce_enabled_boolean'] = ( isset( $input['mfo_module_woocommerce_enabled_boolean'] ) && true == $input['mfo_module_woocommerce_enabled_boolean'] ? true : false );
 	$newinput['mfo_eventbrite_token_string'] = trim($input['mfo_eventbrite_token_string']);
-	mfo_log(1, "MFO Settings" , "mfo_options_modules changed");
+	$newinput['mfo_slack_enabled_boolean'] = ( isset( $input['mfo_slack_enabled_boolean'] ) && true == $input['mfo_slack_enabled_boolean'] ? true : false );
+	$newinput['mfo_slack_token_string'] = trim($input['mfo_slack_token_string']);
+mfo_log(1, "MFO Settings" , "mfo_options_modules changed");
 	return $newinput;
 }
 

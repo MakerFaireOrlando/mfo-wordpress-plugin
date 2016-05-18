@@ -12,9 +12,24 @@ $version = get_query_var("version", 1);
 $qv_token = get_query_var( 'token' );
 $qv_text = get_query_var( 'text' );
 
-if ($qv_token != "zxoXpOoOZKAzAU8N8AuTl6r0") {
-wp_send_json("security error - are you calling this from the MFO slack?!");
+$options = get_option('mfo_options_modules');
+$enabled = $options['mfo_slack_enabled_boolean'];
+$token = $options['mfo_slack_token_string'];
+
+
+if ( !$enabled ) {
+	mfo_log(1, "json-slack-maker.php", "Error: Page called, but module not enabled in settings");
+	wp_send_json("Error: Module not enabled. Please check MFO Settings.");
 }
+
+if ($qv_token != $token) {
+	mfo_log(1, "json-slack-maker.php", "Error: Bad token");
+	wp_send_json("Error: Bad token. Please check MFO Settings.");
+}
+
+
+mfo_log(3, "json-slack-maker.php", "search text = ". $qv_text);
+
 
 $args = array(
   'post_type' => array('maker', 'exhibit'),
