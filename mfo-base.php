@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.3.0
+Version: 3.4.0
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -43,11 +43,42 @@ if ( $options['mfo_module_woocommerce_enabled_boolean'] ) {
 add_filter( 'page_template', 'mfo_page_template' );
 function mfo_page_template( $page_template )
 {
-    if ( is_page( 'duplicate-exhibit' ) ) {
-        $page_template = dirname( __FILE__ ) . '/templates/duplicate-exhibit.php';
-    }
-    return $page_template;
+	$pagename = get_query_var('pagename');  
+
+	//mfo_log(4, "mfo_page_template", "pre: page_template=" . $page_template);
+	mfo_log(4, "mfo_page_template", "pre: pagename=" . $pagename);
+
+	$templates = array (
+	array('csv-exhibit-checkin', 	'csv-exhibit-checkin.php'),
+	array('csv-helper-checkin', 	'csv-helper-checkin.php'),
+	array('csv-maker-media-export',	'csv-maker-media-export.php'),
+	array('producer-exhibit-search-csv-results', 	'csv-results.php'),
+	array('producer-maker-search-csv-results', 	'csv-results.php'),
+	array('csv-social', 		'csv-social.php'),
+ 	array('duplicate-exhibit', 'duplicate-exhibit.php'),
+	array('exhibit-table-signs',	'exhibit-table-signs.php'),
+	array('events-json',		'json-eventlist.php'),
+	array('makers-json',		'json-makerlist.php'),
+	array('select-load-in-date-time','load-in.php'),
+	array('producer-loadin-report',	'loadin-report.php'),
+	array('much-makers',		'stat.php')
+	);
+
+	foreach ($templates as $t) {
+		if ($t[0] == $pagename)  {
+        		$page_template = dirname( __FILE__ ) . '/templates/' . $t[1];
+			break;
+		}
+	}
+
+
+	//deprecated?
+	//mfo_load_page_template('event-talks',		'json-eventlist.php'); 
+	//mfo_load_page_template('fix-events',		'fix-event-locations.php'); 
+	mfo_log(4, "mfo_page_template", "post: page_template=" . $page_template);
+	return $page_template;
 }
+
 
 
 /*
@@ -80,7 +111,8 @@ Changelog:
 05-16-2016: Added options to turn on / off exhibit editing
 05-16-2016: Added mfo_toolset_add_shortcodes function to automatically register shortcodes with Toolset
 05-17-2016: Updates to duplicate exhibit functionality
-05-17-2016: Moved duplicate-exhibit.php into plugin from theme
+05-17-2016: Moved custom templates into plugin from theme
+05-17-2016:  Updated count_exhibits shortcode to only process current year
 */
 
 
@@ -653,7 +685,8 @@ function count_exhibits_shortcode( $atts, $content = null ) {
         $childargs = array(
         'post_type' => 'exhibit',
         'numberposts' => -1,
-        'post_status' => 'publish'
+        'post_status' => 'publish',
+	'meta_query' => array(array('key' => 'wpcf-approval-year', 'value' => mfo_event_year()))
         );
 
         $children = get_posts($childargs);
