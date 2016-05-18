@@ -42,18 +42,12 @@ $args = array(
 
 $exhibits_array = get_posts($args);
 
-//$exhibits_array = new WP_Query( array( 'post_type' => 'exhibit', 's' => $qv_text ) );
+//todo: add max results as setting
 
-//echo count($exhibits_array);
-//echo "\r\n";
-//wp_send_json($makers_array);
-
-//todo
-//create readable locations
-//create qrcodes
-//create detail JSON
-//validate photo size param
-//is my rewrite page cached?
+if ( count($exhibits_array) > 10) {
+        mfo_log(1, "json-slack-maker.php", "Error: Too Many Results");
+        wp_send_json("Error: More than 10 results, try a more specific term!");
+}
 
 foreach ($exhibits_array as $exhibit) {
 
