@@ -4,17 +4,59 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.5.1
+Version: 3.6.0
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
 */
+
+/*
+
+General todo:
+ - Remove form id dependent functions?
+ - multi-year
+ 	- Append year to exhibit links? https://wp-types.com/forums/topic/custom-taxonomies-not-showing-on-permalink/
+ - Remove 2015 badges from those that were not "approved" for 2015...See "Ability3D" as example exhibit
+ - ^^^ Should 2015+ badge be calculated instead of category?
+
+Changelog:
+
+05-06-2016: Pulled mfo-stats, mfo-backend-tools, and mfo-shortcodes into one file
+05-06-2016: Added settings for Logging Enabled, System Warning Email address
+05-06-2016: Updated mfo_log to use setting
+05-06-2016: Created mfo_warning_email to utilise the system warning email address, and to write to log
+05-06-2016: Modified cred_update_maker_stats to not use form ids
+05-06-2016: Modified update_maker_stats() to use approval-year in logic as start of multi-year mods
+05-07-2016: Pulled mfo-eventbrite-webhook, mfo-woocommerce-helpers, mfo-sensei helpers into same directory
+05-07-2016: Updated plugin about information
+05-07-2016: Added setup_cred_recipients() to allow CRED forms to use option: mfo_notification_email_string
+05-07-2016: Added setting and dynamic loading of modules for sensei, woocommerce, eventbrite
+05-07-2016: Added log-level setting and modified all mfo_log calls to use level
+05-09-2016: Updated settings page explanation of shortcodes, etc
+05-10-2016: MAJOR settings additions; tabbed interface; admin notifications for missing settings
+05-14-2016: New exhibits without a year are set to mfo_event_year() (thought this was already done...)
+05-14-2016: Exhibits now at /exhibits/%year%/slug; requires modification to exhibit type
+05-15-2016: Feature: duplicate exhibit: requires maker-dashboard mods and pages
+05-16-2016: Added options to turn on / off exhibit editing
+05-16-2016: Added mfo_toolset_add_shortcodes function to automatically register shortcodes with Toolset
+05-17-2016: Updates to duplicate exhibit functionality
+05-17-2016: Moved custom templates into plugin from theme
+05-17-2016: Updated count_exhibits shortcode to only process current year
+05-21-2016: Moved MFO-specific code from functions.php to plugin
+*/
+
+
 
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 //include settings code
 include( plugin_dir_path( __FILE__ ) . 'mfo-settings.php');
+
+//disables the admin bar on the frontend
+add_filter('show_admin_bar', '__return_false');
+
+add_action( 'wp_enqueue_scripts', 'add_custom_scripts' );
 
 
 mfo_load_modules();
@@ -80,41 +122,6 @@ function mfo_page_template( $page_template )
 	return $page_template;
 }
 
-
-
-/*
-
-General todo:
- - Remove form id dependent functions?
- - multi-year
- 	- Append year to exhibit links? https://wp-types.com/forums/topic/custom-taxonomies-not-showing-on-permalink/
- - Remove 2015 badges from those that were not "approved" for 2015...See "Ability3D" as example exhibit
- - ^^^ Should 2015+ badge be calculated instead of category?
-
-Changelog:
-
-05-06-2016: Pulled mfo-stats, mfo-backend-tools, and mfo-shortcodes into one file
-05-06-2016: Added settings for Logging Enabled, System Warning Email address
-05-06-2016: Updated mfo_log to use setting
-05-06-2016: Created mfo_warning_email to utilise the system warning email address, and to write to log
-05-06-2016: Modified cred_update_maker_stats to not use form ids
-05-06-2016: Modified update_maker_stats() to use approval-year in logic as start of multi-year mods
-05-07-2016: Pulled mfo-eventbrite-webhook, mfo-woocommerce-helpers, mfo-sensei helpers into same directory
-05-07-2016: Updated plugin about information
-05-07-2016: Added setup_cred_recipients() to allow CRED forms to use option: mfo_notification_email_string
-05-07-2016: Added setting and dynamic loading of modules for sensei, woocommerce, eventbrite
-05-07-2016: Added log-level setting and modified all mfo_log calls to use level
-05-09-2016: Updated settings page explanation of shortcodes, etc
-05-10-2016: MAJOR settings additions; tabbed interface; admin notifications for missing settings
-05-14-2016: New exhibits without a year are set to mfo_event_year() (thought this was already done...)
-05-14-2016: Exhibits now at /exhibits/%year%/slug; requires modification to exhibit type
-05-15-2016: Feature: duplicate exhibit: requires maker-dashboard mods and pages
-05-16-2016: Added options to turn on / off exhibit editing
-05-16-2016: Added mfo_toolset_add_shortcodes function to automatically register shortcodes with Toolset
-05-17-2016: Updates to duplicate exhibit functionality
-05-17-2016: Moved custom templates into plugin from theme
-05-17-2016:  Updated count_exhibits shortcode to only process current year
-*/
 
 
 
@@ -1368,5 +1375,23 @@ function mfo_toolset_add_shortcodes( $shortcodes ) {
 
     return $shortcodes;
 }
+
+//load custom scripts by page
+function add_custom_scripts() {
+        if (is_page('producer-exhibit-location-and-hidden-category-slides') OR
+                is_page('select-load-in-date-time') ){
+        	wp_enqueue_script('jquery-ui-accordion');
+        	wp_enqueue_script('jquery-ui-button');
+        	wp_enqueue_style('mfo-admin-ui-css',
+                'http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/blitzer/jquery-ui.css',
+                false, "1.11.4", false);
+        }
+	elseif (is_page('makers') OR is_page('schedule')) {
+ 		wp_enqueue_script( "isotope-js", get_stylesheet_directory_uri() . '/js/libs/isotope.pkgd.min.js');
+		wp_enqueue_script( "imagefill-js", get_stylesheet_directory_uri() . '/js/libs/jquery-imagefill.js');
+ 	}
+}
+
+
 
 ?>

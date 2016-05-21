@@ -10,8 +10,8 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 /*
 
 General todo:
-UPDATE MAIN TODO
-
+1) Setting for show_admin_bar?
+2) 
 
 Changelog:
 UPDATE MAIN CHANGELOG

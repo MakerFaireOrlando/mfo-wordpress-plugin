@@ -52,5 +52,41 @@ function enroll_producer_courses_shortcode( $atts, $content = null ) {
 }
 add_shortcode( 'enroll-producer-courses', 'enroll_producer_courses_shortcode' );
 
+//fix sensei sidebar issues
+//as per http://docs.woothemes.com/document/sensei-and-theme-compatibility/
+
+global $woothemes_sensei;
+remove_action( 'sensei_before_main_content', array( $woothemes_sensei->frontend, 'sensei_output_content_wrapper' ), 10 );
+remove_action( 'sensei_after_main_content', array( $woothemes_sensei->frontend, 'sensei_output_content_wrapper_end' ), 10 );
+
+add_action('sensei_before_main_content', 'my_theme_wrapper_start', 10);
+add_action('sensei_after_main_content', 'my_theme_wrapper_end', 10);
+
+function my_theme_wrapper_start() {
+  echo '<div id="content-container"><div id="content" role="main">';
+}
+
+function my_theme_wrapper_end() {
+  echo '</div><!-- #content -->
+        </div><!-- #content-container -->';
+        get_sidebar();
+}
+
+//declare sensei support for theme to stop annoying messages
+add_action( 'after_setup_theme', 'declare_sensei_support' );
+function declare_sensei_support() {
+    add_theme_support( 'sensei' );
+}
+
+/*
+//Doesn't look like they really implemnted this - only changes in some places
+add_filter( 'sensei_lessons_text', 'sensei_custom_lessons_text', 10 );
+
+function sensei_custom_lessons_text () {
+        $text = "Topics";
+        return $text;
+}
+*/
+
 
 ?>
