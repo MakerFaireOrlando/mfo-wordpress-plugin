@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.6.2
+Version: 3.6.3
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -44,6 +44,7 @@ Changelog:
 05-17-2016: Updated count_exhibits shortcode to only process current year
 05-21-2016: Moved MFO-specific code from functions.php to plugin
 05-21-2016: Added admin warning if js files are not found in theme folder (not adding them to plugin due to redistribution)
+05-22-2016: Minor updates to duplicate exhibit template / function.
 */
 
 
@@ -1339,7 +1340,7 @@ function mfo_duplicate_post ($post_id, $old_name, $new_name) {
 			$wpdb->query($sql_query);
 		}
 
-	$ret = 1;
+	$ret = $new_post_id;
 	}
 	return $ret;
 }

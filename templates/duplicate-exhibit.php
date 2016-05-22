@@ -71,15 +71,16 @@ else {
 			$dup_ret = mfo_duplicate_post($exhibit_id, $old_post_name, $new_post_name );
 
 			if ($dup_ret) {
-				echo '<h3>Post Duplicated</h3>';
+				echo '<h3>Your Exhibit has been Duplicated - Please return to the Maker Dashboard to review and make any needed updates.</h3>';
 			}
 			else {
-				echo '<h3>Post Duplication Failed. Please email us at [mfo-support-email-link]"</h3>';
+				echo '<h3>Exhibit Duplication Failed. Please email us at [mfo-support-email-link]"</h3>';
 			}
 		}
 		else {
-			echo '<h3>Post Duplication Failed (post type is not exhibit).</h3> Please email us at ' . mfo_support_email_link();
+			echo '<h3>Exhibit Duplication Failed (post type is not exhibit).</h3> Please email us at ' . mfo_support_email_link();
 		}
+
 
 		echo '<div style="margin-bottom:20px">';
         	echo '<button class="ui-widget" id="release" onclick="cancel()">Return to Dashboard</button>';
@@ -108,16 +109,16 @@ else {
 	$oldname = $newname . "-" .get_post_meta($exhibit, "wpcf-approval-year", true);
 
 	echo '<div style="margin-bottom:20px">';
-	echo '<H3>We strongly recommend using the prior year post URL so that old links now point to the new exhibit.</h3>';
-	echo 'Using the pre-filled post URLs here will rename last years exhibit to now include the year at the end,';
-	echo 'and will put the NEW exhibit at the previous link.';
+	echo '<H3>We strongly recommend using the pre-filled exhibit URLs below so that old links now point to the new exhibit.</h3>';
+	echo 'Using the pre-filled exhibit URLs here will rename last years exhibit to now include the year at the end,';
+	echo ' and will put the NEW exhibit at the previous link.';
 	echo '</div>';
 
 
-  	echo '<div>New Post URL: <input type="text" name="new-post-name" value="' . $newname . '"size="60"/> </div>';
+  	echo '<div>New Exhibit URL: <input type="text" name="new-post-name" value="' . $newname . '"size="60"/> </div>';
 
 
-  	echo '<div>Old Post URL changed to:  <input type="text" name="old-post-name" value="' . $oldname . '" size="60"/> </div>';
+  	echo '<div>Old Exhibit URL changed to:  <input type="text" name="old-post-name" value="' . $oldname . '" size="60"/> </div>';
 	echo '</form>';
 
 	echo '</div>';
@@ -129,7 +130,6 @@ else {
 	echo '<div style="margin-bottom:20px">';
         echo '<button class="ui-widget" id="release" onclick="cancel()">Cancel and Return to Dashboard</button>';
         echo '</div>';
-
 
 	}
 
@@ -149,6 +149,7 @@ function dupExhibit(exhibit_id){
 function cancel() {
 	window.location.href = "/maker-dashboard";
 }
+
 
 </script>
 
