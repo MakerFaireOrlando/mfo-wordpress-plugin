@@ -602,6 +602,8 @@ function mfo_settings_admin_notice_error() {
 	mfo_option_test('mfo_options_main', 'mfo_event_year_string', 'Event Year must be entered.');
 	mfo_option_test('mfo_options_debug', 'mfo_warning_email_string', 'System Warning Email Address must be entered.');
 
+	mfo_file_test(get_stylesheet_directory() . '/js/libs/isotope.pkgd.min.js', "isotope-js");
+        mfo_file_test(get_stylesheet_directory() . '/js/libs/jquery-imagefill.js', "imagefill-js");
 
 }
 add_action( 'admin_notices', 'mfo_settings_admin_notice_error' );
@@ -610,6 +612,14 @@ function mfo_option_test ($options, $opt, $txt) {
 	$options = get_option($options);
         if (strlen($options[$opt])<1) {
 		printf( '<div class="%1$s"><p><a href="/wp-admin/options-general.php?page=mfo-options-page">%2$s</a></p></div>','notice notice-error' , 'MFO Settings Error: ' . $txt ); 
+        }
+}
+
+function mfo_file_test ($filename, $txt) {
+        if (!file_exists ($filename)) {
+		mfo_log(1, "MISSING FILE" , $txt . " - " . $filename);
+		printf( '<div class="%1$s"><p>%2$s</p></div>','notice notice-error' ,
+			 'MFO ERROR: File Not Found - ' . $txt ); 
         }
 }
 

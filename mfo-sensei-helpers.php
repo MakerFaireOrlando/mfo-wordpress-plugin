@@ -54,21 +54,27 @@ add_shortcode( 'enroll-producer-courses', 'enroll_producer_courses_shortcode' );
 
 //fix sensei sidebar issues
 //as per http://docs.woothemes.com/document/sensei-and-theme-compatibility/
+//needed to be called from function.php - calling from plugin was not working...
+function mfo_sensei_compatibility() {
+	global $woothemes_sensei;
+	mfo_log(4, "mfo_sensei_compatibility", "fixing compat issues");
+	remove_action( 'sensei_before_main_content', array( $woothemes_sensei->frontend, 'sensei_output_content_wrapper' ), 10 );
+	remove_action( 'sensei_after_main_content', array( $woothemes_sensei->frontend, 'sensei_output_content_wrapper_end' ), 10 );
 
-global $woothemes_sensei;
-remove_action( 'sensei_before_main_content', array( $woothemes_sensei->frontend, 'sensei_output_content_wrapper' ), 10 );
-remove_action( 'sensei_after_main_content', array( $woothemes_sensei->frontend, 'sensei_output_content_wrapper_end' ), 10 );
+	add_action('sensei_before_main_content', 'mfo_theme_wrapper_start', 10);
+	add_action('sensei_after_main_content', 'mfo_theme_wrapper_end', 10);
+	}
 
-add_action('sensei_before_main_content', 'my_theme_wrapper_start', 10);
-add_action('sensei_after_main_content', 'my_theme_wrapper_end', 10);
-
-function my_theme_wrapper_start() {
-  echo '<div id="content-container"><div id="content" role="main">';
+function mfo_theme_wrapper_start() {
+	mfo_log (4, "mfo_theme_wrapper_start", "adding content-container div");
+  	echo '<div id="content-container"><div id="content" role="main">';
 }
 
-function my_theme_wrapper_end() {
-  echo '</div><!-- #content -->
-        </div><!-- #content-container -->';
+function mfo_theme_wrapper_end() {
+	mfo_log (4, "mfo_theme_wrapper_end", "closing content and content-container div");
+  	echo '</div><!-- #content -->
+	<!---------------- WRAPPER END------------------------------->
+       </div><!-- #content-container -->';
         get_sidebar();
 }
 

@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.6.0
+Version: 3.6.2
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -43,6 +43,7 @@ Changelog:
 05-17-2016: Moved custom templates into plugin from theme
 05-17-2016: Updated count_exhibits shortcode to only process current year
 05-21-2016: Moved MFO-specific code from functions.php to plugin
+05-21-2016: Added admin warning if js files are not found in theme folder (not adding them to plugin due to redistribution)
 */
 
 
@@ -58,7 +59,6 @@ add_filter('show_admin_bar', '__return_false');
 
 add_action( 'wp_enqueue_scripts', 'add_custom_scripts' );
 
-
 mfo_load_modules();
 
 
@@ -73,6 +73,7 @@ if ( $options['mfo_module_eventbrite_enabled_boolean'] ) {
 if ( $options['mfo_module_sensei_enabled_boolean'] ) {
 	mfo_log (4, "load modules", "loading mfo-sensei-helpers module");
 	include( plugin_dir_path( __FILE__ ) . 'mfo-sensei-helpers.php');
+	//mfo_sensei_compatibility();
 }
 
 if ( $options['mfo_module_woocommerce_enabled_boolean'] ) {
@@ -1383,8 +1384,8 @@ function add_custom_scripts() {
         	wp_enqueue_script('jquery-ui-accordion');
         	wp_enqueue_script('jquery-ui-button');
         	wp_enqueue_style('mfo-admin-ui-css',
-                'http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/blitzer/jquery-ui.css',
-                false, "1.11.4", false);
+                	'http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/blitzer/jquery-ui.css',
+                	false, "1.11.4", false);
         }
 	elseif (is_page('makers') OR is_page('schedule')) {
  		wp_enqueue_script( "isotope-js", get_stylesheet_directory_uri() . '/js/libs/isotope.pkgd.min.js');
