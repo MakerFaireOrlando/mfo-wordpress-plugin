@@ -274,7 +274,11 @@ add_settings_field('mfo_module_eventbrite_enabled_boolean', 'Eventbrite Integrat
 add_settings_field('mfo_eventbrite_token_string', 'Eventbrite API Token', 'mfo_eventbrite_token_setting_string', 'mfo_module_tab', 'mfo_eventbrite');
 
 add_settings_field('mfo_slack_enabled_boolean', 'Slack Integration Enabled?', 'mfo_slack_enabled_setting_boolean', 'mfo_module_tab', 'mfo_slack');
-add_settings_field('mfo_slack_token_string', 'Eventbrite API Token', 'mfo_slack_token_setting_string', 'mfo_module_tab', 'mfo_slack');
+add_settings_field('mfo_slack_token_string', 'Slack API Token', 'mfo_slack_token_setting_string', 'mfo_module_tab', 'mfo_slack');
+add_settings_field('mfo_slack_webhook_url_string', 'Slack Incoming Webhook URL Token', 'mfo_slack_webhook_url_setting_string', 'mfo_module_tab', 'mfo_slack');
+add_settings_field('mfo_slack_cfm_channel_string', 'Slack CFM Channel', 'mfo_slack_cfm_channel_setting_string', 'mfo_module_tab', 'mfo_slack');
+add_settings_field('mfo_slack_producer_channel_string', 'Slack Producer Channel', 'mfo_slack_producer_channel_setting_string', 'mfo_module_tab', 'mfo_slack');
+
 
 //features
 add_settings_field('mfo_edit_makers_enabled_boolean', 'Maker Editing Enabled?', 'mfo_edit_makers_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
@@ -415,12 +419,28 @@ $options = get_option('mfo_options_modules');
 echo "<input id='mfo_slack_token_string' name='mfo_options_modules[mfo_slack_token_string]' size='30' type='text' value='{$options['mfo_slack_token_string']}' />";
 }
 
+function mfo_slack_webhook_url_setting_string() {
+$options = get_option('mfo_options_modules');
+echo "<input id='mfo_slack_webhook_url_string' name='mfo_options_modules[mfo_slack_webhook_url_string]' size='100' type='text' value='{$options['mfo_slack_webhook_url_string']}' />";
+}
+
+function mfo_slack_cfm_channel_setting_string() {
+$options = get_option('mfo_options_modules');
+echo "<input id='mfo_slack_cfm_channel_string' name='mfo_options_modules[mfo_slack_cfm_channel_string]' size='30' type='text' value='{$options['mfo_slack_cfm_channel_string']}' />";
+}
+
+function mfo_slack_producer_channel_setting_string() {
+$options = get_option('mfo_options_modules');
+echo "<input id='mfo_slack_producer_channel_string' name='mfo_options_modules[mfo_slack_producer_channel_string]' size='30' type='text' value='{$options['mfo_slack_producer_channel_string']}' />";
+}
+
 
 function mfo_feepayments_enabled_setting_boolean() {
 	$options = get_option('mfo_options_features');
 	$html = '<input type="checkbox" id="mfo_feepayments_enabled_boolean" name="mfo_options_features[mfo_feepayments_enabled_boolean]" value="1"' . checked( 1, $options['mfo_feepayments_enabled_boolean'], false ) . '/>';
 	echo $html;
 	echo "<br>&nbsp&nbspThis feature uses WooCommerce (you will need to purchase and configure) to allow a user to pay Seller Fees for an APPROVED EXHIBIT.";
+
 	echo "<br>&nbsp&nbspThis checkbox controls the display of the option on the Maker Dashboard for an APPROVED EXHIBIT.";
 	echo "<br>&nbsp&nbspShortcode: <b>[mfo-feepayments-enabled]</b> for use in Toolset Views conditional logic (make sure Toolset Settings include this shortcode).";
 }
@@ -563,7 +583,10 @@ function mfo_options_modules_validate($input) {
 	$newinput['mfo_eventbrite_token_string'] = trim($input['mfo_eventbrite_token_string']);
 	$newinput['mfo_slack_enabled_boolean'] = ( isset( $input['mfo_slack_enabled_boolean'] ) && true == $input['mfo_slack_enabled_boolean'] ? true : false );
 	$newinput['mfo_slack_token_string'] = trim($input['mfo_slack_token_string']);
-mfo_log(1, "MFO Settings" , "mfo_options_modules changed");
+	$newinput['mfo_slack_webhook_url_string'] = trim($input['mfo_slack_webhook_url_string']);
+	$newinput['mfo_slack_cfm_channel_string'] = trim($input['mfo_slack_cfm_channel_string']);
+	$newinput['mfo_slack_producer_channel_string'] = trim($input['mfo_slack_producer_channel_string']);
+	mfo_log(1, "MFO Settings" , "mfo_options_modules changed");
 	return $newinput;
 }
 

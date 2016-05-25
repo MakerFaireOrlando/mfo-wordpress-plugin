@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.6.3
+Version: 3.7.0
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -45,6 +45,7 @@ Changelog:
 05-21-2016: Moved MFO-specific code from functions.php to plugin
 05-21-2016: Added admin warning if js files are not found in theme folder (not adding them to plugin due to redistribution)
 05-22-2016: Minor updates to duplicate exhibit template / function.
+05-23-2015: 3.7.0: Added settings for slack webhooks; added mfo-slack.php module
 */
 
 
@@ -59,6 +60,8 @@ include( plugin_dir_path( __FILE__ ) . 'mfo-settings.php');
 add_filter('show_admin_bar', '__return_false');
 
 add_action( 'wp_enqueue_scripts', 'add_custom_scripts' );
+
+
 
 mfo_load_modules();
 
@@ -80,6 +83,11 @@ if ( $options['mfo_module_sensei_enabled_boolean'] ) {
 if ( $options['mfo_module_woocommerce_enabled_boolean'] ) {
 	mfo_log (4, "load modules", "loading mfo-woocommerce-helpers module");
 	include( plugin_dir_path( __FILE__ ) . 'mfo-woocommerce-helpers.php');
+}
+
+if ( $options['mfo_slack_enabled_boolean'] ) {
+	include( plugin_dir_path( __FILE__ ) . 'mfo-slack.php');
+	mfo_log (4, "load modules", "loading mfo-slack module");
 }
 
 }
@@ -497,6 +505,7 @@ function mfo_warning_email ($subject, $body) {
 	$options = get_option('mfo_options_debug');
 	mfo_log (1, "WARNING EMAIL", $subject . " | " . $body);
 	wp_mail(  $options['mfo_warning_email_string'], $subject, $body);
+	mfo_post_to_slack($subject, 'mfo-wp-debug', 'tacocat', ':taco:');
 }
 
 
