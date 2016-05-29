@@ -17,40 +17,40 @@ function my_filter_post_id( $query_args, $query, $view_id ) {
 
 
 
-function mfo_init(){
+function mfo_eventbrite_init(){
 	/* hook for creating webhook endpoints */
-	mfo_log(4, 'eventbrite','mfo_init();');
-	add_action( 'init', 'mfo_endpoint' );
-	add_action( 'parse_request', 'mfo_parse_request' );
+	mfo_log(4, 'eventbrite','mfo_eventbrite_init();');
+	add_action( 'init', 'mfo_eventbrite_endpoint' );
+	add_action( 'parse_request', 'mfo_eventbrite_parse_request' );
 }
 
 
-function mfo_endpoint(){
+function mfo_eventbrite_endpoint(){
 	// access webhook at url such as http://[your site]/mailchimp/webhook
-	mfo_log(4, 'eventbrite', 'mfo_endpoint();');
+	mfo_log(4, 'eventbrite', 'mfo_eventbrite_endpoint();');
     	add_rewrite_rule( 'webhook' , 'index.php?webhook=1', 'top' );
     	add_rewrite_tag( '%webhook%' , '([^&]+)' );
 }
 
-function mfo_parse_request( $wp )
+function mfo_eventbrite_parse_request( $wp )
 {
-	mfo_log(4, 'eventbrite', 'mfo_parse_request();');
+	mfo_log(4, 'eventbrite', 'mfo_eventbrite_parse_request();');
 	mfo_log(4, 'eventbrite', 'query_vars: '.print_r($wp->query_vars, true));
 
 	//note, the line below was commented to remove debug notice warnings
-	//if($wp->query_vars['webhook']) {
+	if($wp->query_vars['webhook']) {
 
 	//and trying this line, but todo: need to retest with eventbrite to make sure it works
-	if (get_query_var('webhook')){
+	//if (get_query_var('webhook')){
 
 	//if('webhook'== $wp->query_vars['pagename']) {
     	//if ( array_key_exists( 'webhook', $wp->query_vars ) ) {
-       		mfo_action_webhook();
+       		mfo_eventbrite_action_webhook();
         	exit();
     	}
 }
 
-function mfo_action_webhook() {
+function mfo_eventbrite_action_webhook() {
 	mfo_log(3, 'eventbrite', '==================[ Incoming Request ]==================');
 	mfo_log(4, 'eventbrite', 'Full _REQUEST dump:\n'.print_r($_REQUEST,true)); 
 	mfo_log(4, 'eventbrite', 'Full _POST dump:\n'.print_r($_POST,true)); 
@@ -71,14 +71,14 @@ function mfo_action_webhook() {
 	mfo_log(3,'eventbrite', "data->config->action: ".print_r($action, true));
 	mfo_log(3,'eventbrite', "data->config->user_id: ".print_r($data->config->user_id, true));
 	if ($action == 'order.placed') {
-		mfo_eb_order_placed($data);
+		mfo_eventbrite_order_placed($data);
 		}
 
 	echo "Webhook received.";
 	mfo_log(3,'eventbrite', 'Finished processing request.');
 }
 
-function mfo_eb_order_placed ($data) {
+function mfo_eventbrite_order_placed ($data) {
 	//todo: add setting for token
 
 	$options = get_option('mfo_options');
@@ -136,6 +136,5 @@ function mfo_eb_order_placed ($data) {
 
 }
 
-mfo_init();
 
 ?>
