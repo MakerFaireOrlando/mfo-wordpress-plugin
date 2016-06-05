@@ -279,6 +279,9 @@ add_settings_field('mfo_slack_webhook_url_string', 'Slack Incoming Webhook URL T
 add_settings_field('mfo_slack_cfm_channel_string', 'Slack CFM Channel', 'mfo_slack_cfm_channel_setting_string', 'mfo_module_tab', 'mfo_slack');
 add_settings_field('mfo_slack_producer_channel_string', 'Slack Producer Channel', 'mfo_slack_producer_channel_setting_string', 'mfo_module_tab', 'mfo_slack');
 
+add_settings_field('mfo_imgflip_username_string', 'imgflip Username', 'mfo_imgflip_username_setting_string', 'mfo_module_tab', 'mfo_slack');
+add_settings_field('mfo_imgflip_password_string', 'imgflip Password', 'mfo_imgflip_password_setting_string', 'mfo_module_tab', 'mfo_slack');
+
 
 //features
 add_settings_field('mfo_edit_makers_enabled_boolean', 'Maker Editing Enabled?', 'mfo_edit_makers_enabled_setting_boolean', 'mfo_features_tab', 'mfo_features');
@@ -434,6 +437,16 @@ $options = get_option('mfo_options_modules');
 echo "<input id='mfo_slack_producer_channel_string' name='mfo_options_modules[mfo_slack_producer_channel_string]' size='30' type='text' value='{$options['mfo_slack_producer_channel_string']}' />";
 }
 
+function mfo_imgflip_username_setting_string() {
+$options = get_option('mfo_options_modules');
+echo "<input id='mfo_imgflip_username_string' name='mfo_options_modules[mfo_imgflip_username_string]' size='30' type='text' value='{$options['mfo_imgflip_username_string']}' />";
+}
+
+function mfo_imgflip_password_setting_string() {
+$options = get_option('mfo_options_modules');
+echo "<input id='mfo_imgflip_password_string' name='mfo_options_modules[mfo_imgflip_password_string]' size='30' type='text' value='{$options['mfo_imgflip_password_string']}' />";
+}
+
 
 function mfo_feepayments_enabled_setting_boolean() {
 	$options = get_option('mfo_options_features');
@@ -586,6 +599,8 @@ function mfo_options_modules_validate($input) {
 	$newinput['mfo_slack_webhook_url_string'] = trim($input['mfo_slack_webhook_url_string']);
 	$newinput['mfo_slack_cfm_channel_string'] = trim($input['mfo_slack_cfm_channel_string']);
 	$newinput['mfo_slack_producer_channel_string'] = trim($input['mfo_slack_producer_channel_string']);
+	$newinput['mfo_imgflip_username_string'] = trim($input['mfo_imgflip_username_string']);
+	$newinput['mfo_imgflip_password_string'] = trim($input['mfo_imgflip_password_string']);
 	mfo_log(1, "MFO Settings" , "mfo_options_modules changed");
 	return $newinput;
 }

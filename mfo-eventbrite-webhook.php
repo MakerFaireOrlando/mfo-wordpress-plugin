@@ -81,14 +81,14 @@ function mfo_eventbrite_action_webhook() {
 function mfo_eventbrite_order_placed ($data) {
 	//todo: add setting for token
 
-	$options = get_option('mfo_options');
+	$options = get_option('mfo_options_modules');
 	$token = $options['mfo_eventbrite_token_string'];
 
 	mfo_log(3, 'eventbrite',"mfo_eb_order_placed();");
 
 	mfo_log(3, 'eventbrite',"data->api_url: ".print_r($data->api_url, true));
 	$url_order = $data->api_url.'?token='.$token.'&expand=attendees,event';
-	mfo_log("order url: ".$url_order);
+	mfo_log(3, "order url: ".$url_order);
 	$order_raw = file_get_contents($url_order);
 	mfo_log(4, 'eventbrite',"file_get_contents: ".$order_raw);
 	$order = json_decode($order_raw);
@@ -97,6 +97,7 @@ function mfo_eventbrite_order_placed ($data) {
 
 	$url_event = $order->event->resource_uri.'?token='.$token.'&expand=ticket_classes';
 	mfo_log(3, 'eventbrite',"event url: ".$url_event);
+
 	$event_raw = file_get_contents($url_event);
 	mfo_log(4, 'eventbrite',"file_get_contents: ".$event_raw);
 	$event = json_decode($event_raw);
@@ -125,16 +126,77 @@ function mfo_eventbrite_order_placed ($data) {
 	);
 	$post_id = wp_insert_post( $post, false );
 
+
 	update_post_meta($post_id, 'wpcf-order-name', $order->name);
 	update_post_meta($post_id, 'wpcf-order-email', $order->email);
 	update_post_meta($post_id, 'wpcf-order-id', $order->id);
 	update_post_meta($post_id, 'wpcf-order-event-id', $order->event->id);
 	update_post_meta($post_id, 'wpcf-order-number-of-tickets', $numTickets);
-	update_post_meta($post_id, 'wpcf-eventbrite-order-debug', $debug_content);
+	//removed this from post_cotent for security
+	//update_post_meta($post_id, 'wpcf-eventbrite-order-debug', $debug_content);
 
+	$slack = $options['mfo_slack_enabled_boolean'];
+
+	if ($slack) {
+		mfo_slack_eventbrite_notification($post_id, $order->event->id);
+	}
 
 
 }
 
+//for testing only 
+/*
+function mfo_slack_notify_test() {
+         mfo_slack_eventbrite_notification("1234" , "22749813304");
+}
+
+add_shortcode("mfo-slack-notify-test", "mfo_slack_notify_test");
+*/
+
+function mfo_slack_eventbrite_notification( $order_id, $event_id ) {
+
+        $imgflip_template_ids = array (15865071, 23862248, 37113200, 52265123, 63777975);
+        $imgflip_template_id = $imgflip_template_ids[array_rand($imgflip_template_ids)];
+
+        $qty = mfo_eventbrite_tickets_sold($event_id);
+
+        $image_url = mfo_create_meme($imgflip_template_id, $qty. " Tickets", "HA! HA! HA!");
+
+        //attachments must be an array of attachment objects, hence the nested arrays
+        $attach = array(array( "text" => "", "image_url"=>$image_url ));
+
+        mfo_log (4, "mfo_slack_eb_notify", "attach: " . print_r( $attach, true));
+	$options = get_option('mfo_options_modules');
+	$channel = $options[mfo_slack_producer_channel_string];
+
+        mfo_post_to_slack("", $channel , "The Count", ":count:", $attach);
+
+}
+
+function mfo_eventbrite_tickets_sold($event_id){
+
+	//need to have a setting for the event id
+	$options = get_option('mfo_options_modules');
+        $token = $options['mfo_eventbrite_token_string'];
+	//$event_id = "22749813304";
+
+	$url_tickets = 'https://www.eventbriteapi.com/v3/events/' . $event_id .'/ticket_classes/?token='.$token;
+
+	//do not log the following, contains EB token...
+	//mfo_log(3, 'mfo_eb_tix_sold', "event url: ".$url_tickets);
+
+        $tickets_raw = file_get_contents($url_tickets);
+
+	//mfo_log(4, 'eventbrite', "file_get_contents: ".$tickets_raw);
+        $tickets = json_decode($tickets_raw);
+	$ticket_classes = $tickets->ticket_classes;
+
+	$total_tickets = 0;
+        //mfo_log(4, 'eventbrite', "ticket_classes: ". print_r($ticket_classes, true));
+	foreach ($ticket_classes as $ticket_class) {
+		$total_tickets += $ticket_class->quantity_sold;
+	}
+	return $total_tickets;
+}
 
 ?>
