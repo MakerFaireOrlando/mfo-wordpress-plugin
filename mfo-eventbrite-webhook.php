@@ -155,7 +155,7 @@ add_shortcode("mfo-slack-notify-test", "mfo_slack_notify_test");
 
 function mfo_slack_eventbrite_notification( $order_id, $event_id ) {
 
-        $imgflip_template_ids = array (15865071, 23862248, 37113200, 52265123, 63777975);
+        $imgflip_template_ids = array (15865071, 23862248, 36667827, 37113200, 52265123, 63777975, 69466679);
         $imgflip_template_id = $imgflip_template_ids[array_rand($imgflip_template_ids)];
 
         $qty = mfo_eventbrite_tickets_sold($event_id);
