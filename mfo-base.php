@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.10.2
+Version: 3.10.3
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -52,6 +52,7 @@ Changelog:
 06-07-2016: 3.10.0: Added mfo_educator_save_post function
 06-07-2016: 3.10.1: Bug-fix in mfo_educator_save_post function
 06-07-2016: 3.10.2: Bug-fix in mfo_educator_save_post function
+06-08-2016: 3.10.3: Rework the educator save function (moved to cred_save)
 
 */
 
@@ -1075,14 +1076,13 @@ function update_maker_stats ($post_id) {
 
 add_action ('save_post', 'update_maker_stats', 9999);
 
-add_action ('save_post', 'mfo_save_post_educator', 9999);
-
-function mfo_save_post_educator($post_id) {
+//this creates a post title from the name and email, and sets the event year
+function mfo_cred_save_data_educator($post_id) {
 
 	$post_type = get_post_type($post_id);
 
 	if ($post_type == 'educator') {
-		mfo_log(4, "mfo_save_data_educator", "educator postid:" . $post_id);
+		mfo_log(4, "mfo_cred_save_data_educator", "educator postid:" . $post_id);
 
 
 		//better title
@@ -1100,43 +1100,32 @@ function mfo_save_post_educator($post_id) {
 
 
 		$year = get_post_meta($post_id, 'wpcf-educator-event-year', true);
-		mfo_log(4, "mfo_save_data_educator", "educator year:" . $year);
+		mfo_log(4, "mfo_cred_save_data_educator", "educator year:" . $year);
 
 		if (!$year) {
 	       		$upm = update_post_meta($post_id, 'wpcf-educator-event-year', mfo_event_year());
 		}
 
 
-		//get options
-		//if eventbrite enabled
-		//get access code
-		//get disc code
-
-		//need the eventid & the ticket class id - settings? Hook and custom function? Hard code for now?
-
-
-
-		//unhook to prevent infinite loop
-		remove_action ('save_post', 'mfo_save_post_educator',9999);
-
         	// Update the post into the database
         	wp_update_post( $my_post );
 
-		//re-hook
-		add_action ('save_post', 'mfo_save_post_educator',9999);
-
-        	mfo_log(3, "mfo_save_data_educator", "post_title=".$title);
+        	mfo_log(3, "mfo_cred_save_data_educator", "post_title=".$title);
 
 		}
 
 }
 
-function cred_update_maker_stats($post_id, $form_data){
+
+
+
+//function cred_update_maker_stats($post_id, $form_data){
+function mfo_cred_save_data($post_id, $form_data){
 	//need to use this hook because the wpcf_pr_post_get_belongs function doesnt work
 	//with the standard save_data hook.
 
 
-	mfo_log(2, "cred_update_maker_stats(" . $post_id . ", " . print_r ($form_data, true) . ");");
+	mfo_log(2, "mfo_cred_save_data",  $post_id . ", " . print_r ($form_data, true));
 
 	//fix hard coding form ID
 	//if ($form_data['id']==2725) { //Exhibit - Edit
@@ -1155,10 +1144,14 @@ function cred_update_maker_stats($post_id, $form_data){
 			update_maker_stats($parent);
 		}
 	} //end exhibit - all other forms
+	else if (get_post_type($post_id)=="educator") {
+		mfo_log(4,"mfo_cred_save_data", "educator: ".$post_id);
+		mfo_cred_save_data_educator($post_id);
+	}
 
 }
 
-add_action ('cred_save_data', 'cred_update_maker_stats', 9999 ,2 );
+add_action ('cred_save_data', 'mfo_cred_save_data', 9999 ,2 );
 
 
 
