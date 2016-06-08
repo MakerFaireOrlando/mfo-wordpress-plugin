@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.10.0
+Version: 3.10.1
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -50,6 +50,7 @@ Changelog:
 06-05-2016: 3.9.0: Added slack notification for eventbrite orders. HA! HA! HA!
 06-05-2016: 3.9.1: Added more slack notification images for eventbrite orders. HA! HA! HA!
 06-07-2016: 3.10.0: Added mfo_educator_save_post function
+06-07-2016: 3.10.0: Big-fix in mfo_educator_save_post function
 
 */
 
@@ -1118,7 +1119,7 @@ function mfo_save_post_educator($post_id) {
 		remove_action ('save_post', 'mfo_save_post_educator');
 
         	// Update the post into the database
-        	//wp_update_post( $my_post );
+        	wp_update_post( $my_post );
 
 		//re-hook
 		add_action ('save_post', 'mfo_save_post_educator',9999);
