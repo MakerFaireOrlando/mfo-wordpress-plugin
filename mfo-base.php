@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.9.1
+Version: 3.10.0
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -49,6 +49,8 @@ Changelog:
 05-28-2016: 3.8.0: Updating eventbrite webhook functions to work with new settings
 06-05-2016: 3.9.0: Added slack notification for eventbrite orders. HA! HA! HA!
 06-05-2016: 3.9.1: Added more slack notification images for eventbrite orders. HA! HA! HA!
+06-07-2016: 3.10.0: Added mfo_educator_save_post function
+
 */
 
 
@@ -167,8 +169,12 @@ function add_query_vars_filter($vars) {
 	$vars[] = "li-exhibit";
 	$vars[] = "dup-exhibit";
 	$vars[] = "post_ids";
+
+	//vars for slash commands
 	$vars[] = "token";
 	$vars[] = "text";
+	$vars[] = "channel_name";
+
 
 	return $vars;
 }
@@ -1067,6 +1073,61 @@ function update_maker_stats ($post_id) {
 
 add_action ('save_post', 'update_maker_stats', 9999);
 
+add_action ('save_post', 'mfo_save_post_educator', 9999);
+
+function mfo_save_post_educator($post_id) {
+
+	$post_type = get_post_type($post_id);
+
+	if ($post_type == 'educator') {
+		mfo_log(4, "mfo_save_data_educator", "educator postid:" . $post_id);
+
+
+		//better title
+       		$first = get_post_meta($post_id,'wpcf-first-name', true);
+        	$last = get_post_meta($post_id, 'wpcf-last-name', true);
+        	$email = get_post_meta($post_id, 'wpcf-educator-email-address', true);
+        	$title = $first." ".$last." - ".$email;
+
+        	//collect data and define new title
+        	$my_post = array(
+            	'ID'           => $post_id,
+           	'post_title'   => $title,
+            	'post_name'    => $post_id,
+        	);
+
+
+		$year = get_post_meta($post_id, 'wpcf-educator-event-year', true);
+		mfo_log(4, "mfo_save_data_educator", "educator year:" . $year);
+
+		if (!$year) {
+	       		$upm = update_post_meta($post_id, 'wpcf-educator-event-year', mfo_event_year());
+		}
+
+
+		//get options
+		//if eventbrite enabled
+		//get access code
+		//get disc code
+
+		//need the eventid & the ticket class id - settings? Hook and custom function? Hard code for now?
+
+
+
+		//unhook to prevent infinite loop
+		remove_action ('save_post', 'mfo_save_post_educator');
+
+        	// Update the post into the database
+        	//wp_update_post( $my_post );
+
+		//re-hook
+		add_action ('save_post', 'mfo_save_post_educator',9999);
+
+        	mfo_log(3, "mfo_save_data_educator", "post_title=".$title);
+
+		}
+
+}
 
 function cred_update_maker_stats($post_id, $form_data){
 	//need to use this hook because the wpcf_pr_post_get_belongs function doesnt work
@@ -1096,6 +1157,9 @@ function cred_update_maker_stats($post_id, $form_data){
 }
 
 add_action ('cred_save_data', 'cred_update_maker_stats', 9999 ,2 );
+
+
+
 
 //need to catch exhibit edits in the backend to trigger a maker stats update
 //TODO: This appears to fire before updates are in database for the exhibit and isn't working
