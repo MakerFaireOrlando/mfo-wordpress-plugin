@@ -17,7 +17,22 @@ $args = array(
   'posts_per_page' => -1, // all
   'orderby' => 'title',
   'order' => 'ASC',
-  'meta_query' => array(array('key' => 'wpcf-approval-status', 'value' => '1'))
+//  'meta_query' => array(array('key' => 'wpcf-approval-status', 'value' => '1'))
+  'meta_query' => array(
+/*
+	'relation' => 'AND',
+	array(
+		'key' 		=> 'wpcf-approval-status',
+		'value' 	=> '1',
+		'compare'	=> '='
+	),
+*/
+	array(
+		'key' 		=> 'wpcf-approval-year',
+		'value' 	=> mfo_event_year(),
+		'compare'	=> '='
+	)
+  )
 );
 
 $exhibits_array = get_posts($args);
@@ -32,7 +47,14 @@ $exhibits_array = get_posts($args);
 //validate photo size param
 //is my rewrite page cached?
 
+
 foreach ($exhibits_array as $exhibit) {
+
+	//filter by approval status. This is a hack as I could not get the meta_query 
+	//to work property
+
+	$approval = get_post_meta($exhibit->ID, "wpcf-approval-status", true);
+	if ($approval != '1') continue; //don't BREAK here!!
 
 	//get the id of the maker
 	$maker_id = wpcf_pr_post_get_belongs($exhibit->ID, 'maker');
@@ -81,6 +103,9 @@ foreach ($exhibits_array as $exhibit) {
 
 	//create the array for the exhibit
 	$e_output[]= array (
+			//'approval_year' => get_post_meta($exhibit->ID, "wpcf-approval-year", true),
+			//'approval_status' => $approval,
+
 			'exhibit_category' => strip_tags(get_the_term_list($exhibit->ID, "exhibit-category","",", ")),
 			'hidden_exhibit_category' => strip_tags(get_the_term_list($exhibit->ID, "hidden-exhibit-category","",", ")),
 			'hidden_maker_category' => strip_tags(get_the_term_list($maker_id, "hidden-maker-category","",", ")),
@@ -115,10 +140,18 @@ foreach ($exhibits_array as $exhibit) {
 	}
 
 
+//fail gracefully on no exibits returned
+if (!isset($e_output)) {
+	 $e_output[]= array();
+	 $e_output_count = 0;
+}
+else $e_output_count = count($e_output);
+
 
 //create the overall JSON array
 $output = array(
 		'attend_link' => 'http://www.makerfaireorlando.com/attend',
+		'accepteds_count' => $e_output_count,
 		'accepteds' => $e_output,
 		'categories' => $cats_output,
 		'title' => 'Maker Faire Orlando',
