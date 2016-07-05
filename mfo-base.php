@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.11.3
+Version: 3.11.4
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -57,6 +57,7 @@ Changelog:
 07-05-2016: 3.11.1: Fix to eventbrite webhook to get rid of warning
 07-05-2016: 3.11.2: Fix to eventbrite webhook to  mfo-settings due to warnings about unquoted options constants (bad ian)
 07-05-2016: 3.11.3: Fix to mfo-settings due to active_tab not being declared before use and throwing warnings
+07-05-2016: 3.11.4: Fixed PHP warnings on submission of agreement, including debug file output fix in update_maker_stats to output post author name
 */
 
 
@@ -897,6 +898,8 @@ function update_maker_stats ($post_id) {
 		$debug = $debug.current_time('mysql')."\r\n";
 		$debug = $debug."Maker: ".$post_id.": ".$title."\r\n";
 		$author_id = get_post_field( 'post_author', $post_id );
+		$author_info = get_userdata($author_id);
+		$author_name = $author_info->first_name . " " . $author_info->last_name;
 		$debug = $debug."User: ".$author_id.": ".$author_name."\r\n";
 
 
@@ -1208,8 +1211,8 @@ function cred_update_agreement_before_save($form_data){
 
 	if ($ack) {
 	        //wp_mail( "ian.cole@gmail.com", "got ack".$post_id, "stuff");
-		$date = $_POST['wpcf-maker-agreement-date'];
-		if ($date) {	//this is an error condition...
+		//$date = $_POST['wpcf-maker-agreement-date'];
+		if (isset($_POST['wpcf-maker-agreement-date'])) {	//this is an error condition...
 	              	//wp_mail( "ian.cole@gmail.com", "ERROR: cred_update_agreement: Already had agreement date!", $post_id);
 		} else { // no date
 	        	//wp_mail( "ian.cole@gmail.com", "got ack, but no date",$post_id);
@@ -1324,7 +1327,7 @@ function setup_cred_recipients($recipients, $notification, $form_id, $post_id)
 
 	$search = "notification-email";
 	$options = get_option('mfo_options_main');
- 	$replace = $options[mfo_notification_email_string];
+ 	$replace = $options['mfo_notification_email_string'];
 
 	$new_recipients = json_decode(str_ireplace($search, $replace, json_encode($recipients)),true);
 	//found this trick here: http://codelinks.pachanka.org/post/94733910648/php-replace-strings-in-multidimensional-arrays
