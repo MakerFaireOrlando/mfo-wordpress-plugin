@@ -60,87 +60,87 @@ add_shortcode('mfo-notification-email', 'mfo_notification_email');
 function mfo_notification_email_link() {
 
 $options = get_option('mfo_options_main');
-$link ="<a href=\"mailto:" . $options[mfo_notification_email_string] . "\">" . $options[mfo_notification_email_string] . "</a>";
+$link ="<a href=\"mailto:" . $options['mfo_notification_email_string'] . "\">" . $options['mfo_notification_email_string'] . "</a>";
 return $link;
 }
 add_shortcode('mfo-notification-email-link', 'mfo_notification_email_link');
 
 function mfo_edit_makers_enabled() {
 	$options = get_option('mfo_options_features');
- 	return $options[mfo_edit_makers_enabled_boolean];
+ 	return $options['mfo_edit_makers_enabled_boolean'];
 }
 add_shortcode('mfo-edit-makers-enabled', 'mfo_edit_makers_enabled');
 
 function mfo_edit_exhibits_enabled() {
 	$options = get_option('mfo_options_features');
- 	return $options[mfo_edit_exhibits_enabled_boolean];
+ 	return $options['mfo_edit_exhibits_enabled_boolean'];
 }
 add_shortcode('mfo-edit-exhibits-enabled', 'mfo_edit_exhibits_enabled');
 
 function mfo_agreements_enabled() {
 	$options = get_option('mfo_options_features');
- 	return $options[mfo_agreements_enabled_boolean];
+ 	return $options['mfo_agreements_enabled_boolean'];
 }
 add_shortcode('mfo-agreements-enabled', 'mfo_agreements_enabled');
 
 function mfo_exhibithelpers_enabled() {
 	$options = get_option('mfo_options_features');
- 	return $options[mfo_exhibithelpers_enabled_boolean];
+ 	return $options['mfo_exhibithelpers_enabled_boolean'];
 }
 add_shortcode('mfo-exhibithelpers-enabled', 'mfo_exhibithelpers_enabled');
 
 function mfo_exhibithelpers_default() {
 	$options = get_option('mfo_options_features');
- 	return $options[mfo_exhibithelpers_default_number];
+ 	return $options['mfo_exhibithelpers_default_number'];
 }
 add_shortcode('mfo-exhibithelpers-default', 'mfo_exhibithelpers_default');
 
 function mfo_orientationrsvp_enabled() {
 	$options = get_option('mfo_options_features');
- 	return $options[mfo_orientationrsvp_enabled_boolean];
+ 	return $options['mfo_orientationrsvp_enabled_boolean'];
 }
 add_shortcode('mfo-orientationrsvp-enabled', 'mfo_orientationrsvp_enabled');
 
 function mfo_loadin_enabled() {
 	$options = get_option('mfo_options_features');
- 	return $options[mfo_loadin_enabled_boolean];
+ 	return $options['mfo_loadin_enabled_boolean'];
 }
 add_shortcode('mfo-loadin-enabled', 'mfo_loadin_enabled');
 
 function mfo_tablesigns_enabled() {
 	$options = get_option('mfo_options_features');
- 	return $options[mfo_tablesigns_enabled_boolean];
+ 	return $options['mfo_tablesigns_enabled_boolean'];
 }
 add_shortcode('mfo-tablesigns-enabled', 'mfo_tablesigns_enabled');
 
 
 function mfo_exhibit_location_enabled() {
 	$options = get_option('mfo_options_display');
- 	return $options[mfo_exhibit_location_enabled_boolean];
+ 	return $options['mfo_exhibit_location_enabled_boolean'];
 }
 add_shortcode('mfo-exhibit-location-enabled', 'mfo_exhibit_location_enabled');
 
 function mfo_maker_badges_enabled() {
 	$options = get_option('mfo_options_display');
- 	return $options[mfo_maker_badges_enabled_boolean];
+ 	return $options['mfo_maker_badges_enabled_boolean'];
 }
 add_shortcode('mfo-maker-badges-enabled', 'mfo_maker_badges_enabled');
 
 function mfo_maker_color() {
 	$options = get_option('mfo_options_display');
- 	return $options[mfo_maker_color_string];
+ 	return $options['mfo_maker_color_string'];
 }
 add_shortcode('mfo-maker-color', 'mfo_maker_color');
 
 function mfo_exhibit_color() {
 	$options = get_option('mfo_options_display');
- 	return $options[mfo_exhibit_color_string];
+ 	return $options['mfo_exhibit_color_string'];
 }
 add_shortcode('mfo-exhibit-color', 'mfo_exhibit_color');
 
 function mfo_exhibit_prioryear_color() {
 	$options = get_option('mfo_options_display');
- 	return $options[mfo_exhibit_prioryear_color_string];
+ 	return $options['mfo_exhibit_prioryear_color_string'];
 }
 add_shortcode('mfo-exhibit-prioryear-color', 'mfo_exhibit_prioryear_color');
 
