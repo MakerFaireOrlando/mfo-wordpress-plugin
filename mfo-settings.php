@@ -186,6 +186,8 @@ function mfo_plugin_options() {
 
 
 function mfo_plugin_options() {
+	$active_tab="";
+
 ?>
     <!-- Create a header in the default WordPress 'wrap' container -->
     <div class="wrap">
