@@ -38,7 +38,10 @@ function mfo_eventbrite_parse_request( $wp )
 	mfo_log(4, 'eventbrite', 'query_vars: '.print_r($wp->query_vars, true));
 
 	//note, the line below was commented to remove debug notice warnings
-	if($wp->query_vars['webhook']) {
+	//if($wp->query_vars['webhook']) {
+
+	//this appears to get rid of the warning
+	if (isset($wp->query_vars['webhook'])) {
 
 	//and trying this line, but todo: need to retest with eventbrite to make sure it works
 	//if (get_query_var('webhook')){

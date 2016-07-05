@@ -53,7 +53,8 @@ Changelog:
 06-07-2016: 3.10.1: Bug-fix in mfo_educator_save_post function
 06-07-2016: 3.10.2: Bug-fix in mfo_educator_save_post function
 06-08-2016: 3.10.3: Rework the educator save function (moved to cred_save)
-07-0502016: 3.11.0: Fix to App JSON for Makers to only return current year
+07-05-2016: 3.11.0: Fix to App JSON for Makers to only return current year
+07-05-2016: 3.11.1: Fix to eventbrite webhook to get rid of warning
 */
 
 
