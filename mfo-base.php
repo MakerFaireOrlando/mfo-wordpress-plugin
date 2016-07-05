@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.11.4
+Version: 3.12
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -58,6 +58,8 @@ Changelog:
 07-05-2016: 3.11.2: Fix to eventbrite webhook to  mfo-settings due to warnings about unquoted options constants (bad ian)
 07-05-2016: 3.11.3: Fix to mfo-settings due to active_tab not being declared before use and throwing warnings
 07-05-2016: 3.11.4: Fixed PHP warnings on submission of agreement, including debug file output fix in update_maker_stats to output post author name
+07-05-2016: 3.12.0: Updated duplicate exhibit funtion to NOT copy over exhibit-location and exhibit-hidden-category taxonomies. Also email + slack notify on duplicate.
+
 */
 
 
@@ -67,6 +69,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 //include settings code
 include( plugin_dir_path( __FILE__ ) . 'mfo-settings.php');
+include( plugin_dir_path( __FILE__ ) . 'mfo-cleanup.php');
 
 //disables the admin bar on the frontend
 add_filter('show_admin_bar', '__return_false');
@@ -524,6 +527,14 @@ function mfo_warning_email ($subject, $body) {
 	mfo_log (1, "WARNING EMAIL", $subject . " | " . $body);
 	wp_mail(  $options['mfo_warning_email_string'], $subject, $body);
 	mfo_post_to_slack($subject, 'mfo-wp-debug', 'tacocat', ':taco:');
+}
+
+function mfo_send_notification_email ($subject, $body) {
+	$options = get_option('mfo_options_main');
+	mfo_log (1, "mfo_notification_email", $subject . " | " . $body);
+	wp_mail(  $options['mfo_notification_email_string'], $subject, $body);
+	$attach = array(array( "text" => $body));
+	mfo_post_to_slack($subject, 'system-notifications', 'makey', ':makey:', $body);
 }
 
 
@@ -1396,12 +1407,20 @@ function mfo_duplicate_post ($post_id, $old_name, $new_name) {
 
 
 		/*
-		 * get all current post terms ad set them to the new post draft
+		 * get all current post terms and set them to the new post draft
 		 */
 		$taxonomies = get_object_taxonomies($post->post_type); // returns array of taxonomy names for post type, ex array("category", "post_tag");
+
+		//mfo_log(2, "mfo_duplicate_post", "taxonomies:" . print_r($taxonomies, true));
+
+		//we want to NOT copy locations; featured posts, etc. - ONLY CATEGORIES
+
 		foreach ($taxonomies as $taxonomy) {
-			$post_terms = wp_get_object_terms($post_id, $taxonomy, array('fields' => 'slugs'));
-			wp_set_object_terms($new_post_id, $post_terms, $taxonomy, false);
+			//mfo_log(2, "mfo_duplicate_post", "taxonomy:" . print_r($taxonomy, true));
+			if ($taxonomy == "exhibit-category") {
+				$post_terms = wp_get_object_terms($post_id, $taxonomy, array('fields' => 'slugs'));
+				wp_set_object_terms($new_post_id, $post_terms, $taxonomy, false);
+			}
 		}
 
 		/*
@@ -1420,6 +1439,10 @@ function mfo_duplicate_post ($post_id, $old_name, $new_name) {
 		}
 
 	$ret = $new_post_id;
+
+
+	mfo_send_notification_email("MFO: Exhibit Duplicated - " . $post->post_title, print_r($post, true));
+
 	}
 	return $ret;
 }
