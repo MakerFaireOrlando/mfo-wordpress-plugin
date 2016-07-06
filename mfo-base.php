@@ -60,6 +60,7 @@ Changelog:
 07-05-2016: 3.11.4: Fixed PHP warnings on submission of agreement, including debug file output fix in update_maker_stats to output post author name
 07-05-2016: 3.12.0: Updated duplicate exhibit function to NOT copy over exhibit-location and exhibit-hidden-category taxonomies. Also email + slack notify on duplicate.
 07-06-2016: 3.13.0: Added cleanup scripts for duplicated exhibits (see 3.12.0), and to wipe old maker agreements
+07-06-2016: 3.13.1: Update (minor) to cleanup scripts 
 */
 
 

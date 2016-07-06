@@ -52,7 +52,7 @@ function mfo_utility_strip_maker_agreement_acks() {
 $args = array(
   'post_type' => 'maker',
   //'post_status' => 'publish',
-  'posts_per_page' => 3, // all
+  'posts_per_page' => 1, // all
   'orderby' => 'title',
   'order' => 'ASC',
 );
@@ -70,6 +70,7 @@ $args = array(
 
 }
 
-add_shortcode('mfo-utility-strip-maker-agreement-acks', 'mfo_utility_strip_maker_agreement_acks');
+//commented for safety!
+//add_shortcode('mfo-utility-strip-maker-agreement-acks', 'mfo_utility_strip_maker_agreement_acks');
 
 ?>
