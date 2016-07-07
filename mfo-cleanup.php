@@ -52,7 +52,7 @@ function mfo_utility_strip_maker_agreement_acks() {
 $args = array(
   'post_type' => 'maker',
   //'post_status' => 'publish',
-  'posts_per_page' => 1, // all
+  'posts_per_page' => -1, // all
   'orderby' => 'title',
   'order' => 'ASC',
 );
@@ -72,5 +72,35 @@ $args = array(
 
 //commented for safety!
 //add_shortcode('mfo-utility-strip-maker-agreement-acks', 'mfo_utility_strip_maker_agreement_acks');
+
+function mfo_utility_set_all_exhibits_to_pending() {
+
+
+$year = mfo_event_year();
+ mfo_log (4, "mfo_utility_set_all_exhibits_to_pending", "start");
+ echo "Year: " . $year . "<br>";
+
+$args = array(
+  'post_type' => 'exhibit',
+  'post_status' => 'publish',
+  'posts_per_page' => -1, // all
+  'orderby' => 'title',
+  'order' => 'ASC',
+  'meta_query' => array(array('key' => 'wpcf-approval-year', 'value' => mfo_event_year()))
+);
+
+ $exhibits_array = get_posts($args);
+ echo "Exhibits: " . count($exhibits_array) . "<br>";
+ foreach ($exhibits_array as $exhibit) {
+ 	echo "Exhibit: " . $exhibit->post_name . "<br>";
+	update_post_meta( $exhibit->ID, "wpcf-approval-status","2"); //pending
+ }
+
+
+}
+
+//commented for safety!
+//add_shortcode('mfo-utility-set_all_exhibits_to_pending', 'mfo_utility_set_all_exhibits_to_pending');
+
 
 ?>

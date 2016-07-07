@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.15.0
+Version: 3.16.0
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -63,6 +63,7 @@ Changelog:
 07-06-2016: 3.13.1: Update (minor) to cleanup scripts
 07-06-2016: 3.14.0: Added (missing) mfo-feepayments-enabled shortcode and added shortcode to wpv-views processing
 07-06-2016: 3.15.0: Updated producer counts shortcodes to include year
+07-06-2016: 3.16.0: Updated duplicate function to always set exhibit approval status to pending; added cleanup function to fix previously duplicated exhibits
 */
 
 
@@ -1435,6 +1436,9 @@ function mfo_duplicate_post ($post_id, $old_name, $new_name) {
 			$sql_query.= implode(" UNION ALL ", $sql_query_sel);
 			$wpdb->query($sql_query);
 		}
+
+		//override prior exhibit approval status with PENDING
+		update_post_meta( $new_post_id, "wpcf-approval-status","2"); //pending
 
 	$ret = $new_post_id;
 
