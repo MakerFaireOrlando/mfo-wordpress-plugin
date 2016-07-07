@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.14.0
+Version: 3.15.0
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -62,6 +62,7 @@ Changelog:
 07-06-2016: 3.13.0: Added cleanup scripts for duplicated exhibits (see 3.12.0), and to wipe old maker agreements
 07-06-2016: 3.13.1: Update (minor) to cleanup scripts
 07-06-2016: 3.14.0: Added (missing) mfo-feepayments-enabled shortcode and added shortcode to wpv-views processing
+07-06-2016: 3.15.0: Updated producer counts shortcodes to include year
 */
 
 
@@ -748,74 +749,69 @@ function count_exhibits_shortcode( $atts, $content = null ) {
 add_shortcode( 'count-exhibits', 'count_exhibits_shortcode' );
 
 function count_exhibits_pending_shortcode( $atts, $content = null ) {
-	$count = -1;
+        $childargs = array(
+        'post_type' => 'exhibit',
+        'posts_per_page' => -1,
+        'post_status' => 'publish',
+        'meta_query' => array(
+                'relation' => 'AND',
+                array('key' => 'wpcf-approval-year', 'value' => mfo_event_year()) ,
+                array('key' => 'wpcf-approval-status', 'value' => '2'),
+                )
+        );
 
-	$childargs = array(
-	'post_type' => 'exhibit',
-	'numberposts' => -1,
-	'post_status' => 'publish',
-	'meta_query' => array(array('key' => 'wpcf-approval-status', 'value' => '2'))
-	);
-
-	$children = get_posts($childargs);
-
-        $count = count($children);
-        return $count;
+        $children = new WP_Query($childargs);
+        return $children->post_count;
 }
 add_shortcode( 'count-exhibits-pending', 'count_exhibits_pending_shortcode' );
 
 function count_exhibits_approved_shortcode( $atts, $content = null ) {
-	$count = -1;
+        $childargs = array(
+        'post_type' => 'exhibit',
+        'posts_per_page' => -1,
+        'post_status' => 'publish',
+        'meta_query' => array(
+                'relation' => 'AND',
+                array('key' => 'wpcf-approval-year', 'value' => mfo_event_year()) ,
+                array('key' => 'wpcf-approval-status', 'value' => '1'),
+                )
+        );
 
-	$childargs = array(
-	'post_type' => 'exhibit',
-	'numberposts' => -1,
-	'post_status' => 'publish',
-	'meta_query' => array(array('key' => 'wpcf-approval-status', 'value' => '1'))
-	);
-
-	$children = get_posts($childargs);
-
-        $count = count($children);
-
-        return $count;
+        $children = new WP_Query($childargs);
+        return $children->post_count;
 }
 add_shortcode( 'count-exhibits-approved', 'count_exhibits_approved_shortcode' );
 
 function count_exhibits_rejected_shortcode( $atts, $content = null ) {
-	$count = -1;
-
 	$childargs = array(
-	'post_type' => 'exhibit',
-	'numberposts' => -1,
-	'post_status' => 'publish',
-	'meta_query' => array(array('key' => 'wpcf-approval-status', 'value' => '3'))
-	);
+        'post_type' => 'exhibit',
+        'posts_per_page' => -1,
+        'post_status' => 'publish',
+        'meta_query' => array(
+                'relation' => 'AND',
+                array('key' => 'wpcf-approval-year', 'value' => mfo_event_year()) ,
+                array('key' => 'wpcf-approval-status', 'value' => '3'),
+                )
+        );
 
-	$children = get_posts($childargs);
-
-        $count = count($children);
-
-        return $count;
-}
+        $children = new WP_Query($childargs);
+        return $children->post_count; }
 add_shortcode( 'count-exhibits-rejected', 'count_exhibits_rejected_shortcode' );
 
 function count_exhibits_withdrawn_shortcode( $atts, $content = null ) {
-	$count = -1;
+$childargs = array(
+        'post_type' => 'exhibit',
+        'posts_per_page' => -1,
+        'post_status' => 'publish',
+        'meta_query' => array(
+                'relation' => 'AND',
+                array('key' => 'wpcf-approval-year', 'value' => mfo_event_year()) ,
+                array('key' => 'wpcf-approval-status', 'value' => '4'),
+                )
+        );
 
-	$childargs = array(
-	'post_type' => 'exhibit',
-	'numberposts' => -1,
-	'post_status' => 'publish',
-	'meta_query' => array(array('key' => 'wpcf-approval-status', 'value' => '4'))
-	);
-
-	$children = get_posts($childargs);
-
-        $count = count($children);
-
-        return $count;
-}
+        $children = new WP_Query($childargs);
+        return $children->post_count; }
 add_shortcode( 'count-exhibits-withdrawn', 'count_exhibits_withdrawn_shortcode' );
 
 
