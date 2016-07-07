@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.13.0
+Version: 3.14.0
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -60,7 +60,8 @@ Changelog:
 07-05-2016: 3.11.4: Fixed PHP warnings on submission of agreement, including debug file output fix in update_maker_stats to output post author name
 07-05-2016: 3.12.0: Updated duplicate exhibit function to NOT copy over exhibit-location and exhibit-hidden-category taxonomies. Also email + slack notify on duplicate.
 07-06-2016: 3.13.0: Added cleanup scripts for duplicated exhibits (see 3.12.0), and to wipe old maker agreements
-07-06-2016: 3.13.1: Update (minor) to cleanup scripts 
+07-06-2016: 3.13.1: Update (minor) to cleanup scripts
+07-06-2016: 3.14.0: Added (missing) mfo-feepayments-enabled shortcode and added shortcode to wpv-views processing
 */
 
 
@@ -1463,6 +1464,7 @@ function mfo_toolset_add_shortcodes( $shortcodes ) {
 		'mfo-exhibit-color',
 		'mfo-exhibit-location-enabled',
 		'mfo-exhibithelpers-enabled',
+		'mfo-feepayments-enabled',
 		'mfo-event-year',
 		'mfo-loadin-enabled',
 		'mfo-maker-color',

@@ -83,6 +83,13 @@ function mfo_agreements_enabled() {
 }
 add_shortcode('mfo-agreements-enabled', 'mfo_agreements_enabled');
 
+function mfo_feepayments_enabled() {
+	$options = get_option('mfo_options_features');
+ 	return $options['mfo_feepayments_enabled_boolean'];
+}
+add_shortcode('mfo-feepayments-enabled', 'mfo_feepayments_enabled');
+
+
 function mfo_exhibithelpers_enabled() {
 	$options = get_option('mfo_options_features');
  	return $options['mfo_exhibithelpers_enabled_boolean'];
