@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.16.1
+Version: 3.17
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -65,6 +65,7 @@ Changelog:
 07-06-2016: 3.15.0: Updated producer counts shortcodes to include year
 07-06-2016: 3.16.0: Updated duplicate function to always set exhibit approval status to pending; added cleanup function to fix previously duplicated exhibits
 07-08-2016: 3.16.1: Fix to mfo_cred_save_data; was not calling update_maker_stats on exhibit edits
+07-09-2016: 3.17.0: Added mfo_field_term_output function to support making badge images a direct field on the taxonomy
 */
 
 
@@ -1500,6 +1501,17 @@ function add_custom_scripts() {
 		wp_enqueue_script( "imagefill-js", get_stylesheet_directory_uri() . '/js/libs/jquery-imagefill.js');
  	}
 }
+
+// this function is used to retrieve custom fields for taxonomy "terms"
+// example
+// [mfo-term-field-output term="Featured" taxonomy="hidden-exhibit-category" field="badge-image"]
+function mfo_term_field_output($atts) {
+        $satts = shortcode_atts( array('term' => '', 'taxonomy' =>'' , 'field' => ''), $atts);
+        $term_array = get_term_by('slug', $satts['term'], $satts['taxonomy']);
+        return types_render_termmeta($satts['field'], array( "term_id" => $term_array->term_id) );
+}
+
+add_shortcode('mfo-term-field-output', 'mfo_term_field_output');
 
 
 ?>
