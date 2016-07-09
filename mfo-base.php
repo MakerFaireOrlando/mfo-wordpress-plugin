@@ -64,6 +64,7 @@ Changelog:
 07-06-2016: 3.14.0: Added (missing) mfo-feepayments-enabled shortcode and added shortcode to wpv-views processing
 07-06-2016: 3.15.0: Updated producer counts shortcodes to include year
 07-06-2016: 3.16.0: Updated duplicate function to always set exhibit approval status to pending; added cleanup function to fix previously duplicated exhibits
+07-08-2016: 3.16.1: Fix to mfo_cred_save_data; was not calling update_maker_stats on exhibit edits
 */
 
 
@@ -1153,6 +1154,7 @@ function mfo_cred_save_data($post_id, $form_data){
 			//wp_mail( "ian.cole@gmail.com", "WARNING:ORPHAN".$post_id, $post_id.":".$parent);
 			mfo_warning_email( "WARNING:ORPHAN".$post_id, $post_id.":".$parent);
 		}
+		else update_maker_stats($parent);
 	} //end exhibit - edit form
 	else if (get_post_type($post_id)=="exhibit") {
 		$parent = wpcf_pr_post_get_belongs($post_id, 'maker');
@@ -1498,7 +1500,6 @@ function add_custom_scripts() {
 		wp_enqueue_script( "imagefill-js", get_stylesheet_directory_uri() . '/js/libs/jquery-imagefill.js');
  	}
 }
-
 
 
 ?>
