@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.17.1
+Version: 3.18.0
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -67,6 +67,7 @@ Changelog:
 07-08-2016: 3.16.1: Fix to mfo_cred_save_data; was not calling update_maker_stats on exhibit edits
 07-09-2016: 3.17.0: Added mfo_field_term_output function to support making badge images a direct field on the taxonomy
 07-09-2016: 3.17.1: Updates mfo_field_term_output function to have use name (vs. slug), and raw output (todo: support all types_render attributes?)
+07-09-2016: 3.18.0: Added cleanup function update_maker_stats_all() - DO NOT MASS UPDATE MAKERS IN THE ADMIN SCREENS, IT TRASHES THE AUTHOR
 */
 
 
@@ -383,6 +384,7 @@ add_shortcode('taxonomy-level', 'taxonomy_level');
 
 function current_user_can_edit_post() {
 
+	//todo: test for $atts existing to prevent warnings
 	$id = $atts["id"];
 	if (!$id) {
 		$id=get_the_ID();
@@ -971,6 +973,7 @@ function update_maker_stats ($post_id) {
 		//update has-approved-children and number-approved-children
 		$hac = 0; //start false
 		$nac = 0;
+		$appr_year = ""; //avoid warnings with no child exhibits
 		$author_name = get_the_author_meta('display_name', $author_id);
 		foreach ($children as $child) {
 

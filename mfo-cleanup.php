@@ -73,6 +73,35 @@ $args = array(
 //commented for safety!
 //add_shortcode('mfo-utility-strip-maker-agreement-acks', 'mfo_utility_strip_maker_agreement_acks');
 
+
+function mfo_utility_update_maker_stats_all() {
+
+ mfo_log (4, "mfo_utility_update_maker_stats_all", "start");
+
+$args = array(
+  'post_type' => 'maker',
+  //'post_status' => 'publish',
+  'posts_per_page' => -1, // all
+  'orderby' => 'title',
+  'order' => 'ASC',
+);
+
+ $makers_array = get_posts($args);
+
+ foreach ($makers_array as $maker) {
+        echo "Updating stats for Maker: " . $maker->post_name . "<br>";
+        update_maker_stats($maker->ID);
+ }
+
+}
+
+//commented for safety!
+//add_shortcode('mfo-utility-update-maker-stats-all', 'mfo_utility_update_maker_stats_all');
+
+
+
+
+
 function mfo_utility_set_all_exhibits_to_pending() {
 
 
