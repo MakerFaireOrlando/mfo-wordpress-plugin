@@ -44,7 +44,7 @@ $helpers_array = get_posts($h_args);
 
 //print_r($exhibits_array);
 
-	echo 'exhibit-id,maker-id,maker-name,maker-last-name,maker-first-name,';
+	echo 'exhibit-year,exhibit-id,maker-id,maker-name,maker-last-name,maker-first-name,';
 	echo 'maker-email,maker-phone,maker-address,maker-website,exhibit-name,exhibit-description';
 	echo "\r\n";
 
@@ -63,6 +63,10 @@ foreach ($exhibits_array as $exhibit) {
 
 	$score = 0;
 
+	echo '"';
+	echo get_post_meta($exhibit->ID, "wpcf-approval-year", true);
+	echo '"';
+	echo ',';
 	echo '"';
 	echo $exhibit->ID; //exhibit id
 	echo '"';
