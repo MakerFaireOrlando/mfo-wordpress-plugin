@@ -670,4 +670,42 @@ function mfo_file_test ($filename, $txt) {
         }
 }
 
+/* ajax from here
+//https://codex.wordpress.org/AJAX_in_Plugins
+//settings_page_mfo-options-page
+//find with echo $GLOBALS['hook_suffix']
+add_action ("admin_footer-settings_page_mfo-options-page", "mfo_options_page_hook");
+
+function mfo_options_page_hook(){
+ ?>
+	<script type="text/javascript" >
+	jQuery(document).ready(function($) {
+
+		var data = {
+			'action': 'my_action',
+			'whatever': 1234
+		};
+
+		// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+		jQuery.post(ajaxurl, data, function(response) {
+			alert('Got this from the server: ' + response);
+		});
+	});
+	</script> <?php
+}
+
+add_action( 'wp_ajax_my_action', 'my_action_callback' );
+
+function my_action_callback() {
+	global $wpdb; // this is how you get access to the database
+
+	$whatever = intval( $_POST['whatever'] );
+
+	$whatever += 10;
+
+        echo $whatever;
+
+	wp_die(); // this is required to terminate immediately and return a proper response
+}
+/*
 ?>
