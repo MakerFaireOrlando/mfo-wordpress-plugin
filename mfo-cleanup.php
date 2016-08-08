@@ -6,6 +6,45 @@ This file is for cleanup functions with special uses
 Use with extreme care :)
 */
 
+/*
+//reset min default helpers - DOES not change if already at or above min
+function mfo_utility_reset_exhibit_helpers() {
+
+ $year = mfo_event_year();
+  mfo_log (4, "mfo_utility_reset_exhibit_helpers", "year: " . $year);
+ echo "Year: " . $year . "<br>";
+        
+$args = array(
+  'post_type' => 'exhibit',
+  'post_status' => 'publish',
+  'posts_per_page' => -1, // all
+  'orderby' => 'title',
+  'order' => 'ASC',
+  'meta_query' => array(array('key' => 'wpcf-approval-year', 'value' => mfo_event_year()))
+);
+
+ $exhibits_array = get_posts($args);
+
+ $haq_default = mfo_exhibithelpers_default();
+ echo "Default HAQ = " . $haq_default. "<br>";
+
+ echo "Exhibits: " . count($exhibits_array) . "<br>";
+
+ foreach ($exhibits_array as $exhibit) {
+        $haq = get_post_meta($exhibit->ID, "wpcf-helper-approved-quantity", true);
+        echo "Exhibit: " . $exhibit->post_name . " - haq=". $haq ."<br>";
+        if ($haq < $haq_default) {
+                echo "Updating min <br>";
+                update_post_meta($exhibit->ID, "wpcf-helper-approved-quantity", $haq_default);
+        }
+ }
+
+}
+
+//commented for safety!
+//add_shortcode('mfo-utility-reset-exhibit-helpers', 'mfo_utility_reset_exhibit_helpers');
+*/
+
 
 //strip all locations from current year exhibits
 //this was needed because the duplicate exhibit function
