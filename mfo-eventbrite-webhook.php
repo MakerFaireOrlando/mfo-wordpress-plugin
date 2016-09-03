@@ -249,7 +249,7 @@ function mfo_eventbrite_create_code () {
 
 	$ed_email = get_post_meta($post_id, "wpcf-educator-email-address", true);
 
-	$eb_discountcode = "TEST-ed_50off_" . $ed_email;
+	$eb_discountcode = "ed_50off_" . $ed_email;
 	$eb_discountcode_url = 'https://www.eventbriteapi.com/v3/events/'. $event . '/discounts/?token=' . $eb_token;
 	$eb_discountcode_data = array ("discount.code" => $eb_discountcode,
 			     	 "discount.percent_off" => '50.00',
@@ -262,7 +262,7 @@ function mfo_eventbrite_create_code () {
 
 	add_post_meta($post_id, "wpcf-educator-eventbrite-code-url", $eb_public_url . $eb_discountcode);
 
-	$eb_accesscode = "TEST-ed_free_" . $ed_email;
+	$eb_accesscode = "ed_free_" . $ed_email;
 	$eb_accesscode_url = 'https://www.eventbriteapi.com/v3/events/'. $event . '/access_codes/?token=' . $eb_token;
 	$eb_accesscode_data = array ("access_code.code" => $eb_accesscode,
 	  			     "access_code.ticket_ids" => $access_tickets,
@@ -277,8 +277,7 @@ function mfo_eventbrite_create_code () {
 
 
 	$headers[] = 'From: Maker Faire Orlando <educators@makerfaireorlando.com>';
-	//TODO: ADD THIS 
-	//$headers[] = 'Bcc: producers@makerfaireorlando.com';
+	$headers[] = 'Bcc: producers@makerfaireorlando.com';
 	$msg = "Your Maker Faire Orlando Educator ticket codes are below.\r\n\r\n" . 
 		"These tickets are made possible by the generosity of Vistana Signature Experiences (www.vistana.com)\r\n\r\n" .
 		"Please click the links to obtain each ticket from Eventbrite." . 
