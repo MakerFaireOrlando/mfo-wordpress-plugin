@@ -202,4 +202,99 @@ function mfo_eventbrite_tickets_sold($event_id){
 	return $total_tickets;
 }
 
+//Eventbrite access code creation
+
+function mfo_eb_code_ajax() {
+ return  "<a id='button' href='" . admin_url('admin-ajax.php?action=eventbrite_create_code') .  "'>Click here now</a>";
+ //admin_url('admin-ajax.php?action=eventbrite_create_code');
+}
+
+add_shortcode('mfo-eb-code-ajax', 'mfo_eb_code_ajax');
+
+add_action('wp_ajax_eventbrite_create_code', 'mfo_eventbrite_create_code');
+
+function mfo_eventbrite_create_code () {
+
+	//todo: this code needs to be abstracted with settings, or a hook, so that the specific
+	//	implementation is not in the plugin, but for now, this is here...
+
+	$post_id = $_POST['postID'];
+	mfo_log (4, 'eventbrite', "create_code - begin" . " : ". $post_id);
+
+	$ed_email = get_post_meta($post_id, "wpcf-educator-email-address");
+
+	//are there existing codes for this educator? If so, stop and error.
+	$codes = get_post_meta($post_id, "wpcf-educator-eventbrite-code-url");
+	if ( !empty($codes[0])) {
+		echo 3;
+		die();
+	}
+
+	//remove existing, to handle the case where there is an existing blank
+	//this isnt elegant, but gets it done
+	if (count($codes) > 0) {
+		delete_post_meta($post_id, "wpcf-educator-eventbrite-code-url");
+		}
+
+	//todo, this should not be hardcoded :)
+	$disc_tickets = "50863047,50863048,50401216,51376652,50863049,51376653,51376651,51376654";
+	$access_tickets = "51114514";
+	$eb_public_url = "http://makerfaireorlando.eventbrite.com?discount=";
+	$event = "22749813304";
+	$options = get_option('mfo_options_modules');
+	$eb_token = $options['mfo_eventbrite_token_string'];
+
+
+	//todo: test if codes already exist?
+
+	$ed_email = get_post_meta($post_id, "wpcf-educator-email-address", true);
+
+	$eb_discountcode = "TEST-ed_50off_" . $ed_email;
+	$eb_discountcode_url = 'https://www.eventbriteapi.com/v3/events/'. $event . '/discounts/?token=' . $eb_token;
+	$eb_discountcode_data = array ("discount.code" => $eb_discountcode,
+			     	 "discount.percent_off" => '50.00',
+				"discount.ticket_ids" => $disc_tickets,
+			     	 "discount.quantity_available" => '1',
+			     	);
+
+	$dc_return = mfo_call_api("POST", $eb_discountcode_url, $eb_discountcode_data);
+	mfo_log (4, 'eventbrite', "create_code - discount" . " : ". $dc_return);
+
+	add_post_meta($post_id, "wpcf-educator-eventbrite-code-url", $eb_public_url . $eb_discountcode);
+
+	$eb_accesscode = "TEST-ed_free_" . $ed_email;
+	$eb_accesscode_url = 'https://www.eventbriteapi.com/v3/events/'. $event . '/access_codes/?token=' . $eb_token;
+	$eb_accesscode_data = array ("access_code.code" => $eb_accesscode,
+	  			     "access_code.ticket_ids" => $access_tickets,
+			     	     "access_code.quantity_available" => '1',
+			     	    );
+
+	$ac_return = mfo_call_api("POST", $eb_accesscode_url, $eb_accesscode_data);
+	mfo_log (4, 'eventbrite', "create_code - access" . " : ". $ac_return);
+	add_post_meta($post_id, "wpcf-educator-eventbrite-code-url", $eb_public_url . $eb_accesscode);
+
+	wp_publish_post($post_id);
+
+
+	$headers[] = 'From: Maker Faire Orlando <educators@makerfaireorlando.com>';
+	//TODO: ADD THIS 
+	//$headers[] = 'Bcc: producers@makerfaireorlando.com';
+	$msg = "Your Maker Faire Orlando Educator ticket codes are below.\r\n\r\n" . 
+		"These tickets are made possible by the generosity of Vistana Signature Experiences (www.vistana.com)\r\n\r\n" .
+		"Please click the links to obtain each ticket from Eventbrite." . 
+		" Note that they will need to be transacted separately. You may give the 50% off code to a friend.\r\n\r\n" .
+		"Free Ticket: http://makerfaireorlando.eventbrite.com?discount=" . $eb_accesscode . "\r\n\r\n" .
+		"50% off discount code (good for 1 discounted ticket): http://makerfaireorlando.eventbrite.com?discount=" . $eb_discountcode . "\r\n\r\n" .
+		"\r\n" .
+		"Please tell other educators about this program (http://www.makerfaireorlando.com/educator-tickets/)," .
+		" and we greatly appreciate your social media posts and mentions of Maker Faire Orlando.\r\n"
+
+		;
+
+	wp_mail($ed_email, "Your Maker Faire Orlando Educator tickets", $msg, $headers);
+
+	echo 1;
+
+	die(); //this prevents admin-ajax from also returning a zero :)
+}
 ?>
