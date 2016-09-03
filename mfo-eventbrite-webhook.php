@@ -280,7 +280,7 @@ function mfo_eventbrite_create_code () {
 	$headers[] = 'Bcc: producers@makerfaireorlando.com';
 	$msg = "Your Maker Faire Orlando Educator ticket codes are below.\r\n\r\n" . 
 		"These tickets are made possible by the generosity of Vistana Signature Experiences (www.vistana.com)\r\n\r\n" .
-		'Please click the links to obtain each ticket from Eventbrite. (Once you are on the Eventbrite site, click the green "TICKETS" button)\r\n' . 
+		'Please click the links to obtain each ticket from Eventbrite. (Once you are on the Eventbrite site, click the green "TICKETS" button)' ."\r\n" . 
 		"Note that they will need to be transacted separately. You may give the 50% off code to a friend, or purchase the ticket and then give away the ticket.\r\n\r\n" .
 		"Free Ticket: http://makerfaireorlando.eventbrite.com?discount=" . $eb_accesscode . "\r\n\r\n" .
 		"50% off discount code (good for 1 discounted ticket): http://makerfaireorlando.eventbrite.com?discount=" . $eb_discountcode . "\r\n\r\n" .
