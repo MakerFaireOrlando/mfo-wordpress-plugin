@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.19.3
+Version: 3.20.0
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -75,6 +75,7 @@ Changelog:
 09-03-2016: 3.19.1: Minor updates to eventbrite educator code emails
 09-03-2016: 3.19.2: Minor updates to eventbrite educator code emails
 09-03-2016: 3.19.3: Minor updates to eventbrite educator code emails
+06-11-2017: 3.20.0: Fixed warnings in current_user_can_edit_post(); changed script loading to make jquery a dependency for isotope
 */
 
 
@@ -392,10 +393,10 @@ add_shortcode('taxonomy-level', 'taxonomy_level');
 function current_user_can_edit_post() {
 
 	//todo: test for $atts existing to prevent warnings
-	$id = $atts["id"];
-	if (!$id) {
+	//$id = $atts["id"];
+	//if (!$id) {
 		$id=get_the_ID();
-	}
+	//}
 
 return current_user_can('edit_post',$id);
 }
@@ -1497,6 +1498,7 @@ function mfo_toolset_add_shortcodes( $shortcodes ) {
     return $shortcodes;
 }
 
+
 //load custom scripts by page
 function add_custom_scripts() {
         if (is_page('producer-exhibit-location-and-hidden-category-slides') OR
@@ -1508,7 +1510,15 @@ function add_custom_scripts() {
                 	false, "1.11.4", false);
         }
 	elseif (is_page('makers') OR is_page('schedule')) {
- 		wp_enqueue_script( "isotope-js", get_stylesheet_directory_uri() . '/js/libs/isotope.pkgd.min.js');
+
+
+		wp_register_script (
+			'isotope-js', 
+			//get_stylesheet_directory_uri() . '/js/libs/isotope.pkgd.min.js',
+			'https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js',
+			array('jquery')
+		); //jquery as a dependy for isotope
+ 		wp_enqueue_script( "isotope-js");
 		wp_enqueue_script( "imagefill-js", get_stylesheet_directory_uri() . '/js/libs/jquery-imagefill.js');
  	}
 }
