@@ -76,6 +76,8 @@ Changelog:
 09-03-2016: 3.19.2: Minor updates to eventbrite educator code emails
 09-03-2016: 3.19.3: Minor updates to eventbrite educator code emails
 06-11-2017: 3.20.0: Fixed warnings in current_user_can_edit_post(); changed script loading to make jquery a dependency for isotope
+06-13-2017: 3.21.0: Added custom post template for maker and exhibit; also made debugging edits to the current_user_can_edit_post before moving on
+
 */
 
 
@@ -123,6 +125,26 @@ if ( $options['mfo_slack_enabled_boolean'] ) {
 }
 
 }
+
+add_filter('single_template', 'mfo_single_template');
+
+function mfo_single_template($single) {
+    global $wp_query, $post;
+
+    /* Checks for single template by post type */
+    if ($post->post_type == "maker"){
+        if(file_exists( dirname( __FILE__ ) . '/templates/single-maker.php'))
+            return dirname( __FILE__ ) . '/templates/single-maker.php';
+    }
+    elseif ($post->post_type == "exhibit"){
+        if(file_exists( dirname( __FILE__ ) . '/templates/single-exhibit.php'))
+            return dirname( __FILE__ ) . '/templates/single-exhibit.php';
+    }
+
+
+    return $single;
+}
+
 
 add_filter( 'page_template', 'mfo_page_template' );
 function mfo_page_template( $page_template )
@@ -397,8 +419,15 @@ function current_user_can_edit_post() {
 	//if (!$id) {
 		$id=get_the_ID();
 	//}
-
-return current_user_can('edit_post',$id);
+	$cap = false;
+	$cap = current_user_can('edit_post',$id);
+	echo $id; 
+	echo " - "; 
+	echo  get_current_user_id();
+	echo " - "; 
+	echo $cap ? 'true' : 'false';
+	echo '<br>';
+return $cap;
 }
 add_shortcode('current-user-can-edit-post', 'current_user_can_edit_post');
 
