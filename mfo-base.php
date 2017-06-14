@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.20.0
+Version: 3.20.1
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -77,6 +77,7 @@ Changelog:
 09-03-2016: 3.19.3: Minor updates to eventbrite educator code emails
 06-11-2017: 3.20.0: Fixed warnings in current_user_can_edit_post(); changed script loading to make jquery a dependency for isotope
 06-13-2017: 3.21.0: Added custom post template for maker and exhibit; also made debugging edits to the current_user_can_edit_post before moving on
+06-13-2017: 3.21.1: Added not-approved messages to custom post template for maker and exhibit
 
 */
 
