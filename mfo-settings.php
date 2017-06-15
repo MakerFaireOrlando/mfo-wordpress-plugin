@@ -649,8 +649,9 @@ function mfo_settings_admin_notice_error() {
 	mfo_option_test('mfo_options_main', 'mfo_event_year_string', 'Event Year must be entered.');
 	mfo_option_test('mfo_options_debug', 'mfo_warning_email_string', 'System Warning Email Address must be entered.');
 
-	mfo_file_test(get_stylesheet_directory() . '/js/libs/isotope.pkgd.min.js', "isotope-js");
-        mfo_file_test(get_stylesheet_directory() . '/js/libs/jquery-imagefill.js', "imagefill-js");
+	//removing these tests as we now call a CDN for these
+	//mfo_file_test(get_stylesheet_directory() . '/js/libs/isotope.pkgd.min.js', "isotope-js");
+        //mfo_file_test(get_stylesheet_directory() . '/js/libs/jquery-imagefill.js', "imagefill-js");
 
 }
 add_action( 'admin_notices', 'mfo_settings_admin_notice_error' );
