@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.makerfaireorlando.com
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.21.3
+Version: 3.21.4
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.themakereffect.org/about/
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -80,6 +80,7 @@ Changelog:
 06-13-2017: 3.21.1: Added not-approved messages to custom post template for maker and exhibit
 06-14-2017: 3.21.2: imagefill and isotope now called from CDN, and removed the safety checks for these files
 06-15-2017: 3.21.3: dynamic menu items created with wp_nav_menu_items now format properly for bootstrap (works with nav_walker)
+06-16-2017: 3.21.4: Add the maker-dashboard page template
 */
 
 
@@ -163,7 +164,8 @@ function mfo_page_template( $page_template )
 	array('producer-exhibit-search-csv-results', 	'csv-results.php'),
 	array('producer-maker-search-csv-results', 	'csv-results.php'),
 	array('csv-social', 		'csv-social.php'),
- 	array('duplicate-exhibit', 'duplicate-exhibit.php'),
+ 	array('duplicate-exhibit',	'duplicate-exhibit.php'),
+ 	array('maker-dashboard', 	'maker-dashboard.php'),
 	array('exhibit-table-signs',	'exhibit-table-signs.php'),
 	array('events-json',		'json-eventlist.php'),
 	array('makers-json',		'json-makerlist.php'),
