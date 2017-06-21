@@ -2,11 +2,11 @@
 
 /*
 Plugin Name: Maker Faire Online - CFM & More
-Plugin URI: http://www.makerfaireorlando.com
+Plugin URI: http://www.github.com/digitalman2112/mfo-wordpress-plugin
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.21.4
+Version: 3.22.0
 Author: Ian Cole (Maker Faire Orlando)
-Author URI: http://www.themakereffect.org/about/
+Author URI: http://www.github.com/digitalman2112
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
 */
 
@@ -81,6 +81,7 @@ Changelog:
 06-14-2017: 3.21.2: imagefill and isotope now called from CDN, and removed the safety checks for these files
 06-15-2017: 3.21.3: dynamic menu items created with wp_nav_menu_items now format properly for bootstrap (works with nav_walker)
 06-16-2017: 3.21.4: Add the maker-dashboard page template
+06-21-2017: 3.22.0: Implemented login redirect function - mfo_login_redirect - to deprecate Peter's Login redirect plugin
 */
 
 
@@ -1607,6 +1608,32 @@ function add_to_menu( $items, $args ) {
     return $items;
 }
 
+/**
+ * Redirect user after successful login.
+ *
+ * @param string $redirect_to URL to redirect to.
+ * @param string $request URL the user is coming from.
+ * @param object $user Logged user's data.
+ * @return string
+ *
+ * url:https://codex.wordpress.org/Plugin_API/Filter_Reference/login_redirect
+ * 
+ */
+function mfo_login_redirect( $redirect_to, $request, $user ) {
+	//is there a user to check?
+	if ( isset( $user->roles ) && is_array( $user->roles ) ) {
+		//check for administrator or producer
+		if ( in_array( 'producer', $user->roles ) || in_array( 'administrator', $user->roles ) ) {
+			// redirect them to the default place
+			return  "/producer-dashboard";
+		} else {
+			return "/maker-dashboard";
+		}
+	} else {
+		return $redirect_to;
+	}
+}
 
+add_filter( 'login_redirect', 'mfo_login_redirect', 10, 3 );
 
 ?>
