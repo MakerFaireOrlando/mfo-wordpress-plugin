@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.github.com/digitalman2112/mfo-wordpress-plugin
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.22.0
+Version: 3.23.0
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.github.com/digitalman2112
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -81,7 +81,7 @@ Changelog:
 06-14-2017: 3.21.2: imagefill and isotope now called from CDN, and removed the safety checks for these files
 06-15-2017: 3.21.3: dynamic menu items created with wp_nav_menu_items now format properly for bootstrap (works with nav_walker)
 06-16-2017: 3.21.4: Add the maker-dashboard page template
-06-21-2017: 3.22.0: Implemented login redirect function - mfo_login_redirect - to deprecate Peter's Login redirect plugin
+06-24-2017: 3.23.0: Added menu items for producers  / admins to the "my account" menu
 */
 
 
@@ -1578,6 +1578,8 @@ function add_to_menu( $items, $args ) {
 
 	  if (is_user_logged_in() ) {
 
+		$user = $user ? new WP_User( $user ) : wp_get_current_user();
+
         	$items .=  '<li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-99900"'.
 				'class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-99900 dropdown">'.
  
@@ -1589,14 +1591,27 @@ function add_to_menu( $items, $args ) {
 				'<ul role="menu" class=" dropdown-menu">'.
 					'<li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-99901"' .
 							'class="menu-item menu-item-type-post_type menu-item-object-page menu-item-99901" >' .
-							'<a title="Maker Dashboard" href="/maker-dashboard">Maker Dashboard</a></li>'.
-					'<li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-99902"' .
+							'<a title="Maker Dashboard" href="/maker-dashboard">Maker Dashboard</a></li>';
+
+					if ( in_array( 'producer', $user->roles ) || in_array( 'administrator', $user->roles ) ) {
+
+					$items .= '<li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-99902"' .
 							'class="menu-item menu-item-type-post_type menu-item-object-page menu-item-99902" >' .
-							'<a title="Change Password" href="/wp-admin/profile.php">Change Password</a></li>'.
+							'<a title="Maker Dashboard" href="/producer-dashboard">Producer Dashboard</a></li>' .
 					'<li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-99903"' .
 							'class="menu-item menu-item-type-post_type menu-item-object-page menu-item-99903" >' .
+							'<a title="Maker Dashboard" href="/wp-admin">Wordpress Admin</a></li>';
+
+					}
+
+
+					$items .= '<li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-99904"' .
+							'class="menu-item menu-item-type-post_type menu-item-object-page menu-item-99904" >' .
+							'<a title="Change Password" href="/wp-admin/profile.php">Change Password</a></li>'.
+						'<li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-99905"' .
+							'class="menu-item menu-item-type-post_type menu-item-object-page menu-item-99905" >' .
 							'<a title="Logout" href="' . wp_logout_url() . ' ">Logout</a></li>'.
-			  '</li>';
+			  			'</li>';
 
 		}
 	 else {
