@@ -135,7 +135,7 @@ foreach ($exhibits_array as $exhibit) {
 		$cats_output[] = array(
 			'name' => $cat->name,
 			'slug' => $cat->slug,
-			'url'  => "http://www.makerfaireorlando.com/makers/?category=".$cat->slug
+			'url'  => get_site_url() ."/makers/?category=".$cat->slug
 		);
 	}
 
@@ -150,28 +150,17 @@ else $e_output_count = count($e_output);
 
 //create the overall JSON array
 $output = array(
-		'attend_link' => 'http://www.makerfaireorlando.com/attend',
+		'attend_link' => get_site_url() . '/attend',
 		'accepteds_count' => $e_output_count,
 		'accepteds' => $e_output,
 		'categories' => $cats_output,
-		'title' => 'Maker Faire Orlando',
-		'sponsor_link' => 'http://www.makerfaireorlando.com/sponsor',
-		'volunteer_link' => 'http://www.makerfaireorlando.com/volunteers',
-		'about_url' => 'http://www.makerfaireorlando.com/about',
-		'info_url' => 'http://www.makerfaireorlando.com/mobile-app-information-page',
+		'title' => mfo_event_name(),
+		'sponsor_link' => get_site_url() . '/sponsor',
+		'volunteer_link' => get_site_url() . '/volunteers',
+		'about_url' => get_site_url() . '/about',
+		'info_url'=> get_site_url() . '/mobile-app-information-page',
 		'json_version' => $version,
 		);
-
-/* Used htaccess rewrite so that I dont need to put the file out
-//write to disk for the app (HACK FOR NOW)
-$ss_dir = get_stylesheet_directory();
-//echo $ss_dir;
-//echo "\r\n";
-$filename = $ss_dir."/makerlist/json_backup/makerlist_json";
-//echo $filename;
-//echo "\r\n";
-//file_put_contents ( $filename,json_encode( $output));
-*/
 
 //send headers & JSON
 wp_send_json($output);
