@@ -1611,8 +1611,7 @@ function add_to_menu( $items, $args ) {
 							'<a title="Change Password" href="/wp-admin/profile.php">Change Password</a></li>'.
 						'<li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-99905"' .
 							'class="menu-item menu-item-type-post_type menu-item-object-page menu-item-99905" >' .
-							'<a title="Logout" href="' . wp_logout_url() . ' ">Logout</a></li>'.
-			  			'</li>';
+							'<a title="Logout" href="' . wp_logout_url() . ' ">Logout</a></li>';
 
 		}
 	 else {
