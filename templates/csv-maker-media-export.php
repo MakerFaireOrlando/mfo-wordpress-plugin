@@ -8,7 +8,7 @@ Date: Sep 20th, 2015
 
 
 	//set the filename from parameter if exists
-	$fname = "mf-orlando-maker-export";
+	$fname = "mfo-maker-export";
 	if(isset($wp_query->query_vars['csv-filename'])) {
 		$fname = urldecode($wp_query->query_vars['csv-filename']);
 	}
