@@ -7,14 +7,14 @@
 
 get_header(); ?>
 
-<div id="content-container">
-       <div id="content" role="main">
+<div id="page-content">
+       <div id="page-body">
         <?php the_post();?>
 
                 <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<?php if ( (get_the_author_meta('ID') == get_current_user_id() )
 					 || current_user_can("edit_posts", get_the_ID() )):?>
-                        <div class="entry-content">
+                        <div class="container">
                                 <?php the_content(); ?>
                         </div><!-- .entry-content -->
 			<?php else: ?>
