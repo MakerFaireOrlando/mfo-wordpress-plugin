@@ -32,6 +32,17 @@ function mfo_event_year() {
 }
 add_shortcode('mfo-event-year', 'mfo_event_year');
 
+function mfo_header_button_text() {
+ $options = get_option('mfo_options_main');
+ return $options['mfo_header_button_text_string'];
+}
+
+function mfo_header_button_url() {
+ $options = get_option('mfo_options_main');
+ return $options['mfo_header_button_url_string'];
+}
+
+
 
 function mfo_support_email() {
 
@@ -268,6 +279,8 @@ add_settings_field('mfo_event_name_string', 'Event Name', 'mfo_event_name_settin
 add_settings_field('mfo_support_email_string', 'Support Email Address', 'mfo_support_email_setting_string', 'mfo_main_tab', 'mfo_main');
 add_settings_field('mfo_notification_email_string', 'Notification Email Address', 'mfo_notification_email_setting_string', 'mfo_main_tab', 'mfo_main');
 add_settings_field('mfo_event_year_string', 'Event Year', 'mfo_event_year_setting_string', 'mfo_main_tab', 'mfo_main');
+add_settings_field('mfo_header_button_text_string', 'Header Button Text', 'mfo_header_button_text_setting_string', 'mfo_main_tab', 'mfo_main');
+add_settings_field('mfo_header_button_url_string', 'Header Button Link URL', 'mfo_header_button_url_setting_string', 'mfo_main_tab', 'mfo_main');
 
 //debug
 add_settings_field('mfo_log_enabled_boolean', 'Logging Enabled?', 'mfo_log_enabled_setting_boolean', 'mfo_debug_tab', 'mfo_debug');
@@ -371,6 +384,17 @@ function mfo_event_year_setting_string() {
 	$options = get_option('mfo_options_main');
 	echo "<input id='mfo_event_year_string' name='mfo_options_main[mfo_event_year_string]' size='4' type='text' value='{$options['mfo_event_year_string']}' />";
 	echo "<br>&nbsp&nbspShortcode: <b>[mfo-event-year]</b> for use in posts / pages / views / forms, etc.";
+}
+
+function mfo_header_button_text_setting_string() {
+	$options = get_option('mfo_options_main');
+	echo "<input id='mfo_header_button_text_string' name='mfo_options_main[mfo_header_button_text_string]' size='20' type='text' value='{$options['mfo_header_button_text_string']}' />";
+}
+
+function mfo_header_button_url_setting_string() {
+	$options = get_option('mfo_options_main');
+	echo "<input id='mfo_header_button_url_string' name='mfo_options_main[mfo_header_button_url_string]' size='50' type='text' value='{$options['mfo_header_button_url_string']}' />";
+	echo "<br>&nbsp&nbspThe URL should be full url including http:// or https://";
 }
 
 function mfo_log_enabled_setting_boolean() {
@@ -586,6 +610,8 @@ function mfo_options_main_validate($input) {
 	$newinput['mfo_support_email_string'] = trim($input['mfo_support_email_string']);
 	$newinput['mfo_notification_email_string'] = trim($input['mfo_notification_email_string']);
 	$newinput['mfo_event_year_string'] = trim($input['mfo_event_year_string']);
+	$newinput['mfo_header_button_text_string'] = trim($input['mfo_header_button_text_string']);
+	$newinput['mfo_header_button_url_string'] = trim($input['mfo_header_button_url_string']);
 	mfo_log(1, "MFO Settings" , "mfo_options_main changed");
 	return $newinput;
 }
