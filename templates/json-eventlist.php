@@ -114,27 +114,14 @@ foreach ($dates as $date) {
 		$cats_output[] = array(
 			'name' => $cat->name,
 			'slug' => $cat->slug,
-			'url'  => "http://www.makerfaireorlando.com/makers/?category=".$cat->slug
+			'url'  => get_site_url() . "/makers/?category=".$cat->slug
 		);
 	}
 
 */
 
 //create the overall JSON array
-$output = array(
-/*
-		'days' => array ($d1_output, $d2_output),
-		'categories' => $cats_output,
-		'title' => 'Maker Faire Orlando',
-		'sponsor_link' => 'http://www.makerfaireorlando.com/sponsor',
-		'volunteer_link' => 'http://www.makerfaireorlando.com/volunteers',
-		'about_url' => 'http://www.makerfaireorlando.com/about',
-		'info_url' => 'http://www.makerfaireorlando.com/mobile-app-information-page',
-*/
-		//'dates' => $dates,
-		//'events' => $events,
-		'days' => $dates_output,
-		);
+$output = array( 'days' => $dates_output );
 
 
 //send headers & JSON
