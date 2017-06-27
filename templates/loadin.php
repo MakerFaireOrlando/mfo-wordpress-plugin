@@ -119,13 +119,13 @@ else {
 					echo '<div style="color:white; background-color:green; margin-bottom:20px;">';
 					echo 'Exhibit Load-in updated.';
 					echo '</div>';
-					$headers = 'From: Maker Faire Orlando <makers@makerfaireorlando.com>' . "\r\n";
+					$headers = 'From: '. mfo_event_name() . '<' . mfo_support_email() . '>' . "\r\n";
 					$subject = 'Load-in selected for ';
 					$subject = $subject . get_the_title($exhibit);
 					$message = $subject . ' (' . $exhibit  . ')' . ' - ' . $slot_name . "\r\n\r\n";
 					$message = $message . 'Username: ' . $current_user->user_login . "\r\n";
 					$message = $message . 'User email: ' . $current_user->user_email . "\r\n";
-					$from = do_shortcode("[mfo-support-email]");
+					$from = mfo-support-email();
 					//$from = "ian.cole@gmail.com";
 					wp_mail($from, $subject, $message, $headers);
 
