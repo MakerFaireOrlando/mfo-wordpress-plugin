@@ -674,7 +674,7 @@ function mfo_settings_admin_notice_error() {
 	mfo_option_test('mfo_options_main', 'mfo_notification_email_string', 'Notification Email Address must be entered.');
 	mfo_option_test('mfo_options_main', 'mfo_event_year_string', 'Event Year must be entered.');
 	mfo_option_test('mfo_options_main', 'mfo_header_button_text_string', 'Header button text must be entered.');
-	mfo_option_test('mfo_options_main', 'mfo_header_button_url', 'Header button URL  must be entered.');
+	mfo_option_test('mfo_options_main', 'mfo_header_button_url_string', 'Header button URL  must be entered.');
 	mfo_option_test('mfo_options_debug', 'mfo_warning_email_string', 'System Warning Email Address must be entered.');
 
 	//removing these tests as we now call a CDN for these
