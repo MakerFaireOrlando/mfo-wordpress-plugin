@@ -394,7 +394,7 @@ function mfo_header_button_text_setting_string() {
 function mfo_header_button_url_setting_string() {
 	$options = get_option('mfo_options_main');
 	echo "<input id='mfo_header_button_url_string' name='mfo_options_main[mfo_header_button_url_string]' size='50' type='text' value='{$options['mfo_header_button_url_string']}' />";
-	echo "<br>&nbsp&nbspThe URL should be full url including http:// or https://";
+	echo "<br>&nbsp&nbspThe URL can be a full url including http:// or https:// or a relative url starting with /";
 }
 
 function mfo_log_enabled_setting_boolean() {
@@ -673,6 +673,8 @@ function mfo_settings_admin_notice_error() {
 	mfo_option_test('mfo_options_main', 'mfo_support_email_string', 'Support Email Address must be entered.');
 	mfo_option_test('mfo_options_main', 'mfo_notification_email_string', 'Notification Email Address must be entered.');
 	mfo_option_test('mfo_options_main', 'mfo_event_year_string', 'Event Year must be entered.');
+	mfo_option_test('mfo_options_main', 'mfo_header_button_text_string', 'Header button text must be entered.');
+	mfo_option_test('mfo_options_main', 'mfo_header_button_url', 'Header button URL  must be entered.');
 	mfo_option_test('mfo_options_debug', 'mfo_warning_email_string', 'System Warning Email Address must be entered.');
 
 	//removing these tests as we now call a CDN for these
