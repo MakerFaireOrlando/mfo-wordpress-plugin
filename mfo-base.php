@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.github.com/digitalman2112/mfo-wordpress-plugin
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.24.2
+Version: 3.24.3
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.github.com/digitalman2112
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -85,7 +85,7 @@ Changelog:
 06-27-2017: 3.24.0: Removed some maker faire orlando hardcoding from json-makerlist template
 06-28-2017: 3.24.1: Updated settings (better explanation text on header button url) and checks for button text and url
 06-28-2017: 3.24.2: Fix for button url setting check
-
+06-29-2017: 3.24.3: Menu name change to align with template for menu injection
 */
 
 
@@ -1578,7 +1578,7 @@ add_shortcode('mfo-term-field-output', 'mfo_term_field_output');
 add_filter('wp_nav_menu_items','add_to_menu', 1, 2);
 function add_to_menu( $items, $args ) {
 
-    if( $args->theme_location == 'primary')  {
+    if( $args->theme_location == 'header-menu')  {
 
 	  if (is_user_logged_in() ) {
 
