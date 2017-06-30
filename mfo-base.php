@@ -4,7 +4,7 @@
 Plugin Name: Maker Faire Online - CFM & More
 Plugin URI: http://www.github.com/digitalman2112/mfo-wordpress-plugin
 Description: Helper plugin for the Maker Faire Online system based using the Toolset plugins & more
-Version: 3.24.3
+Version: 3.24.4
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.github.com/digitalman2112
 GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
@@ -86,6 +86,7 @@ Changelog:
 06-28-2017: 3.24.1: Updated settings (better explanation text on header button url) and checks for button text and url
 06-28-2017: 3.24.2: Fix for button url setting check
 06-29-2017: 3.24.3: Menu name change to align with template for menu injection
+06-29-2017: 3.24.4: Add mfo-makey-border shortcode
 */
 
 
@@ -1653,5 +1654,18 @@ function mfo_login_redirect( $redirect_to, $request, $user ) {
 }
 
 add_filter( 'login_redirect', 'mfo_login_redirect', 10, 3 );
+
+
+/*
+ * Shortcode to output makey border
+ *
+ */
+function mfo_makey_border() {
+	$ret  =  '<div class="wimf-border"><div class="wimf-triangle"></div></div>';
+	$ret .= '<img src="/wp-content/themes/mfo-wordpress-theme/images/makey.png" alt="Maker Faire information Makey icon">';
+	return $ret;
+}
+
+add_shortcode('mfo-makey-border', 'mfo_makey_border');
 
 ?>
