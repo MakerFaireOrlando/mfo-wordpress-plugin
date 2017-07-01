@@ -1,8 +1,5 @@
 <?php
 /**
- * @package WordPress
- * @subpackage Coraline
- * @since Coraline 1.0
  * Template Name: Maker Dashboard
  */
 
@@ -15,14 +12,14 @@ if ( !is_user_logged_in() ) {
 }
 get_header(); ?>
 
-		<div id="content-container">
-			<div id="content" role="main">
+		<div id="page-content">
+			<div id="page-body">
 
 			<?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
 
 				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
-					<div class="entry-content">
+					<div class="container">
 						<?php the_content(); ?>
 
 						<?php edit_post_link( __( 'Edit', 'coraline' ), '<span class="edit-link">', '</span>' ); ?>
@@ -32,10 +29,8 @@ get_header(); ?>
 
 			<?php endwhile; ?>
 
-			</div><!-- #content -->
-		</div><!-- #content-container -->
+			</div><!-- #page-content -->
 
-<?php get_sidebar(); ?>
 <?php get_footer(); ?>
 <?php
 
