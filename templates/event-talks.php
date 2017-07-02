@@ -10,14 +10,14 @@
 
 get_header(); ?>
 
-		<div id="content-container">
-			<div id="content" role="main">
+		<div id="page-content">
+			<div id="page-body">
 
 			<?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
 
 				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
-					<div class="entry-content">
+					<div class="container">
 						<?php the_content(); ?>
 
 <?php
@@ -109,5 +109,4 @@ echo '</pre>';
 			</div><!-- #content -->
 		</div><!-- #content-container -->
 
-<?php get_sidebar(); ?>
 <?php get_footer(); ?>

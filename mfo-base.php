@@ -582,7 +582,9 @@ function mfo_warning_email ($subject, $body) {
 	$options = get_option('mfo_options_debug');
 	mfo_log (1, "WARNING EMAIL", $subject . " | " . $body);
 	wp_mail(  $options['mfo_warning_email_string'], $subject, $body);
-	mfo_post_to_slack($subject, 'mfo-wp-debug', 'tacocat', ':taco:');
+	if (function_exists('mfo_post_to_slack')) {
+		mfo_post_to_slack($subject, 'mfo-wp-debug', 'tacocat', ':taco:');
+	}
 }
 
 function mfo_send_notification_email ($subject, $body) {
@@ -590,7 +592,9 @@ function mfo_send_notification_email ($subject, $body) {
 	mfo_log (1, "mfo_notification_email", $subject . " | " . $body);
 	wp_mail(  $options['mfo_notification_email_string'], $subject, $body);
 	$attach = array(array( "text" => $body));
-	mfo_post_to_slack($subject, 'system-notifications', 'makey', ':makey:', $body);
+	if (function_exists('mfo_post_to_slack')) {
+		mfo_post_to_slack($subject, 'system-notifications', 'makey', ':makey:', $body);
+	}
 }
 
 
