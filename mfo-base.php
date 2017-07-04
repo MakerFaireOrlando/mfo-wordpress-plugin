@@ -1672,4 +1672,44 @@ function mfo_makey_border() {
 
 add_shortcode('mfo-makey-border', 'mfo_makey_border');
 
+
+
+/*
+ * Get media attachment ID from the URL (for image urls in fields)
+ * From - https://frankiejarrett.com/2013/05/get-an-attachment-id-by-url-in-wordpress/
+ */
+
+function mfo_get_attachment_id_by_url( $url ) {
+
+    //echo 'mfo_get_attachment_id_by_url( '.$url.' )';
+    // Split the $url into two parts with the wp-content directory as the separator
+    $parsed_url  = explode( parse_url( WP_CONTENT_URL, PHP_URL_PATH ), $url );
+    // echo 'purl1 - ' . $parsed_url[1] .'<br>';
+    // Get the host of the current site and the host of the $url, ignoring www
+    $this_host = str_ireplace( 'www.', '', parse_url( home_url(), PHP_URL_HOST ) );
+    $file_host = str_ireplace( 'www.', '', parse_url( $url, PHP_URL_HOST ) );
+    //echo 'this_host = ' . $this_host .'<br>';
+    //echo 'file_host = ' . $file_host .'<br>';
+    // Return nothing if there aren't any $url parts or if the current host and $url host do not match
+    // ic - i removed the host matching criteria as it failed on the test server
+    if ( ! isset( $parsed_url[1] ) || empty( $parsed_url[1] ) /* || ( $this_host != $file_host ) */ ) {
+        //echo 'early return';
+	 return;
+    }
+
+    // Now we're going to quickly search the DB for any attachment GUID with a partial path match
+
+    // Example: /uploads/2013/05/test-image.jpg
+    global $wpdb;
+    //echo $parsed_url[1];
+    $attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM {$wpdb->prefix}posts WHERE guid RLIKE %s;", $parsed_url[1] ) );
+
+    // Returns null if no attachment is found
+    return $attachment[0];
+}
+
+
+
 ?>
+
+

@@ -2,9 +2,7 @@
 /**
  * single-exhibit.php
  * Page Template for exhibit custom post type
- * todo: add check for approval status &  message
  * todo: add categories
- * todo: add additional photos / videos
  * todo: exhibit location (with check for setting)
  */
 
@@ -63,8 +61,72 @@ get_header(); ?>
 
 				<?php //Categories ?>
 				<?php //Exhibit Location ?>
-				<?php //Additional Pictures & videos & such ?>
+				<?php //Additional Pictures & videos & such
+				      //https://stackoverflow.com/questions/5487444/wordpress-image-size-based-on-url
+				      //https://wp-types.com/documentation/customizing-sites-using-php/displaying-repeating-fields-one-kind/
+					$addl_photos = get_post_meta($exhibit_id, 'wpcf-additional-photos');
+					$num_photos = count(array_filter($addl_photos));
+					if ($num_photos > 1):
+					?>
+					<section class="exhibitPhotos num-photos-<?php echo $num_photos?>">
+					<div id="exhibitPhotoCarousel" class="carousel slide" data-ride="carousel">
+					<!-- Indicators -->
+					<ol class="carousel-indicators">
+					<?php
+					$counter = 0;
+					foreach ($addl_photos as $photo) {
+						$active = ""; if ($counter==0) $active='class = "active"';
+						echo '<li data-target="exhibitPhotoCarousel" data-slide-to="' . $counter . '"' .$active.'></li>';
+						$counter++;
+					}?>
+					</ol>
 
+					<!-- Wrapper for slides -->
+  					<div class="carousel-inner">
+					<?php
+					$counter = 0;
+					foreach ($addl_photos as $photo) {
+						$active = ""; if ($counter==0) $active=" active";
+						$photo_id = mfo_get_attachment_id_by_url($photo);
+						$photo_imgtag = wp_get_attachment_image($photo_id, 'large');
+						echo '<div class="item' . $active .'">';
+						echo $photo_imgtag . '</div>';
+						$counter++;
+					}
+				 	?>
+
+					<!-- Left and right controls -->
+ 					<a class="left carousel-control" href="#exhibitPhotoCarousel"  data-slide="prev">
+    					<span class="glyphicon glyphicon-chevron-left"></span>
+    					<span class="sr-only">Previous</span>
+  					</a>
+  					<a class="right carousel-control" href="#exhibitPhotoCarousel" data-slide="next">
+    					<span class="glyphicon glyphicon-chevron-right"></span>
+    					<span class="sr-only">Next</span>
+  					</a>
+
+					</div></section>
+					<?php
+					elseif ($num_photos == 1):
+						$photo_id = mfo_get_attachment_id_by_url($addl_photos[0]);
+                                                $photo_imgtag = wp_get_attachment_image($photo_id, 'large');
+						echo '<section class="exhibitPhotos"><div class="single-image">';
+						echo $photo_imgtag;
+						echo '</div></section>';
+					endif;
+					?>
+
+					<?php
+					$embeds = get_post_meta($exhibit_id, 'wpcf-embeddable-media');
+					if (count(array_filter($embeds)) > 0) {
+						echo '<div class="exhibit-embeds num-embeds-' . count($embeds) . '">';
+						foreach ($embeds as $embed) {
+					  	echo '<div class="exhibit-oembed">';
+					  	echo wp_oembed_get($embed, array('width'=>700));
+					  	echo '</div>';
+						}
+					  	echo '</div>';
+					}?>
 
 				<?php //Maker Info 
 				 global $post;
@@ -76,7 +138,7 @@ get_header(); ?>
 
 				<div class="row center-block maker-profile-row">
 				  <a href="<?php the_permalink() ?>"><img class="col-md-3 pull-left img-responsive" src="<?php the_post_thumbnail_url( $maker )?>" alt="<?php the_title() ?>"></a>
-				  <div class="col-md-5">
+				  <div class="col-md-7">
 				    <h3><a href="<?php the_permalink() ?>"><?php the_title() ?></a></h3>
 				    <p <?php the_excerpt() ?></p>
 				  </div>
