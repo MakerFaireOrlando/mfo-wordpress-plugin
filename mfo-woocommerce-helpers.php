@@ -11,13 +11,14 @@ todo: TEST the switch away from form id below
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
+/*
 //don't let woocommerce take over the lost password page
 function reset_pass_url() {
     $siteURL = get_option('siteurl');
     return "{$siteURL}/makerlogin/?action=lostpassword";
 }
 add_filter( 'lostpassword_url',  'reset_pass_url', 11, 0 );
-
+*/
 
 //connect FeePayment to exhibit (not working in CRED form)
 add_action('cred_save_data', 'my_save_data_action',10,2);
