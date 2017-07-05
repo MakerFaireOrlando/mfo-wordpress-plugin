@@ -10,8 +10,20 @@ get_header(); ?>
 
 <div id="page-content">
        <div id="page-body">
-        <?php the_post();?>
+	<?php 
+	$cred_form = get_query_var('cred-edit-form');
+	$cred_id   = get_query_var('id');
 
+	  if ($cred_form):
+		//echo '$cred_id=' . $cred_id;
+		//echo '$cred_form=' . $cred_form;
+		echo '<div class="container"><row>';
+		cred_form($cred_form, $cred_id);
+		echo '</row></div>';
+	 else:
+		?>
+		
+        <?php the_post();?>
 		<?php
 		  $exhibit_id = get_the_id();
 		  $approval_status = get_post_meta($exhibit_id, 'wpcf-approval-status', true);
@@ -153,7 +165,6 @@ get_header(); ?>
 
 			  <div class="container">
 
-                       <?php //the_content(); ?>
 
 
                         </div><!-- .entry-content -->
@@ -165,6 +176,7 @@ get_header(); ?>
 
                 </div><!-- #post-## -->
 
+          <?php endif; //end cred edit test ?>
 
         </div><!-- #content -->
 

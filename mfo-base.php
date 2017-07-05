@@ -227,6 +227,8 @@ function add_query_vars_filter($vars) {
 	$vars[] = "li-exhibit";
 	$vars[] = "dup-exhibit";
 	$vars[] = "post_ids";
+	$vars[] = "cred-edit-form";
+	$vars[] = "id";
 
 	//vars for slash commands
 	$vars[] = "token";
