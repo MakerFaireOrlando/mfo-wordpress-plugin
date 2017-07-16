@@ -1713,5 +1713,3 @@ function mfo_get_attachment_id_by_url( $url ) {
 
 
 ?>
-
-
