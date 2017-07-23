@@ -66,7 +66,7 @@ get_header(); ?>
 				<?php if ($email) 	echo '<li><a href="mailto:' . $email	   . '" target="_blank"<i class="fa fa-2x fa-envelope" 	aria-hidden="true"></i></a></li>'; ?>
 				<?php if ($twitter) 	echo '<li><a href="' . $twitter    . '" target="_blank"<i class="fa fa-2x fa-twitter" 	aria-hidden="true"></i></a></li>'; ?>
 				<?php if ($instagram) 	echo '<li><a href="' . $instagram  . '" target="_blank"<i class="fa fa-2x fa-instagram" 	aria-hidden="true"></i></a></li>'; ?>
-				<?php if ($facebok) 	echo '<li><a href="' . $facebook   . '" target="_blank"<i class="fa fa-2x fa-facebook" 	aria-hidden="true"></i></a></li>'; ?>
+				<?php if ($facebook) 	echo '<li><a href="' . $facebook   . '" target="_blank"<i class="fa fa-2x fa-facebook" 	aria-hidden="true"></i></a></li>'; ?>
 				<?php if ($googleplus) 	echo '<li><a href="' . $googleplus . '" target="_blank"<i class="fa fa-2x fa-googleplus" 	aria-hidden="true"></i></a></li>'; ?>
 				<?php if ($youtube) 	echo '<li><a href="' . $youtube    . '" target="_blank"<i class="fa fa-2x fa-youtube" 	aria-hidden="true"></i></a></li>'; ?>
 				</ul></div></div>
