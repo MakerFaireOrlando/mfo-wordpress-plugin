@@ -149,7 +149,7 @@ get_header(); ?>
 				<h1>Maker</h1></div>
 
 				<div class="row center-block maker-profile-row">
-				  <a href="<?php the_permalink() ?>"><img class="col-md-3 pull-left img-responsive" src="<?php the_post_thumbnail_url( $maker )?>" alt="<?php the_title() ?>"></a>
+				  <a href="<?php the_permalink() ?>"><img class="col-md-3 pull-left img-responsive" src="<?php echo get_the_post_thumbnail_url( $maker, 'medium' )?>" alt="<?php the_title() ?>"></a>
 				  <div class="col-md-7">
 				    <h3><a href="<?php the_permalink() ?>"><?php the_title() ?></a></h3>
 				    <p <?php the_excerpt() ?></p>
