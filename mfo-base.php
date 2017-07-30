@@ -178,6 +178,7 @@ function mfo_page_template( $page_template )
 	array('slack-find-exhibit',	'json-slack-maker.php'),
 	array('select-load-in-date-time','load-in.php'),
 	array('producer-loadin-report',	'loadin-report.php'),
+	array('makers',			'exhibits-isotope.php'),
 	array('much-makers',		'stat.php')
 	);
 
@@ -1564,7 +1565,9 @@ function add_custom_scripts() {
 			array('jquery')
 		); //jquery as a dependy for isotope
  		wp_enqueue_script( "isotope-js");
+ 		wp_enqueue_script( "exhibits-isotope-helper-js", plugin_dir_url( __FILE__ ) . '/templates/exhibits-isotope.js', null, false , true);
 		//wp_enqueue_script( "imagefill-js", get_stylesheet_directory_uri() . '/js/libs/jquery-imagefill.js');
+		wp_enqueue_script( "imagesloaded-js", 'https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js');
 		wp_enqueue_script( "imagefill-js", 'https://cdn.jsdelivr.net/jquery.imagefill/0.1/js/jquery-imagefill.js');
 		
  	}
