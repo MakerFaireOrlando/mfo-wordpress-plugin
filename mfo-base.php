@@ -1562,13 +1562,13 @@ function add_custom_scripts() {
 			'isotope-js', 
 			//get_stylesheet_directory_uri() . '/js/libs/isotope.pkgd.min.js',
 			'https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js',
-			array('jquery')
+			array('jquery'), null
 		); //jquery as a dependy for isotope
  		wp_enqueue_script( "isotope-js");
  		wp_enqueue_script( "exhibits-isotope-helper-js", plugin_dir_url( __FILE__ ) . '/templates/exhibits-isotope.js', null, false , true);
 		//wp_enqueue_script( "imagefill-js", get_stylesheet_directory_uri() . '/js/libs/jquery-imagefill.js');
-		wp_enqueue_script( "imagesloaded-js", 'https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js');
-		wp_enqueue_script( "imagefill-js", 'https://cdn.jsdelivr.net/jquery.imagefill/0.1/js/jquery-imagefill.js');
+		wp_enqueue_script( "imagesloaded-js", 'https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js', array(), null);
+		wp_enqueue_script( "imagefill-js", 'https://cdn.jsdelivr.net/jquery.imagefill/0.1/js/jquery-imagefill.js', array(), null);
 		
  	}
 }
