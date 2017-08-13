@@ -97,6 +97,12 @@ jQuery('.filters-select').on( 'change', function() {
   // use filterFn if matches value
   filterValue = filterFns[ filterValue ] || filterValue;
   $container.isotope({ filter: filterValue });
-  window.history.pushState("object or string", "Title", "/makers/?category=" + filterValue.substring(1));
+  console.log("filterValue:" + filterValue);
+  if (filterValue =="*") {
+	window.history.pushState("object or string", "Title", "/makers");
+	}
+  else {
+	window.history.pushState("object or string", "Title", "/makers/?category=" + filterValue.substring(1));
+	}
 });
 
