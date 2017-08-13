@@ -34,6 +34,15 @@ jQuery('.button-group').on( 'click', 'button', function() {
   jQuery('div.category-text').text(textValue);
 });
 
+var fv = jQuery('#category').attr('class');
+console.log("filter category:" + fv);
+$container.isotope({ filter: fv });
+
+
+
+//set select to the right item
+document.getElementById('makers-category-select').value=fv;
+
 
 //if url params are used...
 //var cat = jQuery('#cat-param').text();

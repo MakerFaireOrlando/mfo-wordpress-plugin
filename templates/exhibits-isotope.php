@@ -7,7 +7,15 @@
 
 get_header(); ?>
 
+		<?php
+			$category = get_query_var("category");
+			if ($category) {
+				$cat_class = '<div id="category" class=".' . $category . '"></div>';
+			}
+			else $cat_class = "";
+		?>
                 <div id="page-content">
+                <?php echo $cat_class ?>
                         <div id="page-body">
 
                         <?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>

@@ -223,7 +223,7 @@ function year_permalink($permalink, $post, $leavename) {
 
 
 
-//add variable for load-in page template and slack
+//add query string variables
 function add_query_vars_filter($vars) {
 	$vars[] = "li-exhibit";
 	$vars[] = "dup-exhibit";
@@ -231,12 +231,13 @@ function add_query_vars_filter($vars) {
 	$vars[] = "cred-edit-form";
 	$vars[] = "id";
 
+	//exhibits page
+	$vars[] = "category";
+
 	//vars for slash commands
 	$vars[] = "token";
 	$vars[] = "text";
 	$vars[] = "channel_name";
-
-
 
 	return $vars;
 }
