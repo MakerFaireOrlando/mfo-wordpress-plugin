@@ -39,7 +39,6 @@ console.log("filter category:" + fv);
 $container.isotope({ filter: fv });
 
 
-
 //set select to the right item
 document.getElementById('makers-category-select').value=fv;
 
@@ -98,5 +97,6 @@ jQuery('.filters-select').on( 'change', function() {
   // use filterFn if matches value
   filterValue = filterFns[ filterValue ] || filterValue;
   $container.isotope({ filter: filterValue });
+  window.history.pushState("object or string", "Title", "/makers/?category=" + filterValue.substring(1));
 });
 
