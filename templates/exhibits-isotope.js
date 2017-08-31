@@ -23,8 +23,7 @@ $container.isotope({
 $container.imagesLoaded().progress( function () {
   $container.isotope('layout');
 });
- 
-// Enable filter buttons to behave as expected
+ // Enable filter buttons to behave as expected
 jQuery('.button-group').on( 'click', 'button', function() {
   var filterValue = jQuery(this).attr('data-filter');
   $container.isotope({ filter: filterValue });
@@ -34,14 +33,16 @@ jQuery('.button-group').on( 'click', 'button', function() {
   jQuery('div.category-text').text(textValue);
 });
 
+
 var fv = jQuery('#category').attr('class');
-console.log("filter category:" + fv);
-$container.isotope({ filter: fv });
+if (fv) {
+	console.log("filter category:" + fv);
+	$container.isotope({ filter: fv });
 
 
-//set select to the right item
-document.getElementById('makers-category-select').value=fv;
-
+	//set select to the right item
+	//document.getElementById('makers-category-select').value=fv;
+}
 
 //if url params are used...
 //var cat = jQuery('#cat-param').text();
