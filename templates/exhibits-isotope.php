@@ -39,7 +39,7 @@ get_header(); ?>
 							<div class="col-md-4">
 								<label class="search-filter-label">Filter by category:</label>
 								<select class="filters-select form-control" id="makers-category-select">
-						 		<option value="*">show all</option>
+						 		<option value="*" selected>show all</option>
 
 								<?php
 								//$categories = get_terms("exhibit-category");
