@@ -101,6 +101,9 @@ foreach ($exhibits_array as $exhibit) {
         }
         else $yearstr ="";
 
+	$event_year = mfo_event_year();
+	if (intval($yearstr) == $event_year) {
+
 	//create the array for the exhibit
 	$e_output[]= array (
 			//'exhibit_category' => strip_tags(get_the_term_list($exhibit->ID, "exhibit-category","",", ")),
@@ -117,6 +120,7 @@ foreach ($exhibits_array as $exhibit) {
 			//'embeddable_media'=>$embed_media,
 			//'maker' =>$m_output
 			);
+	}//end if
 }
 
 	$taxes = array(
