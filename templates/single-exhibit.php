@@ -33,6 +33,16 @@ get_header(); ?>
                 <div id="post-<?php the_ID(); ?>" <?php post_class('mfo-single-exhibit approval-status-'.$approval_status); ?>>
 			 <?php if ( ($approval_status ==1 ) || (get_the_author_meta('ID') == get_current_user_id() )
                                            || current_user_can("edit_posts", get_the_ID() )):?>
+			<section class="cta-panel">
+				<div class="container">
+				<div class="row text-center">
+				<div class="col-xs-12">
+				<h3><a href="/attend/">October 21st – 10AM to 7PM&nbsp;&nbsp;&amp;&nbsp;&nbsp;October 22nd – 10AM to 5PM<br>Central Florida Fairgrounds &amp; Expo Halls <i class="fa fa-chevron-right"></i></a></h3>
+				<p></p></div>
+				</div>
+				</div>
+			</section>
+
                         <div class="container">
                         <div class="row">
 			    <div class="content entry-page col-xs-12">
@@ -163,6 +173,18 @@ get_header(); ?>
 			 </div>
 			</div>
 
+			<div style="margin-top:20px;margin-bottom:20px;height:15px;background-color:#00597E"></div>
+			<div class="container">
+			<div class="row">
+			<div class="col-sm-6"><a href="/makers"><img class="aligncenter size-full"
+					src="<?php echo get_template_directory_uri() . '/images/explore-the-exhibits.png'?>" />
+
+			</a></div>
+			<div class="col-sm-6"><a href="/makers"><img class="aligncenter size-full"
+					src="<?php echo get_template_directory_uri() . '/images/meet-the-makers.png'?>" />
+			</a></div>
+			</div>
+			</div>
 			  <div class="container">
 
 
