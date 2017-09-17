@@ -436,12 +436,12 @@ function current_user_can_edit_post() {
 	//}
 	$cap = false;
 	$cap = current_user_can('edit_post',$id);
-	echo $id; 
-	echo " - "; 
-	echo  get_current_user_id();
-	echo " - "; 
-	echo $cap ? 'true' : 'false';
-	echo '<br>';
+	//echo $id; 
+	//echo " - "; 
+	//echo  get_current_user_id();
+	//echo " - "; 
+	//echo $cap ? 'true' : 'false';
+	//echo '<br>';
 return $cap;
 }
 add_shortcode('current-user-can-edit-post', 'current_user_can_edit_post');
