@@ -173,6 +173,7 @@ function mfo_page_template( $page_template )
  	array('duplicate-exhibit',	'duplicate-exhibit.php'),
  	array('maker-dashboard', 	'maker-dashboard.php'),
 	array('exhibit-table-signs',	'exhibit-table-signs.php'),
+	array('exhibit-space-planning-sheets',	'exhibit-space-planning-sheets.php'),
 	array('events-json',		'json-eventlist.php'),
 	array('makers-json',		'json-makerlist.php'),
 	array('slack-find-exhibit',	'json-slack-maker.php'),
