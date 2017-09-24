@@ -46,6 +46,41 @@ $args = array(
 */
 
 
+/* */
+//remove all exhibit space numbers
+function mfo_utility_reset_exhibit_space_numbers() {
+
+ $year = mfo_event_year();
+  mfo_log (4, "mfo_utility_reset_exhibit_space_numbers", "year: " . $year);
+ echo "Year: " . $year . "<br>";
+        
+$args = array(
+  'post_type' => 'exhibit',
+  'post_status' => 'publish',
+  'posts_per_page' => -1, // all
+  'orderby' => 'title',
+  'order' => 'ASC',
+  'meta_query' => array(array('key' => 'wpcf-approval-year', 'value' => mfo_event_year()))
+);
+
+ $exhibits_array = get_posts($args);
+
+ echo "Exhibits: " . count($exhibits_array) . "<br>";
+
+ foreach ($exhibits_array as $exhibit) {
+	$esn = get_post_meta($exhibit->ID, "wpcf-exhibit-space-number", true);
+	echo "Exhibit: " . $exhibit->post_name . " - exhibit-space-number: ". $esn ."<br>";
+     	update_post_meta($exhibit->ID, "wpcf-exhibit-space-number", '');
+        }
+
+}
+
+//commented for safety!
+//add_shortcode('mfo-utility-reset-exhibit-space-numbers', 'mfo_utility_reset_exhibit_space_numbers');
+
+
+
+
 //strip all locations from current year exhibits
 //this was needed because the duplicate exhibit function
 //was copying over the exhibit-location taxonomy
