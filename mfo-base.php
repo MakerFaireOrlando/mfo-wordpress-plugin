@@ -1048,7 +1048,7 @@ function update_maker_stats ($post_id) {
 
 			$helper_qty = get_post_meta($child->ID, 'wpcf-helper-approved-quantity', TRUE);
 			if ($helper_qty < 0 || $helper_qty=="") {
-				update_post_meta($child->ID, 'wpcf-helper-approved-quantity', 2); 
+				update_post_meta($child->ID, 'wpcf-helper-approved-quantity', mfo_exhibithelpers_default()); 
 				//default to two helpers
 			}
 
