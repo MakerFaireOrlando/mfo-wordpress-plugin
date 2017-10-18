@@ -44,7 +44,7 @@ $helpers_array = get_posts($h_args);
 
 //print_r($exhibits_array);
 
-	echo 'exhibit-id,exhibit-name,maker-id,maker-name,maker-last-name,maker-first-name,maker-email,maker-phone,';
+	echo 'exhibit-id,exhibit-year,exhibit-name,maker-id,maker-name,maker-last-name,maker-first-name,maker-email,maker-phone,';
 	echo 'location-floor,location-area,load-in,helper-qty,agreement-status,seller-fee-status,chase-score' . "\r\n";
 
 
@@ -78,6 +78,10 @@ foreach ($exhibits_array as $exhibit) {
 	if (get_post_meta($exhibit->ID, "wpcf-payment-status", true) == 2) $score++; //add 1 for unpaid fee
 	//echo types_render_field("payment-status",array("output"=>"html")); //this won't work because you can't specify the ID
 	//echo get_post_meta($exhibit->ID, "wpcf-payment-status", true); // this works but only gives you the raw value
+
+
+	//exhibit-year
+	$exhibityear = get_post_meta($exhibit->ID, "wpcf-approval-year", true);
 
 
 	//location mess
@@ -139,6 +143,8 @@ foreach ($exhibits_array as $exhibit) {
 	//print_r($helpers);
 
 	echo $exhibit->ID; //exhibit id
+	echo ',';
+	echo $exhibityear;
 	echo ',';
 	echo '"';
 	echo html_entity_decode($exhibit->post_title); //exhibit name
