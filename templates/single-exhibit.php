@@ -33,15 +33,6 @@ get_header(); ?>
                 <div id="post-<?php the_ID(); ?>" <?php post_class('mfo-single-exhibit approval-status-'.$approval_status); ?>>
 			 <?php if ( ($approval_status ==1 ) || (get_the_author_meta('ID') == get_current_user_id() )
                                            || current_user_can("edit_posts", get_the_ID() )):?>
-			<section class="cta-panel">
-				<div class="container">
-				<div class="row text-center">
-				<div class="col-xs-12">
-				<h3><a href="/attend/">October 21st – 10AM to 7PM&nbsp;&nbsp;&amp;&nbsp;&nbsp;October 22nd – 10AM to 5PM<br>Central Florida Fairgrounds &amp; Expo Halls <i class="fa fa-chevron-right"></i></a></h3>
-				<p></p></div>
-				</div>
-				</div>
-			</section>
 
                         <div class="container">
                         <div class="row">

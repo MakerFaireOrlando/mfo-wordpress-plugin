@@ -57,7 +57,6 @@ function mfo_eventbrite_action_webhook() {
 	mfo_log(3, 'eventbrite', '==================[ Incoming Request ]==================');
 	mfo_log(4, 'eventbrite', 'Full _REQUEST dump:\n'.print_r($_REQUEST,true)); 
 	mfo_log(4, 'eventbrite', 'Full _POST dump:\n'.print_r($_POST,true)); 
-	mfo_log(4, 'eventbrite', 'Full header dump:\n'.print_r(getallheaders(),true)); 
 	/*
 	if ( empty($_POST) ) {
 		mfo_log(3,'eventbrite', 'No request details found.');
