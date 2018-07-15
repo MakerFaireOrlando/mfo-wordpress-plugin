@@ -33,15 +33,24 @@ function mfo_event_year() {
 add_shortcode('mfo-event-year', 'mfo_event_year');
 
 function mfo_header_button_text() {
- $options = get_option('mfo_options_main');
+ $options = get_option('mfo_options_display');
  return $options['mfo_header_button_text_string'];
 }
 
 function mfo_header_button_url() {
- $options = get_option('mfo_options_main');
+ $options = get_option('mfo_options_display');
  return $options['mfo_header_button_url_string'];
 }
 
+function mfo_footer_cta_text() {
+ $options = get_option('mfo_options_display');
+ return $options['mfo_footer_cta_text_string'];
+}
+
+function mfo_footer_cta_url() {
+ $options = get_option('mfo_options_display');
+ return $options['mfo_footer_cta_url_string'];
+}
 
 
 function mfo_support_email() {
@@ -279,8 +288,6 @@ add_settings_field('mfo_event_name_string', 'Event Name', 'mfo_event_name_settin
 add_settings_field('mfo_support_email_string', 'Support Email Address', 'mfo_support_email_setting_string', 'mfo_main_tab', 'mfo_main');
 add_settings_field('mfo_notification_email_string', 'Notification Email Address', 'mfo_notification_email_setting_string', 'mfo_main_tab', 'mfo_main');
 add_settings_field('mfo_event_year_string', 'Event Year', 'mfo_event_year_setting_string', 'mfo_main_tab', 'mfo_main');
-add_settings_field('mfo_header_button_text_string', 'Header Button Text', 'mfo_header_button_text_setting_string', 'mfo_main_tab', 'mfo_main');
-add_settings_field('mfo_header_button_url_string', 'Header Button Link URL', 'mfo_header_button_url_setting_string', 'mfo_main_tab', 'mfo_main');
 
 //debug
 add_settings_field('mfo_log_enabled_boolean', 'Logging Enabled?', 'mfo_log_enabled_setting_boolean', 'mfo_debug_tab', 'mfo_debug');
@@ -323,6 +330,11 @@ add_settings_field('mfo_maker_badges_enabled_boolean', 'Show Maker Badges?', 'mf
 add_settings_field('mfo_maker_color_string', 'Maker Color', 'mfo_maker_color_setting_string', 'mfo_display_tab', 'mfo_display');
 add_settings_field('mfo_exhibit_color_string', 'Exhibit Color', 'mfo_exhibit_color_setting_string', 'mfo_display_tab', 'mfo_display');
 add_settings_field('mfo_exhibit_prioryear_color_string', 'Exhibit(Prior Years) Color', 'mfo_exhibit_prioryear_color_setting_string', 'mfo_display_tab', 'mfo_display');
+add_settings_field('mfo_header_button_text_string', 'Header Button Text', 'mfo_header_button_text_setting_string', 'mfo_display_tab', 'mfo_display');
+add_settings_field('mfo_header_button_url_string', 'Header Button Link URL', 'mfo_header_button_url_setting_string', 'mfo_display_tab', 'mfo_display');
+
+add_settings_field('mfo_footer_cta_text_string', 'Footer CTA Text', 'mfo_footer_cta_text_setting_string', 'mfo_display_tab', 'mfo_display');
+add_settings_field('mfo_footer_cta_url_string', 'Footer CTA Link URL', 'mfo_footer_cta_url_setting_string', 'mfo_display_tab', 'mfo_display');
 
 
 }
@@ -387,15 +399,28 @@ function mfo_event_year_setting_string() {
 }
 
 function mfo_header_button_text_setting_string() {
-	$options = get_option('mfo_options_main');
-	echo "<input id='mfo_header_button_text_string' name='mfo_options_main[mfo_header_button_text_string]' size='20' type='text' value='{$options['mfo_header_button_text_string']}' />";
+	$options = get_option('mfo_options_display');
+	echo "<input id='mfo_header_button_text_string' name='mfo_options_display[mfo_header_button_text_string]' size='20' type='text' value='{$options['mfo_header_button_text_string']}' />";
 }
 
 function mfo_header_button_url_setting_string() {
-	$options = get_option('mfo_options_main');
-	echo "<input id='mfo_header_button_url_string' name='mfo_options_main[mfo_header_button_url_string]' size='50' type='text' value='{$options['mfo_header_button_url_string']}' />";
+	$options = get_option('mfo_options_display');
+	echo "<input id='mfo_header_button_url_string' name='mfo_options_display[mfo_header_button_url_string]' size='50' type='text' value='{$options['mfo_header_button_url_string']}' />";
 	echo "<br>&nbsp&nbspThe URL can be a full url including http:// or https:// or a relative url starting with /";
 }
+
+
+function mfo_footer_cta_text_setting_string() {
+        $options = get_option('mfo_options_display');
+        echo "<input id='mfo_footer_cta_text_string' name='mfo_options_display[mfo_footer_cta_text_string]' size='20' type='text' value='{$options['mfo_footer_cta_text_string']}' />";
+}
+
+function mfo_footer_cta_url_setting_string() {
+        $options = get_option('mfo_options_display');
+        echo "<input id='mfo_footer_cta_url_string' name='mfo_options_display[mfo_footer_cta_url_string]' size='50' type='text' value='{$options['mfo_footer_cta_url_string']}' />";
+        echo "<br>&nbsp&nbspThe URL can be a full url including http:// or https:// or a relative url starting with /";
+}
+
 
 function mfo_log_enabled_setting_boolean() {
 	$options = get_option('mfo_options_debug');
@@ -610,8 +635,6 @@ function mfo_options_main_validate($input) {
 	$newinput['mfo_support_email_string'] = trim($input['mfo_support_email_string']);
 	$newinput['mfo_notification_email_string'] = trim($input['mfo_notification_email_string']);
 	$newinput['mfo_event_year_string'] = trim($input['mfo_event_year_string']);
-	$newinput['mfo_header_button_text_string'] = trim($input['mfo_header_button_text_string']);
-	$newinput['mfo_header_button_url_string'] = trim($input['mfo_header_button_url_string']);
 	mfo_log(1, "MFO Settings" , "mfo_options_main changed");
 	return $newinput;
 }
@@ -661,6 +684,10 @@ function mfo_options_display_validate($input) {
 	$newinput['mfo_maker_color_string'] = trim($input['mfo_maker_color_string']);
 	$newinput['mfo_exhibit_color_string'] = trim($input['mfo_exhibit_color_string']);
 	$newinput['mfo_exhibit_prioryear_color_string'] = trim($input['mfo_exhibit_prioryear_color_string']);
+	$newinput['mfo_header_button_text_string'] = trim($input['mfo_header_button_text_string']);
+	$newinput['mfo_header_button_url_string'] = trim($input['mfo_header_button_url_string']);
+	$newinput['mfo_footer_cta_text_string'] = trim($input['mfo_footer_cta_text_string']);
+	$newinput['mfo_footer_cta_url_string'] = trim($input['mfo_footer_cta_url_string']);
 	mfo_log(1, "MFO Settings" , "mfo_options_display changed");
 	return $newinput;
 }
@@ -673,8 +700,10 @@ function mfo_settings_admin_notice_error() {
 	mfo_option_test('mfo_options_main', 'mfo_support_email_string', 'Support Email Address must be entered.');
 	mfo_option_test('mfo_options_main', 'mfo_notification_email_string', 'Notification Email Address must be entered.');
 	mfo_option_test('mfo_options_main', 'mfo_event_year_string', 'Event Year must be entered.');
-	mfo_option_test('mfo_options_main', 'mfo_header_button_text_string', 'Header button text must be entered.');
-	mfo_option_test('mfo_options_main', 'mfo_header_button_url_string', 'Header button URL  must be entered.');
+	mfo_option_test('mfo_options_display', 'mfo_header_button_text_string', 'Header button text must be entered.');
+	mfo_option_test('mfo_options_display', 'mfo_header_button_url_string', 'Header button URL  must be entered.');
+	mfo_option_test('mfo_options_display', 'mfo_footer_cta_text_string', 'Footer CTA text must be entered.');
+	mfo_option_test('mfo_options_display', 'mfo_footer_cta_url_string', 'Footer CTA URL  must be entered.');
 	mfo_option_test('mfo_options_debug', 'mfo_warning_email_string', 'System Warning Email Address must be entered.');
 
 	//removing these tests as we now call a CDN for these
