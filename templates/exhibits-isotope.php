@@ -63,7 +63,7 @@ get_header(); ?>
                                                 'meta_query' => array(
                                                         array(
                                                                 'key' => 'wpcf-approval-year',
-                                                                'value' => '2017'
+                                                                'value' => '2018'
                                                         ),
                                                         array(
                                                                 'key' => 'wpcf-approval-status',
