@@ -1716,5 +1716,9 @@ function mfo_get_attachment_id_by_url( $url ) {
 }
 
 
+add_shortcode('mfo-today-cred', 'mfo_today_cred');
+function mfo_today_cred() {
+  return time();
+}
 
 ?>
