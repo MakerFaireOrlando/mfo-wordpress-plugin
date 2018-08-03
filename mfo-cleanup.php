@@ -145,7 +145,7 @@ $args = array(
 }
 
 //commented for safety!
-//add_shortcode('mfo-utility-strip-maker-agreement-acks', 'mfo_utility_strip_maker_agreement_acks');
+add_shortcode('mfo-utility-strip-maker-agreement-acks', 'mfo_utility_strip_maker_agreement_acks');
 
 
 function mfo_utility_update_maker_stats_all() {
@@ -171,7 +171,6 @@ $args = array(
 
 //commented for safety!
 //add_shortcode('mfo-utility-update-maker-stats-all', 'mfo_utility_update_maker_stats_all');
-
 
 
 
@@ -205,5 +204,45 @@ $args = array(
 //commented for safety!
 //add_shortcode('mfo-utility-set_all_exhibits_to_pending', 'mfo_utility_set_all_exhibits_to_pending');
 
+
+
+function mfo_utility_fix_missing_approval_dates() {
+
+
+$year = mfo_event_year();
+ mfo_log (4, "mfo_utility_fix_missing_approval_dates", "start");
+ echo "Year: " . $year . "<br>";
+
+$args = array(
+  'post_type' => 'exhibit',
+  'post_status' => 'publish',
+  'posts_per_page' => -1, // all
+  'orderby' => 'title',
+  'order' => 'ASC',
+  'meta_query' => array(array('key' => 'wpcf-approval-year', 'value' => mfo_event_year()))
+);
+
+ $exhibits_array = get_posts($args);
+ echo "Exhibits: " . count($exhibits_array) . "<br>";
+ foreach ($exhibits_array as $exhibit) {
+
+	$approval_status = get_post_meta($exhibit->ID, "wpcf-approval-status", true);
+	if ($approval_status == 1)  {
+		$approval_status_date = get_post_meta($exhibit->ID, "wpcf-approval-status-date", true);
+		if (!is_numeric($approval_status_date)) {
+	       	 	echo "Exhibit: " . $exhibit->post_name ."; " . $approval_status."; ". $approval_status_date . "<br>";
+        		update_post_meta( $exhibit->ID, "wpcf-approval-status-date","1532390400"); 
+
+		} //end if approval-status-date is null
+		else echo "Exhibit: " . $exhibit->post_name ."; " . $approval_status."; ". $approval_status_date . "; SKIPPED<br>";
+
+	} //end if approval-status == 1
+ }
+
+
+}
+
+//commented for safety!
+//add_shortcode('mfo-utility-fix-missing-approval-dates', 'mfo_utility_fix_missing_approval_dates');
 
 ?>
