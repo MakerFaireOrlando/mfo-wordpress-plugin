@@ -45,7 +45,7 @@ $helpers_array = get_posts($h_args);
 //print_r($exhibits_array);
 
 	echo 'exhibit-id,exhibit-year,exhibit-name,maker-id,maker-name,maker-last-name,maker-first-name,maker-email,maker-phone,';
-	echo 'location-floor,location-area,load-in,helper-qty,agreement-status,seller-fee-status,chase-score' . "\r\n";
+	echo 'location-floor,location-area,load-in,helper-qty,agreement-status,seller-fee-status,chase-score,approval-date' . "\r\n";
 
 
 foreach ($exhibits_array as $exhibit) {
@@ -142,6 +142,9 @@ foreach ($exhibits_array as $exhibit) {
 	if (!$helpercount) $score++; //add 1 for no helpers
 	//print_r($helpers);
 
+	$approvaldateunix = get_post_meta($exhibit->ID, "wpcf-approval-status-date", true);
+	$approvaldate= date('Y-m-d', $approvaldateunix);
+
 	echo $exhibit->ID; //exhibit id
 	echo ',';
 	echo $exhibityear;
@@ -195,7 +198,10 @@ foreach ($exhibits_array as $exhibit) {
 	echo '"';
 	echo ',';
 	echo $score;
-
+	echo ',';
+        echo '"';
+        echo $approvaldate;
+        echo '"';
 
 	echo "\r\n";
 }//end for each exhibit
