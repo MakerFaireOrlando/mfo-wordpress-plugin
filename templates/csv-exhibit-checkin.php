@@ -7,6 +7,13 @@ Date: Sep 6th, 2015
 */
 
 
+ 	//set the year from parameter if exists
+        $year = "0";
+        if(isset($wp_query->query_vars['csv-year'])) {
+                $year = urldecode($wp_query->query_vars['csv-year']);
+        }
+
+
 	//set the filename from parameter if exists
 	$fname = "exhibit-checkin";
 	if(isset($wp_query->query_vars['csv-filename'])) {
@@ -28,6 +35,9 @@ Date: Sep 6th, 2015
 
 
 
+
+
+
 $args = array(
   'post_type' => 'exhibit',
   'post_status' => 'publish',
@@ -44,8 +54,13 @@ $helpers_array = get_posts($h_args);
 
 //print_r($exhibits_array);
 
+
+	echo $year ."\r\n";
 	echo 'exhibit-id,exhibit-year,exhibit-name,maker-id,maker-name,maker-last-name,maker-first-name,maker-email,maker-phone,';
-	echo 'location-floor,location-area,load-in,helper-qty,agreement-status,seller-fee-status,chase-score,approval-date' . "\r\n";
+	echo 'location-floor,location-area,load-in,helper-qty,agreement-status,seller-fee-status,chase-score,approval-date,power-amps,';
+	echo 'electrical-items, power-dedicated,water-required,inside-outside,light-dark,quiet-loud,location-notes,with-group,related-group,';
+	echo 'share-table,internet-requirements,internet-requirements-notes,haz-chemicals,haz-chemicals-notes,heat-flame,heat-flame-notes,';
+	echo 'safety-concerns,safety-concerns-notes,hours-to-setup,bringing-a-tent,bringing-a-tent-notes,makes-loud-noise,makes-loud-noise-notes,anything-else' . "\r\n";
 
 
 foreach ($exhibits_array as $exhibit) {
@@ -83,6 +98,10 @@ foreach ($exhibits_array as $exhibit) {
 	//exhibit-year
 	$exhibityear = get_post_meta($exhibit->ID, "wpcf-approval-year", true);
 
+	//if year was specified, check the year, and skip if not a match
+	if ($year) {
+		if ($exhibityear != $year) continue;
+	}
 
 	//location mess
 	$locterms = get_the_terms($exhibit->ID, "exhibit-location");
@@ -202,10 +221,115 @@ foreach ($exhibits_array as $exhibit) {
         echo '"';
         echo $approvaldate;
         echo '"';
-
+	echo ',';
+        echo '"';
+        echo mfo_trf('power-amps', $exhibit->ID);
+        echo '"';
+	echo ',';
+        echo '"';
+        echo mfo_trf('electrical-items-for-my-exhibit', $exhibit->ID);
+        echo '"';
+	echo ',';
+        echo '"';
+        echo mfo_trf('power-dedicated', $exhibit->ID);
+        echo '"';
+	echo ',';
+        echo '"';
+        echo mfo_trf('location-requirement-water', $exhibit->ID);
+        echo '"';
+	echo ',';
+        echo '"';
+        echo mfo_trf('location-requirement-in-out', $exhibit->ID);
+        echo '"';
+	echo ',';
+        echo '"';
+        echo mfo_trf('location-requirement-light-dark', $exhibit->ID);
+        echo '"';
+	echo ',';
+        echo '"';
+        echo mfo_trf('location-requirement-quiet-loud', $exhibit->ID);
+        echo '"';
+	echo ',';
+        echo '"';
+        echo mfo_trf('location-requirement-notes', $exhibit->ID);
+        echo '"';
+	 echo ',';
+        echo '"';
+        echo mfo_trf('exhibiting-with-a-group', $exhibit->ID);
+        echo '"';
+	 echo ',';
+        echo '"';
+        echo mfo_trf('related-group', $exhibit->ID);
+        echo '"';
+	 echo ',';
+        echo '"';
+        echo mfo_trf('share-table', $exhibit->ID);
+        echo '"';
+	echo ',';
+        echo '"';
+        echo mfo_trf('internet-requirements', $exhibit->ID);
+        echo '"';
+        echo ',';
+        echo '"';
+        echo mfo_trf('internet-requirements-notes', $exhibit->ID);
+        echo '"';
+        echo ',';
+        echo '"';
+        echo mfo_trf('hazardous-chemicals', $exhibit->ID);
+        echo '"';
+	 echo ',';
+        echo '"';
+        echo mfo_trf('hazardous-chemicals-notes', $exhibit->ID);
+        echo '"';
+	echo ',';
+        echo '"';
+        echo mfo_trf('heat-flame', $exhibit->ID);
+        echo '"';
+	echo ',';
+        echo '"';
+        echo mfo_trf('heat-flame-notes', $exhibit->ID);
+        echo '"';
+ 	echo ',';
+        echo '"';
+        echo mfo_trf('safety-concerns', $exhibit->ID);
+        echo '"';
+ 	echo ',';
+        echo '"';
+        echo mfo_trf('safety-concerns-notes', $exhibit->ID);
+        echo '"';
+	 echo ',';
+        echo '"';
+        echo mfo_trf('hours-to-setup', $exhibit->ID);
+        echo '"';
+	echo ',';
+        echo '"';
+        echo mfo_trf('bringing-a-tent', $exhibit->ID);
+        echo '"';
+	 echo ',';
+        echo '"';
+        echo mfo_trf('bringing-a-tent-notes', $exhibit->ID);
+        echo '"';
+	echo ',';
+        echo '"';
+        echo mfo_trf('makes-loud-noise', $exhibit->ID);
+        echo '"';
+	echo ',';
+        echo '"';
+        echo mfo_trf('makes-loud-noise--notes', $exhibit->ID);
+        echo '"';
+	echo ',';
+        echo '"';
+        echo mfo_trf('anything-else', $exhibit->ID);
+        echo '"';
 	echo "\r\n";
 }//end for each exhibit
 
 
+function mfo_trf($slug, $id, $strip = TRUE) {
+	$fieldtext = types_render_field($slug, array('id' => $id));
+	$fieldtext = str_replace ('"', '`', $fieldtext);
+	if ($strip) $fieldtext = wp_strip_all_tags($fieldtext);
+	return $fieldtext;
+}
 
 ?>
