@@ -517,6 +517,7 @@ add_shortcode( 'crlf', 'crlf_shortcode' );
 function custom_rewrite_tag() {
   //https://codex.wordpress.org/Rewrite_API/add_rewrite_rule
   add_rewrite_tag('%csv-filename%', '([^&]+)');
+  add_rewrite_tag('%csv-year%', '([^&]+)');
 }
 
 add_action('init', 'custom_rewrite_tag', 10, 0);
