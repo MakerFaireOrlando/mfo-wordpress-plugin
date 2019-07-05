@@ -58,6 +58,12 @@ foreach ($exhibits_array as $exhibit) {
 	$photo_src = wp_get_attachment_image_src( get_post_thumbnail_id($exhibit->ID), 'medium');
 	$maker_photo_src = wp_get_attachment_image_src( get_post_thumbnail_id($maker_id), 'medium');
 
+	$space_ids = get_post_meta($exhibit->ID, "wpcf-exhibit-space-number");
+	$space_ids_text = "";
+	foreach ($space_ids as $space) {
+	$space_ids_text = $space_ids_text . $space . "  ";
+	}
+
 	$images = get_post_meta($exhibit->ID, "wpcf-additional-photos");
 
 	//remove empty array items
@@ -109,7 +115,8 @@ foreach ($exhibits_array as $exhibit) {
 			//'exhibit_category' => strip_tags(get_the_term_list($exhibit->ID, "exhibit-category","",", ")),
 			//'hidden_exhibit_category' => strip_tags(get_the_term_list($exhibit->ID, "hidden-exhibit-category","",", ")),
 			//'hidden_maker_category' => strip_tags(get_the_term_list($maker_id, "hidden-maker-category","",", ")),
-			'title' => html_entity_decode($exhibit->post_title." (". $yearstr .get_post_type($exhibit) .")"),
+			'title' => html_entity_decode($exhibit->post_title." (". $yearstr .get_post_type($exhibit) .") - " .$space_ids_text ),
+			//'title' => html_entity_decode($exhibit->post_title." (". $yearstr .get_post_type($exhibit) .")"),
 			//'description' => html_entity_decode(get_post_meta($exhibit->ID, "wpcf-long-description", true)),
 			'title_link' => get_permalink($exhibit),
 			'text' => html_entity_decode($exhibit->post_excerpt),
