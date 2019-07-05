@@ -149,7 +149,7 @@ function mfo_eventbrite_order_placed ($data) {
 //for testing only 
 /*
 function mfo_slack_notify_test() {
-         mfo_slack_eventbrite_notification("1234" , "22749813304");
+         mfo_slack_eventbrite_notification("1234" , "47615498237");
 }
 
 add_shortcode("mfo-slack-notify-test", "mfo_slack_notify_test");
