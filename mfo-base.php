@@ -176,6 +176,7 @@ function mfo_page_template( $page_template )
 	array('exhibit-space-planning-sheets',	'exhibit-space-planning-sheets.php'),
 	array('events-json',		'json-eventlist.php'),
 	array('makers-json',		'json-makerlist.php'),
+	array('makers-json2',		'json-makerlist2.php'),
 	array('slack-find-exhibit',	'json-slack-maker.php'),
 	array('select-load-in-date-time','load-in.php'),
 	array('producer-loadin-report',	'loadin-report.php'),

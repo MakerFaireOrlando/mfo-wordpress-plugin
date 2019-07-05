@@ -2,15 +2,14 @@
 //header( 'Content-type: application/json' );
  
 /**
- * Template Name: Makers JSON page
+ * Template Name: Makers JSON page v2
  * Description: Outputs the list of EXHIBITS as JSON
  *
- * This is built to simulate the OLD format for ease of updating the app
+ * This is a test to speed generation
  */
 
 $version = get_query_var("version", 1);
 
-mfo_log(1,"makers-json", "fixme!");
 
 $args = array(
   'post_type' => 'exhibit',
@@ -81,45 +80,14 @@ foreach ($exhibits_array as $exhibit) {
 			$medium =  types_render_field_single( $field, $params, null, '', $k);
 			$params ['size'] ='large';
 			$large =  types_render_field_single( $field, $params, null, '', $k);
-			$params ['size'] ='full';
-			$full =  types_render_field_single( $field, $params, null, '', $k);
-			
-
-			//mfo2018 hack to add cdn
-
-			$find = "https://makerfaireorlando.com/";
-			$replace = "https://mfocdn-themakereffectfo.netdna-ssl.com/";
-			$thumb = str_replace($find, $replace, $thumb);
-			$medium = str_replace($find, $replace, $medium);
-			$large = str_replace($find, $replace, $large);
-			$full = str_replace($find, $replace, $full);
-
-			$find = "http://makerfaireorlando.com/";
-			$replace = "https://mfocdn-themakereffectfo.netdna-ssl.com/";
-			$thumb = str_replace($find, $replace, $thumb);
-			$medium = str_replace($find, $replace, $medium);
-			$large = str_replace($find, $replace, $large);
-			$full = str_replace($find, $replace, $full);
-
-			$find = "https://www.makerfaireorlando.com/";
-			$replace = "https://mfocdn-themakereffectfo.netdna-ssl.com/";
-			$thumb = str_replace($find, $replace, $thumb);
-			$medium = str_replace($find, $replace, $medium);
-			$large = str_replace($find, $replace, $large);
-			$full = str_replace($find, $replace, $full);
-
-			$find = "http://www.makerfaireorlando.com/";
-			$replace = "https://mfocdn-themakereffectfo.netdna-ssl.com/";
-			$thumb = str_replace($find, $replace, $thumb);
-			$medium = str_replace($find, $replace, $medium);
-			$large = str_replace($find, $replace, $large);
-			$full = str_replace($find, $replace, $full);
-
+			//$params ['size'] ='full';
+			//$full =  types_render_field_single( $field, $params, null, '', $k);
 			$images_output[] = array (
 				'thumbnail' => $thumb,
 				'medium'    => $medium,
-				'large'     => $large,
-				'full'      => $full);
+			//	'large'     => $large,
+			//	'full'      => $full);
+				'large'     => $large);
 
 		}
 
@@ -184,6 +152,7 @@ else $e_output_count = count($e_output);
 //create the overall JSON array
 $output = array(
 		'attend_link' => get_site_url() . '/attend',
+		'event_year' => mfo_approval_year(),
 		'accepteds_count' => $e_output_count,
 		'accepteds' => $e_output,
 		'categories' => $cats_output,
