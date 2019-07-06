@@ -7,7 +7,7 @@ Description: Helper plugin for the Maker Faire Online system based using the Too
 Version: 3.24.4
 Author: Ian Cole (Maker Faire Orlando)
 Author URI: http://www.github.com/digitalman2112
-GitHub Plugin URI: digitalman2112/mfo-wordpress-plugin
+GitHub Plugin URI: makerfaireorlando/mfo-wordpress-plugin
 */
 
 /*
