@@ -300,8 +300,8 @@ add_settings_field('mfo_event_name_string', 'Event Name', 'mfo_event_name_settin
 add_settings_field('mfo_support_email_string', 'Support Email Address', 'mfo_support_email_setting_string', 'mfo_main_tab', 'mfo_main');
 add_settings_field('mfo_notification_email_string', 'Notification Email Address', 'mfo_notification_email_setting_string', 'mfo_main_tab', 'mfo_main');
 add_settings_field('mfo_event_year_string', 'Event Year', 'mfo_event_year_setting_string', 'mfo_main_tab', 'mfo_main');
-add_settings_field('mfo_exhibits_year_string', 'Exhibits Year', 'mfo_exhibits_year_setting_string', 'mfo_main_tab', 'mfo_main');
-add_settings_field('mfo_sponsors_year_string', 'Sponsors Year', 'mfo_sponsors_year_setting_string', 'mfo_main_tab', 'mfo_main');
+add_settings_field('mfo_exhibits_year_string', 'Exhibits List Year', 'mfo_exhibits_year_setting_string', 'mfo_main_tab', 'mfo_main');
+add_settings_field('mfo_sponsors_year_string', 'Sponsors List Year', 'mfo_sponsors_year_setting_string', 'mfo_main_tab', 'mfo_main');
 
 //debug
 add_settings_field('mfo_log_enabled_boolean', 'Logging Enabled?', 'mfo_log_enabled_setting_boolean', 'mfo_debug_tab', 'mfo_debug');
@@ -409,6 +409,7 @@ function mfo_notification_email_setting_string() {
 function mfo_event_year_setting_string() {
 	$options = get_option('mfo_options_main');
 	echo "<input id='mfo_event_year_string' name='mfo_options_main[mfo_event_year_string]' size='4' type='text' value='{$options['mfo_event_year_string']}' />";
+	echo "<br>&nbsp&nbspThis setting controls the approval year added to new exhibits, counts on dashboards, and much more.";
 	echo "<br>&nbsp&nbspShortcode: <b>[mfo-event-year]</b> for use in posts / pages / views / forms, etc.";
 }
 
