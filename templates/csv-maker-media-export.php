@@ -45,7 +45,7 @@ $helpers_array = get_posts($h_args);
 //print_r($exhibits_array);
 
 	echo 'exhibit-year,exhibit-id,maker-id,maker-name,maker-last-name,maker-first-name,';
-	echo 'maker-email,maker-phone,maker-address,maker-website,exhibit-name,exhibit-description';
+	echo 'maker-email,maker-phone,maker-address1,maker-address2,maker-city,maker-state,maker-zipcode,maker-website,exhibit-name,exhibit-description';
 	echo "\r\n";
 
 
@@ -96,7 +96,23 @@ foreach ($exhibits_array as $exhibit) {
 	echo '"';
 	echo ',';
 	echo '"';
-	echo get_post_meta($maker_id, "wpcf-address", true);
+	echo get_post_meta($maker_id, "wpcf-maker-address1", true);
+	echo '"';
+	echo ',';
+	echo '"';
+	echo get_post_meta($maker_id, "wpcf-maker-address2", true);
+	echo '"';
+	echo ',';
+	echo '"';
+	echo get_post_meta($maker_id, "wpcf-maker-city", true);
+	echo '"';
+	echo ',';
+	echo '"';
+	echo get_post_meta($maker_id, "wpcf-maker-state", true);
+	echo '"';
+	echo ',';
+	echo '"';
+	echo get_post_meta($maker_id, "wpcf-maker-zipcode", true);
 	echo '"';
 	echo ',';
 	echo '"';
