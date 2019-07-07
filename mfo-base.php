@@ -1410,24 +1410,53 @@ function mfo_duplicate_post ($post_id, $old_name, $new_name) {
 		 * duplicate all post meta just in two SQL queries
 		 */
 		$post_meta_infos = $wpdb->get_results("SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id=$post_id");
+	
+
+		mfo_log(4, "mfo_duplicate_post", "count(post_meta):" . count($post_meta_infos));
 		if (count($post_meta_infos)!=0) {
+
 			$sql_query = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) ";
 			foreach ($post_meta_infos as $meta_info) {
 				$meta_key = $meta_info->meta_key;
 				$meta_value = addslashes($meta_info->meta_value);
+				mfo_log(4, "mfo_duplicate_post", $meta_key . "->" . $meta_value);
 				$sql_query_sel[]= "SELECT $new_post_id, '$meta_key', '$meta_value'";
 			}
 			$sql_query.= implode(" UNION ALL ", $sql_query_sel);
 			$wpdb->query($sql_query);
+			//mfo_log(4, "mfo_duplicate_post", "sql_query" . printr($sql_query, true));
 		}
 
-		//override prior exhibit approval status with PENDING
-		update_post_meta( $new_post_id, "wpcf-approval-status","2"); //pending
+
+
+		delete_post_meta( $new_post_id, "wpcf-approval-status");
+		delete_post_meta( $new_post_id, "wpcf-approval-status-date");
+		delete_post_meta( $new_post_id, "wpcf-approval-status-notify");
+		delete_post_meta( $new_post_id, "wpcf-agreement-status");
+		delete_post_meta( $new_post_id, "wpcf-exhibit-space-number");
+		delete_post_meta( $new_post_id, "wpcf-exhibit-space-number-sort-order");
+		delete_post_meta( $new_post_id, "wpcf-orientation-status");
+		delete_post_meta( $new_post_id, "wpcf-approval-year");
+		delete_post_meta( $new_post_id, "wpcf-payment-status");
+		delete_post_meta( $new_post_id, "wpcf-orientation-status");
+		delete_post_meta( $new_post_id, "wpcf-exhibit-loadin-slot");
+
+
+		update_post_meta( $new_post_id, "wpcf-approval-year", mfo_event_year());
+		update_post_meta( $new_post_id, "wpcf-approval-status", "2");
+		//update_post_meta( $new_post_id, "wpcf-agreement-status","0");  //not approved
+		//update_post_meta( $new_post_id, "wpcf-exhibit-space-number","");  //no space assigned
+
+		//update_maker_stats ran automatically, when the post was saved, need
+		//to run it again after we make our changes
+		update_maker_stats_child_id($new_post_id);
+
 
 	$ret = $new_post_id;
 
+	$meta = get_post_meta($new_post_id);
 
-	mfo_send_notification_email("MFO: Exhibit Duplicated - " . $post->post_title, print_r($post, true));
+	mfo_send_notification_email("MFO: Exhibit Duplicated - " . $post->post_title, print_r($post, true) . print_r($meta, true));
 
 	}
 	return $ret;
