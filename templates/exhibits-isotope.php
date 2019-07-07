@@ -63,7 +63,7 @@ get_header(); ?>
                                                 'meta_query' => array(
                                                         array(
                                                                 'key' => 'wpcf-approval-year',
-                                                                'value' => '2018'
+                                                                'value' => mfo_exhibits_year()
                                                         ),
                                                         array(
                                                                 'key' => 'wpcf-approval-status',
