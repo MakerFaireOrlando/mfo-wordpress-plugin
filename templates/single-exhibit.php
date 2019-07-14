@@ -47,7 +47,7 @@ get_header(); ?>
 					$approval_year = get_post_meta($exhibit_id, 'wpcf-approval-year', true);
 					echo get_the_title() . ' (' . $approval_year . ' Exhibit)';?></h1>
 				</div>
-				<img class="img-responsive entry-image" src="<?php the_post_thumbnail_url( get_the_ID() )?>" alt="<?php the_title() ?>">
+				<img class="img-responsive entry-image" src="<?php the_post_thumbnail_url( 'large' )?>" alt="<?php the_title() ?>">
 				<p class="lead"><?php echo get_post_meta(get_the_ID(), 'wpcf-long-description', 'true'); ?></p>
 
 				<?php
