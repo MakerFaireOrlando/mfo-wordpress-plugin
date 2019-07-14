@@ -56,7 +56,6 @@ get_header(); ?>
 				$twitter 	= get_post_meta($exhibit_id, 'wpcf-twitter-url', true);
 				$instagram 	= get_post_meta($exhibit_id, 'wpcf-instagram-url', true);
 				$facebook 	= get_post_meta($exhibit_id, 'wpcf-facebook-url', true);
-				$googleplus 	= get_post_meta($exhibit_id, 'wpcf-google-plus-url', true);
 				$youtube 	= get_post_meta($exhibit_id, 'wpcf-youtube-url', true);
 				?>
 				<div class="row exhibit-social-row">
@@ -68,7 +67,6 @@ get_header(); ?>
 				<?php if ($twitter) 	echo '<li><a href="' . $twitter    . '" target="_blank"<i class="fa fa-2x fa-twitter" 	aria-hidden="true"></i></a></li>'; ?>
 				<?php if ($instagram) 	echo '<li><a href="' . $instagram  . '" target="_blank"<i class="fa fa-2x fa-instagram" 	aria-hidden="true"></i></a></li>'; ?>
 				<?php if ($facebook) 	echo '<li><a href="' . $facebook   . '" target="_blank"<i class="fa fa-2x fa-facebook" 	aria-hidden="true"></i></a></li>'; ?>
-				<?php if ($googleplus) 	echo '<li><a href="' . $googleplus . '" target="_blank"<i class="fa fa-2x fa-googleplus" 	aria-hidden="true"></i></a></li>'; ?>
 				<?php if ($youtube) 	echo '<li><a href="' . $youtube    . '" target="_blank"<i class="fa fa-2x fa-youtube" 	aria-hidden="true"></i></a></li>'; ?>
 				</ul></div></div>
 
