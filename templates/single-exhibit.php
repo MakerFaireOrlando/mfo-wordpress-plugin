@@ -97,9 +97,12 @@ get_header(); ?>
 					<?php
 					$counter = 0;
 					foreach ($addl_photos as $photo) {
+						echo '<!--' . $photo . '-->';
 						$active = ""; if ($counter==0) $active=" active";
 						$photo_id = mfo_get_attachment_id_by_url($photo);
-						$photo_imgtag = wp_get_attachment_image($photo_id, 'large');
+						if ($photo_id) {
+							$photo_imgtag = wp_get_attachment_image($photo_id, 'large');
+						} else $photo_imgtag = '<img src="' . $photo . '">';
 						echo '<div class="item' . $active .'">';
 						echo $photo_imgtag . '</div>';
 						$counter++;
