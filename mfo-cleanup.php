@@ -245,7 +245,7 @@ $args = array(
 //commented for safety!
 //add_shortcode('mfo-utility-fix-missing-approval-dates', 'mfo_utility_fix_missing_approval_dates');
 
-
+/*
 function mfo_utility_delete_all_eventbrite_orders() {
 
  mfo_log (4, "mfo_utility_delete_all_eventbrite_orders", "start");
@@ -275,5 +275,36 @@ $args = array(
 
 //commented for safety!
 add_shortcode('mfo-utility-delete-all-eventbrite-orders', 'mfo_utility_delete_all_eventbrite_orders');
+*/
+
+function mfo_utility_delete_all_exhibit_helpers() {
+
+ mfo_log (4, "mfo_utility_delete_all_exhibit_helpers", "start");
+
+$args = array(
+  'post_type' => 'exhibit-helper',
+  //'post_status' => 'publish',
+  'posts_per_page' => -1, // all
+  'orderby' => 'title',
+  'order' => 'ASC',
+);
+
+ $helper_array = get_posts($args);
+ echo count($helper_array)  .' objects<br>';
+
+ $hlp = 1;
+ foreach ($helper_array as $helper) {
+        echo $hlp. ":" ."Deleting Helper: "  . $helper->post_title . "<br>";
+
+	mfo_log(1, "mfo_utility_delete_all_exhibit_helper", $ord. ":" ."Deleting Helper: "  . $helper->post_title);
+        wp_delete_post($helper->ID, 1); //force_delete, not just move to trash
+	$hlp++;
+	if ($hlp>100) break;
+ }
+
+}
+
+//commented for safety!
+add_shortcode('mfo-utility-delete-all-exhibit_helpers', 'mfo_utility_delete_all_exhibit_helpers');
 
 ?>

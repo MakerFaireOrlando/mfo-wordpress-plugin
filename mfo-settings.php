@@ -284,7 +284,7 @@ function mfo_plugin_options() {
 /*
  if ( $active_tab == 'debug_options' ) {
         ?>
-        <form action="<?php echo admin_url('admin-post.php'); ?>" method="post">
+       <form action="<?php echo admin_url('admin-post.php'); ?>" method="post">
         <input type="hidden" name="action" value="mfo_cleanup">
         <input type="submit" value="RUN CLEANUP FUNCTION">
         </form>
@@ -312,7 +312,7 @@ function mfo_plugin_options() {
 
 function mfo_settings_cleanup_function() {
 	mfo_log(1,"mfo_settings_cleanup_function", "start");
-	mfo_utility_delete_all_eventbrite_orders();
+	mfo_utility_delete_all_exhibit_helpers();
 	mfo_log(1,"mfo_settings_cleanup_function", "end");
 }
 add_action( 'admin_post_mfo_cleanup', 'mfo_settings_cleanup_function' );
