@@ -245,4 +245,37 @@ $args = array(
 //commented for safety!
 //add_shortcode('mfo-utility-fix-missing-approval-dates', 'mfo_utility_fix_missing_approval_dates');
 
+
+function mfo_utility_delete_all_eventbrite_orders() {
+
+ mfo_log (4, "mfo_utility_delete_all_eventbrite_orders", "start");
+
+$args = array(
+  'post_type' => 'eventbrite-order',
+  //'post_status' => 'publish',
+  'posts_per_page' => -1, // all
+  'orderby' => 'title',
+  'order' => 'ASC',
+);
+
+ $orders_array = get_posts($args);
+ echo count($orders_array)  .' objects<br>';
+
+ $ord = 1;
+ foreach ($orders_array as $order) {
+        echo $ord. ":" ."Deleting Order: "  . $order->post_name . "<br>";
+
+	mfo_log(1, "mfo_utility_delete_all_eventbrite_orders", $ord. ":" ."Deleting Order: "  . $order->post_name);
+        wp_delete_post($order->ID, 1); //force_delete, not just move to trash
+	$ord++;
+	if ($ord>100) break;
+ }
+
+}
+
+//commented for safety!
+add_shortcode('mfo-utility-delete-all-eventbrite-orders', 'mfo_utility_delete_all_eventbrite_orders');
+
 ?>
+
+

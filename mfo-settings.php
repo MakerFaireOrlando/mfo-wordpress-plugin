@@ -269,10 +269,53 @@ function mfo_plugin_options() {
         submit_button();
     ?>
 </form>
+
+<?php
+
+ if ( $active_tab == 'debug_options' ) {
+	?>
+	<form action="<?php echo admin_url('admin-post.php'); ?>" method="post">
+  	<input type="hidden" name="action" value="mfo_cleanup">
+  	<input type="button" value="RUN CLEANUP FUNCTION" 
+		onClick="if (confirm('Are you sure?')) submit();">
+	</form>
+	<?php
+	}
+/*
+ if ( $active_tab == 'debug_options' ) {
+        ?>
+        <form action="<?php echo admin_url('admin-post.php'); ?>" method="post">
+        <input type="hidden" name="action" value="mfo_cleanup">
+        <input type="submit" value="RUN CLEANUP FUNCTION">
+        </form>
+        <?php
+        }
+
+	<script type="text/javascript">
+
+	function confSubmit(form) {
+		if (confirm("Are you sure?")) {
+			form.submit();
+		}
+
+		else {
+			alert("Cancelled!");
+		}
+	}
+	</script>
+*/
+?>
     </div><!-- /.wrap -->
 <?php
-} 
 
+}
+
+function mfo_settings_cleanup_function() {
+	mfo_log(1,"mfo_settings_cleanup_function", "start");
+	mfo_utility_delete_all_eventbrite_orders();
+	mfo_log(1,"mfo_settings_cleanup_function", "end");
+}
+add_action( 'admin_post_mfo_cleanup', 'mfo_settings_cleanup_function' );
 
 // add the admin settings and such
 add_action('admin_init', 'mfo_admin_init');
