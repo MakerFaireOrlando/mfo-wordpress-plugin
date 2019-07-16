@@ -277,5 +277,3 @@ $args = array(
 add_shortcode('mfo-utility-delete-all-eventbrite-orders', 'mfo_utility_delete_all_eventbrite_orders');
 
 ?>
-
-
