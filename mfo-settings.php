@@ -312,7 +312,7 @@ function mfo_plugin_options() {
 
 function mfo_settings_cleanup_function() {
 	mfo_log(1,"mfo_settings_cleanup_function", "start");
-	mfo_utility_delete_all_exhibit_helpers();
+	mfo_utility_strip_maker_agreement_acks();
 	mfo_log(1,"mfo_settings_cleanup_function", "end");
 }
 add_action( 'admin_post_mfo_cleanup', 'mfo_settings_cleanup_function' );

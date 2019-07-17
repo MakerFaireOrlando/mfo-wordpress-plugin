@@ -121,7 +121,8 @@ $args = array(
 
 function mfo_utility_strip_maker_agreement_acks() {
 
- mfo_log (4, "mfo_utility_strip_maker_agreement_acks", "start");
+ mfo_log (1, "mfo_utility_strip_maker_agreement_acks", "start");
+
 
 $args = array(
   'post_type' => 'maker',
@@ -132,10 +133,11 @@ $args = array(
 );
 
  $makers_array = get_posts($args);
- echo "Exhibits: " . count($makers_array) . "<br>";
+ echo "Makers: " . count($makers_array) . "<br>";
 
  foreach ($makers_array as $maker) {
         echo "Maker: " . $maker->post_name . "<br>";
+	mfo_log (4, "mfo_utility_strip_maker_agreement_acks", "Maker: " . $maker->post_name);
 	update_post_meta( $maker->ID, "wpcf-maker-agreement-ack","");
 	update_post_meta( $maker->ID, "wpcf-maker-agreement-date","");
 	update_post_meta( $maker->ID, "wpcf-maker-agreement-user-name","");
@@ -276,7 +278,7 @@ $args = array(
 //commented for safety!
 add_shortcode('mfo-utility-delete-all-eventbrite-orders', 'mfo_utility_delete_all_eventbrite_orders');
 */
-
+/*
 function mfo_utility_delete_all_exhibit_helpers() {
 
  mfo_log (4, "mfo_utility_delete_all_exhibit_helpers", "start");
@@ -306,5 +308,5 @@ $args = array(
 
 //commented for safety!
 add_shortcode('mfo-utility-delete-all-exhibit_helpers', 'mfo_utility_delete_all_exhibit_helpers');
-
+*/
 ?>
