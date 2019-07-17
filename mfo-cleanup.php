@@ -46,7 +46,7 @@ $args = array(
 */
 
 
-/* */
+/* 
 //remove all exhibit space numbers
 function mfo_utility_reset_exhibit_space_numbers() {
 
@@ -77,10 +77,10 @@ $args = array(
 
 //commented for safety!
 //add_shortcode('mfo-utility-reset-exhibit-space-numbers', 'mfo_utility_reset_exhibit_space_numbers');
+*/
 
 
-
-
+/*
 //strip all locations from current year exhibits
 //this was needed because the duplicate exhibit function
 //was copying over the exhibit-location taxonomy
@@ -113,7 +113,9 @@ $args = array(
 //commented for safety!
 //add_shortcode('mfo-utility-strip-exhibit-locations', 'mfo_utility_strip_exhibit_locations');
 
+*/
 
+/*
 //reset all agreement status
 //need to do this anytime the agreement changes and needs to be acknowledged by all
 //typically once a year
@@ -148,6 +150,8 @@ $args = array(
 
 //commented for safety!
 add_shortcode('mfo-utility-strip-maker-agreement-acks', 'mfo_utility_strip_maker_agreement_acks');
+*/
+
 
 
 function mfo_utility_update_maker_stats_all() {
@@ -176,7 +180,7 @@ $args = array(
 
 
 
-
+/*
 function mfo_utility_set_all_exhibits_to_pending() {
 
 
@@ -206,8 +210,10 @@ $args = array(
 //commented for safety!
 //add_shortcode('mfo-utility-set_all_exhibits_to_pending', 'mfo_utility_set_all_exhibits_to_pending');
 
+*/
 
 
+/*
 function mfo_utility_fix_missing_approval_dates() {
 
 
@@ -246,6 +252,7 @@ $args = array(
 
 //commented for safety!
 //add_shortcode('mfo-utility-fix-missing-approval-dates', 'mfo_utility_fix_missing_approval_dates');
+*/
 
 /*
 function mfo_utility_delete_all_eventbrite_orders() {

@@ -276,8 +276,8 @@ function mfo_plugin_options() {
 	?>
 	<form action="<?php echo admin_url('admin-post.php'); ?>" method="post">
   	<input type="hidden" name="action" value="mfo_cleanup">
-  	<input type="button" value="RUN CLEANUP FUNCTION - Strip Maker Agreement Acks" 
-		onClick="if (confirm('Are you sure?')) submit();">
+  	<input type="button" value="RUN CLEANUP FUNCTION - Update Maker Stats - All" 
+		onClick="if (confirm('Are you sure? Did you enable logging at the right level?')) submit();">
 	</form>
 	<?php
 	}
@@ -312,7 +312,7 @@ function mfo_plugin_options() {
 
 function mfo_settings_cleanup_function() {
 	mfo_log(1,"mfo_settings_cleanup_function", "start");
-	mfo_utility_strip_maker_agreement_acks();
+	mfo_utility_update_maker_stats_all();
 	mfo_log(1,"mfo_settings_cleanup_function", "end");
 }
 add_action( 'admin_post_mfo_cleanup', 'mfo_settings_cleanup_function' );
