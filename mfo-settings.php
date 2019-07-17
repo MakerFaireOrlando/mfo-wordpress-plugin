@@ -276,7 +276,7 @@ function mfo_plugin_options() {
 	?>
 	<form action="<?php echo admin_url('admin-post.php'); ?>" method="post">
   	<input type="hidden" name="action" value="mfo_cleanup">
-  	<input type="button" value="RUN CLEANUP FUNCTION" 
+  	<input type="button" value="RUN CLEANUP FUNCTION - Strip Maker Agreement Acks" 
 		onClick="if (confirm('Are you sure?')) submit();">
 	</form>
 	<?php
