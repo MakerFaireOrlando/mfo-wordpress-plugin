@@ -19,8 +19,88 @@ include( plugin_dir_path( __FILE__ ) . 'mfo-cleanup.php');
 
 //disables the admin bar on the frontend
 add_filter('show_admin_bar', '__return_false');
-
 add_action( 'wp_enqueue_scripts', 'add_custom_scripts' );
+
+
+// add a link to the WP Toolbar
+function custom_toolbar_link($wp_admin_bar) {
+    $args = array(
+        'id' => 'mfooptions',
+        'title' => 'MFO Options',
+        'href' => '/wp-admin/options-general.php?page=mfo-options-page&tab=main_options',
+        'meta' => array(
+            'class' => 'mfooptions',
+            'title' => 'MFO Options'
+            )
+    );
+    $wp_admin_bar->add_node($args);
+
+   // Add the child links
+
+    $args = array(
+        'id' => 'mfomainoptions',
+        'title' => 'Main Options',
+        'href' => '/wp-admin/options-general.php?page=mfo-options-page&tab=main_options',
+        'parent' => 'mfooptions',
+        'meta' => array(
+            'class' => 'mfomainoptions',
+            'title' => 'Main Options'
+            )
+    );
+    $wp_admin_bar->add_node($args);
+
+    $args = array(
+        'id' => 'mfodisplayoptions',
+        'title' => 'Display Options',
+        'href' => '/wp-admin/options-general.php?page=mfo-options-page&tab=display_options',
+        'parent' => 'mfooptions',
+        'meta' => array(
+            'class' => 'mfodisplayoptions',
+            'title' => 'Display Options'
+            )
+    );
+    $wp_admin_bar->add_node($args);
+
+
+    $args = array(
+        'id' => 'mfofeatureoptions',
+        'title' => 'Feature Options',
+        'href' => '/wp-admin/options-general.php?page=mfo-options-page&tab=feature_options',
+        'parent' => 'mfooptions',
+        'meta' => array(
+            'class' => 'mfomainsettings',
+            'title' => 'Feature Options'
+            )
+    );
+    $wp_admin_bar->add_node($args);
+
+    $args = array(
+        'id' => 'mfomoduleoptions',
+        'title' => 'Module Options',
+        'href' => '/wp-admin/options-general.php?page=mfo-options-page&tab=module_options',
+        'parent' => 'mfooptions',
+        'meta' => array(
+            'class' => 'mfomodulesettings',
+            'title' => 'Module Options'
+            )
+    );
+    $wp_admin_bar->add_node($args);
+
+    $args = array(
+        'id' => 'mfodebugoptions',
+        'title' => 'Debug Options',
+        'href' => '/wp-admin/options-general.php?page=mfo-options-page&tab=debug_options',
+        'parent' => 'mfooptions',
+        'meta' => array(
+            'class' => 'mfodebugsettings',
+            'title' => 'Debug Options'
+            )
+    );
+    $wp_admin_bar->add_node($args);
+}
+
+add_action('admin_bar_menu', 'custom_toolbar_link', 999);
+
 
 
 
