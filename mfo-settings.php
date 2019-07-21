@@ -803,7 +803,7 @@ function mfo_file_test ($filename, $txt) {
         }
 }
 
-/* ajax from here
+// ajax from here
 //https://codex.wordpress.org/AJAX_in_Plugins
 //settings_page_mfo-options-page
 //find with echo $GLOBALS['hook_suffix']
