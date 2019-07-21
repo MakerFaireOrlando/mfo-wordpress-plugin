@@ -6,6 +6,91 @@ This file is for cleanup functions with special uses
 Use with extreme care :)
 */
 
+
+/* get array of all images in wpcf-additional-photos
+ *
+ */
+
+function mfo_get_all_exhibit_photos() {
+
+	$args = array(
+ 	 'post_type' => 'exhibit',
+ 	 'post_status' => 'publish',
+ 	 'posts_per_page' => -1, // all
+ 	 'orderby' => 'id',
+ 	 'order' => 'asc',
+	);
+
+ 	$exhibits_array = get_posts($args);
+	$image_array = array();
+
+	foreach ($exhibits_array as $exhibit) {
+		$ap = get_post_meta($exhibit->ID, 'wpcf-additional-photos');
+		$fi = get_the_post_thumbnail_url( $exhibit->ID); 
+
+        	mfo_log(4, "mfo_get_all_exhibit_photos", $exhibit->ID . ": " . $exhibit->post_name .": ". count($ap) . ": " . implode(", ",$ap));
+                if ($fi !="") array_push($image_array, $fi);
+		if (count($ap)) $image_array = array_merge($image_array, $ap);
+	 }
+
+	mfo_log(4, "mfo_get_all_exhibit_photos", "Photos: " . count($image_array));
+	//echo (json_encode($image_array));
+	return $image_array;
+}
+
+
+function mfo_get_all_maker_photos() {
+
+        $args = array(
+         'post_type' => 'maker',
+         'post_status' => 'publish',
+         'posts_per_page' => -1, // all
+         'orderby' => 'id',
+         'order' => 'asc',
+        );
+
+        $makers_array = get_posts($args);
+        $image_array = array();
+
+
+        foreach ($makers_array as $maker) {
+                $fi = get_the_post_thumbnail_url( $maker->ID ); 
+                mfo_log(4, "mfo_get_all_maker_photos", $maker->ID . ": " . $maker->post_name .": " . $fi);
+
+                if ($fi != "") array_push($image_array, $fi);
+         }
+	mfo_log(4, "mfo_get_all_maker_photos", "Photos: " . count($image_array));
+
+        return $image_array;
+}
+
+function mfo_get_all_photos() {
+
+	$image_array = mfo_get_all_maker_photos();
+        // mfo_log(4, "mfo_get_all_maker_photos", $maker->ID . ": " . $maker->post_name .": " . $fi);
+	$image_array = array_merge($image_array, mfo_get_all_exhibit_photos());
+	//$image_array = array_merge($image_array, mfo_get_all_post_photos()); //does this include pages?
+
+	$p_rows = "";
+	foreach ($image_array as $img) {
+		if ($img !="") $p_rows .= "<tr><td>". $img . "</td></tr>";
+		}
+
+        echo "<table>" . $p_rows . "</table>";
+       
+	mfo_log(4, "mfo_get_all_photos", "Photos: " . count($image_array));
+ 	$image_array = array_filter($image_array);
+	mfo_log(4, "mfo_get_all_photos", "Filtered Photos: " . count($image_array));
+        //echo (json_encode($image_array));
+	//return $image_array;
+
+}
+
+
+
+
+
+
 /*
 //reset min default helpers - DOES not change if already at or above min
 function mfo_utility_reset_exhibit_helpers() {
