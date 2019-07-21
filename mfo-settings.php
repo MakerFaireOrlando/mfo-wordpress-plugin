@@ -85,7 +85,7 @@ add_shortcode('mfo-support-email-link', 'mfo_support_email_link');
 function mfo_notification_email() {
 
  $options = get_option('mfo_options_main');
- return $options[mfo_notification_email_string];
+ return $options['mfo_notification_email_string'];
 }
 add_shortcode('mfo-notification-email', 'mfo_notification_email');
 
