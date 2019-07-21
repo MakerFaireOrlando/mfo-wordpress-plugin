@@ -1544,7 +1544,7 @@ function add_to_menu( $items, $args ) {
 
 	  if (is_user_logged_in() ) {
 
-		$user = $user ? new WP_User( $user ) : wp_get_current_user();
+		$user = isset($user) ? new WP_User( $user ) : wp_get_current_user();
 
         	$items .=  '<li itemscope="itemscope" itemtype="https://www.schema.org/SiteNavigationElement" id="menu-item-99900"'.
 				'class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-99900 dropdown">'.
