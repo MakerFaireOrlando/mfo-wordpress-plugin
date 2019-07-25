@@ -97,6 +97,30 @@ function custom_toolbar_link($wp_admin_bar) {
             )
     );
     $wp_admin_bar->add_node($args);
+
+    $args = array(
+        'id' => 'mfoproducerdash',
+        'title' => 'Producer Dashboard',
+        'href' => '/producer-dashboard',
+        'parent' => 'mfooptions',
+        'meta' => array(
+            'class' => 'mfoproducersdash',
+            'title' => 'Producer Dashboard'
+            )
+    );
+    $wp_admin_bar->add_node($args);
+
+    $args = array(
+        'id' => 'mfomakerdash',
+        'title' => 'Maker Dashboard',
+        'href' => '/maker-dashboard',
+        'parent' => 'mfooptions',
+        'meta' => array(
+            'class' => 'mfomakerdash',
+            'title' => 'Maker Dashboard'
+            )
+    );
+    $wp_admin_bar->add_node($args);
 }
 
 add_action('admin_bar_menu', 'custom_toolbar_link', 999);
