@@ -90,7 +90,7 @@ function mfo_eventbrite_order_placed ($data) {
 
 	mfo_log(3, 'eventbrite',"data->api_url: ".print_r($data->api_url, true));
 	$url_order = $data->api_url.'?token='.$token.'&expand=attendees,event';
-	mfo_log(3, "order url: ".$url_order);
+	mfo_log(3, 'eventbrite', "order url: ".$url_order);
 	$order_raw = file_get_contents($url_order);
 	mfo_log(4, 'eventbrite',"file_get_contents: ".$order_raw);
 	$order = json_decode($order_raw);
