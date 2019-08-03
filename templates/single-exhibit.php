@@ -37,7 +37,7 @@ get_header(); ?>
                         <div class="container">
                         <div class="row">
 			    <div class="content entry-page col-xs-12">
-			      <div class="backlink"><a href="/makers"><i class="fa fa-arrow-left" aria-hidden="true"></i> Look for More Makers</a></div>
+			      <div class="backlink"><a href="/makers/"><i class="fa fa-arrow-left" aria-hidden="true"></i> Look for More Makers</a></div>
 
 
 
@@ -75,7 +75,13 @@ get_header(); ?>
 				<?php //Additional Pictures & videos & such
 				      //https://stackoverflow.com/questions/5487444/wordpress-image-size-based-on-url
 				      //https://wp-types.com/documentation/customizing-sites-using-php/displaying-repeating-fields-one-kind/
-					$addl_photos = get_post_meta($exhibit_id, 'wpcf-additional-photos');
+
+
+					$trf = types_render_field('additional-photos', array("size" =>"large", "url" => "true"));
+
+					$addl_photos = explode(" ", $trf);
+
+					//$addl_photos = get_post_meta($exhibit_id, 'wpcf-additional-photos');
 					$num_photos = count(array_filter($addl_photos));
 					if ($num_photos > 1):
 					?>
@@ -97,12 +103,16 @@ get_header(); ?>
 					<?php
 					$counter = 0;
 					foreach ($addl_photos as $photo) {
-						echo '<!--' . $photo . '-->';
+						//echo '<!--' . $photo . '-->';
 						$active = ""; if ($counter==0) $active=" active";
+						/*
 						$photo_id = mfo_get_attachment_id_by_url($photo);
 						if ($photo_id) {
 							$photo_imgtag = wp_get_attachment_image($photo_id, 'large');
 						} else $photo_imgtag = '<img src="' . $photo . '">';
+						*/
+						$photo_imgtag = '<img src="' . $photo . '">';
+
 						echo '<div class="item' . $active .'">';
 						echo $photo_imgtag . '</div>';
 						$counter++;
