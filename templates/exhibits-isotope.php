@@ -78,17 +78,28 @@ get_header(); ?>
 				echo '<div class="exhibits-container" id="exhibits">';
 				foreach ($exhibits as $exhibit) {
 
-				$termlist='';
-				$terms = get_the_terms($exhibit->ID, "exhibit-category");
-				foreach ($terms as $term) {
-				$termlist = $termlist . " " . $term->slug;
-				}
-				echo '<div class="item' . $termlist. '">';
-				echo '<div class="title-container"><a href="' . get_permalink($exhibit->ID) . '">' . $exhibit->post_title  . '</a></div>';
-				echo '<div class="excerpt-container">' . $exhibit->post_excerpt . '</div>';
-				echo '<div class="img-container">';
-				echo '<a href="' . get_permalink($exhibit->ID) .'">';
-				echo '<img src="'. get_the_post_thumbnail_url ($exhibit->ID, 'medium') . '" style="max-width:300px"></a></div></div>'; 
+					$termlist='';
+					$terms = get_the_terms($exhibit->ID, "exhibit-category");
+				
+					foreach ($terms as $term) {
+						$termlist = $termlist . " " . $term->slug;
+					}
+
+					//this works in conjunction with the .js since it forces a reload when the battlebot or combat-robot category is selected from dropdown
+					$show = 1;
+					$botcat = 0;
+					if (($category !="battlebot") || ($category !="combat-robots")) $botcat = 1;
+					if (strstr($termlist, "battlebot") && (!botcat)) $show = 0;
+					if (strstr($termlist, "combat-robots") && (!botcat)) $show = 0;
+
+					if ($show) {
+						echo '<div class="item' . $termlist. '">';
+						echo '<div class="title-container"><a href="' . get_permalink($exhibit->ID) . '">' . $exhibit->post_title  . '</a></div>';
+						echo '<div class="excerpt-container">' . $exhibit->post_excerpt . '</div>';
+						echo '<div class="img-container">';
+						echo '<a href="' . get_permalink($exhibit->ID) .'">';
+						echo '<img src="'. get_the_post_thumbnail_url ($exhibit->ID, 'medium') . '" style="max-width:300px"></a></div></div>'; 
+					}
 				}
 ?>
 

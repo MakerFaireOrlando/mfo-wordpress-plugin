@@ -1,4 +1,4 @@
-console.log("isotope helper js loaded");
+console.log("isotope helper js loaded -010");
 
 // quick search regex
 var qsRegex;
@@ -60,7 +60,12 @@ if (fv) {
 // use value of search field to filter
 var $quicksearch = jQuery('.quicksearch').keyup( debounce( function() {
   qsRegex = new RegExp( $quicksearch.val(), 'gi' );
-  $container.isotope(); 
+  $container.isotope({
+    filter: function() {
+    return qsRegex ? jQuery(this).text().match( qsRegex ) : true;
+  }}); 
+
+
 }, 200 ) );
 
 // debounce so filtering doesn't happen every millisecond
@@ -97,13 +102,20 @@ jQuery('.filters-select').on( 'change', function() {
   var filterValue = this.value;
   // use filterFn if matches value
   filterValue = filterFns[ filterValue ] || filterValue;
-  $container.isotope({ filter: filterValue });
-  console.log("filterValue:" + filterValue);
+
+  jQuery('.quicksearch').val('');
+
   if (filterValue =="*") {
 	window.history.pushState("object or string", "Title", "/makers");
 	}
   else {
 	window.history.pushState("object or string", "Title", "/makers/?category=" + filterValue.substring(1));
 	}
+
+  if ( filterValue.includes("battlebot") || filterValue.includes("combat-robot")) window.location.reload();
+  else {
+  	$container.isotope({ filter: filterValue });
+ 	console.log("filterValue:" + filterValue);
+	}//end if filtervalue.includes
 });
 
