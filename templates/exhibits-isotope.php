@@ -88,9 +88,9 @@ get_header(); ?>
 					//this works in conjunction with the .js since it forces a reload when the battlebot or combat-robot category is selected from dropdown
 					$show = 1;
 					$botcat = 0;
-					if (($category !="battlebot") || ($category !="combat-robots")) $botcat = 1;
-					if (strstr($termlist, "battlebot") && (!botcat)) $show = 0;
-					if (strstr($termlist, "combat-robots") && (!botcat)) $show = 0;
+					if (($category == "battlebot") || ($category == "combat-robots")) $botcat = 1;
+					if (strstr($termlist, "battlebot") 	&& ($botcat==0)) $show = 0;
+					if (strstr($termlist, "combat-robots") 	&& ($botcat==0)) $show = 0;
 
 					if ($show) {
 						echo '<div class="item' . $termlist. '">';
