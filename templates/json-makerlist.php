@@ -1,6 +1,6 @@
 <?php
 //header( 'Content-type: application/json' );
- 
+
 /**
  * Template Name: Makers JSON page
  * Description: Outputs the list of EXHIBITS as JSON
@@ -51,7 +51,7 @@ $exhibits_array = get_posts($args);
 
 foreach ($exhibits_array as $exhibit) {
 
-	//filter by approval status. This is a hack as I could not get the meta_query 
+	//filter by approval status. This is a hack as I could not get the meta_query
 	//to work property
 
 	$approval = get_post_meta($exhibit->ID, "wpcf-approval-status", true);
@@ -83,7 +83,7 @@ foreach ($exhibits_array as $exhibit) {
 			$large =  types_render_field_single( $field, $params, null, '', $k);
 			$params ['size'] ='full';
 			$full =  types_render_field_single( $field, $params, null, '', $k);
-			
+
 
 			//mfo2018 hack to add cdn
 
@@ -123,7 +123,7 @@ foreach ($exhibits_array as $exhibit) {
 
 		}
 
-	
+
 	}
 	$embed_media = get_post_meta($exhibit->ID, "wpcf-embeddable-media", false);
 
@@ -140,18 +140,18 @@ foreach ($exhibits_array as $exhibit) {
 			//'approval_status' => $approval,
 
 			'exhibit_category' => strip_tags(get_the_term_list($exhibit->ID, "exhibit-category","",", ")),
-			'hidden_exhibit_category' => strip_tags(get_the_term_list($exhibit->ID, "hidden-exhibit-category","",", ")),
-			'hidden_maker_category' => strip_tags(get_the_term_list($maker_id, "hidden-maker-category","",", ")),
+			//'hidden_exhibit_category' => strip_tags(get_the_term_list($exhibit->ID, "hidden-exhibit-category","",", ")),
+			//'hidden_maker_category' => strip_tags(get_the_term_list($maker_id, "hidden-maker-category","",", ")),
 			'project_name' => html_entity_decode($exhibit->post_title),
 			'description' => html_entity_decode(get_post_meta($exhibit->ID, "wpcf-long-description", true)),
 			'web_site' => get_post_meta($exhibit->ID, "wpcf-website", true),
 			'promo_url' => get_permalink($exhibit),
-			'qrcode_url' => "",
+			//'qrcode_url' => "",
 			'project_short_summary' => html_entity_decode($exhibit->post_excerpt),
 			'location' => strip_tags(get_the_term_list($exhibit->ID, "exhibit-location","",", ")),
 			'photo_link' => $photo_src[0],
-			'additional_photos'=>$images_output,
-			'embeddable_media'=>$embed_media,
+			//'additional_photos'=>$images_output,
+			//'embeddable_media'=>$embed_media,
 			'maker' =>$m_output
 			);
 }
@@ -198,4 +198,3 @@ $output = array(
 //send headers & JSON
 wp_send_json($output);
 ?>
-
