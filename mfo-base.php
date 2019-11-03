@@ -1398,6 +1398,7 @@ add_action ('cred_save_data_5097', 'cred_save_data_exhibit_helper', 10 ,2 );
 function flush_json_from_cache() {
 	if (function_exists('w3tc_pgcache_flush_post')) {
 		//todo: remove hard-coded post ID; use url_to_postid( $url )  function?
+		mfo_log(3, "flush_json_from_cache()", "");
 		w3tc_pgcache_flush_post(5604); //purge the JSON output from the cache
 	}
 
