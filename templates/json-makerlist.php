@@ -10,7 +10,7 @@
 
 $version = get_query_var("version", 1);
 
-mfo_log(1,"makers-json", "fixme!");
+mfo_log(1,"makers-json", "starting...");
 
 $args = array(
   'post_type' => 'exhibit',
@@ -61,9 +61,33 @@ foreach ($exhibits_array as $exhibit) {
 	$maker_id = wpcf_pr_post_get_belongs($exhibit->ID, 'maker');
 	$maker = get_post($maker_id);
 	unset($m_output);
-	$photo_src = wp_get_attachment_image_src( get_post_thumbnail_id($exhibit->ID), 'medium');
-	$maker_photo_src = wp_get_attachment_image_src( get_post_thumbnail_id($maker_id), 'medium');
 
+	//note that the photo url is the first element, hence the index at the end of the lines below
+	$photo_src = wp_get_attachment_image_src( get_post_thumbnail_id($exhibit->ID), 'large')[0];
+	$maker_photo_src = wp_get_attachment_image_src( get_post_thumbnail_id($maker_id), 'large')[0];
+
+	$find = "https://makerfaireorlando.com/";
+        $replace = "https://mfocdn-themakereffectfo.netdna-ssl.com/";
+        $photo_src = str_replace($find, $replace, $photo_src);
+        $maker_photo_src = str_replace($find, $replace, $maker_photo_src);
+
+	$find = "http://makerfaireorlando.com/";
+        $replace = "https://mfocdn-themakereffectfo.netdna-ssl.com/";
+        $photo_src = str_replace($find, $replace, $photo_src);
+        $maker_photo_src = str_replace($find, $replace, $maker_photo_src);
+
+	$find = "https://www.makerfaireorlando.com/";
+        $replace = "https://mfocdn-themakereffectfo.netdna-ssl.com/";
+        $photo_src = str_replace($find, $replace, $photo_src);
+        $maker_photo_src = str_replace($find, $replace, $maker_photo_src);
+
+	$find = "http://www.makerfaireorlando.com/";
+        $replace = "https://mfocdn-themakereffectfo.netdna-ssl.com/";
+        $photo_src = str_replace($find, $replace, $photo_src);
+        $maker_photo_src = str_replace($find, $replace, $maker_photo_src);
+
+
+/*
 	$images = get_post_meta($exhibit->ID, "wpcf-additional-photos");
 
 	//remove empty array items
@@ -126,11 +150,16 @@ foreach ($exhibits_array as $exhibit) {
 
 	}
 	$embed_media = get_post_meta($exhibit->ID, "wpcf-embeddable-media", false);
+*/
+
+
+	//if (empty($maker_photo_src[0])) $maker_photo_src[0]="";
+	//if (empty($photo_src[0])) $photo_src[0]="";
 
 	$m_output = array(
 			'name' => html_entity_decode(get_the_title($maker_id)),
 			'description' => html_entity_decode($maker->post_excerpt),
-			'photo_link' => $maker_photo_src[0]
+			'photo_link' => $maker_photo_src
 		);
 
 
@@ -149,7 +178,7 @@ foreach ($exhibits_array as $exhibit) {
 			//'qrcode_url' => "",
 			'project_short_summary' => html_entity_decode($exhibit->post_excerpt),
 			'location' => strip_tags(get_the_term_list($exhibit->ID, "exhibit-location","",", ")),
-			'photo_link' => $photo_src[0],
+			'photo_link' => $photo_src,
 			//'additional_photos'=>$images_output,
 			//'embeddable_media'=>$embed_media,
 			'maker' =>$m_output
