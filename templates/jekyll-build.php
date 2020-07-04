@@ -17,6 +17,12 @@ function mfo_yaml_prep($varname, $vartext)
 {
 	if (strlen($vartext))
 	{
+	  // remove any escaped characters
+	  // we see this when people copy and paste from a website
+	  //$vartext = urldecode($vartext); //urldecode eats + signs, so removing it.
+
+	  $vartext = str_replace('\\', '', $vartext);
+
 	  // escape newlines
 	  str_replace('\n', "\\n", $vartext);
 
@@ -57,6 +63,7 @@ $args = array(
 
 $exhibits_array = get_posts($args);
 
+$exhibits_count = 0;
 
 foreach ($exhibits_array as $exhibit) {
 
@@ -114,8 +121,6 @@ foreach ($exhibits_array as $exhibit) {
 	$embed_media = get_post_meta($exhibit->ID, "wpcf-embeddable-media", false);
 
 
-	//if (empty($maker_photo_src[0])) $maker_photo_src[0]="";
-	//if (empty($photo_src[0])) $photo_src[0]="";
 
 	$m_output = array(
 			'name' => html_entity_decode(get_the_title($maker_id)),
@@ -123,12 +128,6 @@ foreach ($exhibits_array as $exhibit) {
 			'photo_link' => $maker_photo_src
 		);
 
-/*
-	$m_output_text = "maker:" 		  . "\n".
-			 "  - name: " 		. get_the_title($maker_id)  . "\n".
-			 "    description: " 	. html_entity_decode($maker->post_excerpt) . "\n".
-		 	 "    photo_link: " 	. $maker_photo_src   . "\n";
-*/
 
 
 	$m_output_text = "maker:" 		  . "\n".
@@ -137,40 +136,17 @@ foreach ($exhibits_array as $exhibit) {
 		 	 "photo_link: " 	. $maker_photo_src   . "\n";
 
 
-	//create the array for the exhibit
-	$e_output[]= array (
-			'approval_year' => get_post_meta($exhibit->ID, "wpcf-approval-year", true),
-			'approval_status' => get_post_meta($exhibit->ID, "wpcf-approval-status", true),
-			'id'=>$exhibit->ID,
-			'exhibit_category' => strip_tags(get_the_term_list($exhibit->ID, "exhibit-category","",", ")),
-			'project_name' => html_entity_decode($exhibit->post_title),
-			'description' => html_entity_decode(get_post_meta($exhibit->ID, "wpcf-long-description", true)),
-			'web_site' => get_post_meta($exhibit->ID, "wpcf-website", true),
-			'promo_url' => get_permalink($exhibit),
-			//'qrcode_url' => "",
-			'project_short_summary' => html_entity_decode($exhibit->post_excerpt),
-			'location' => strip_tags(get_the_term_list($exhibit->ID, "exhibit-location","",", ")),
-			'photo_link' => $photo_src,
-			'additional_photos'=>$images_output,
-			'embeddable_media'=>$embed_media,
-			'maker' =>$m_output
-			);
-
 
 	$exhibitfilepath = plugin_dir_path(__DIR__) .'jekyll-build/' . $exhibit->post_name . '.md';
 	$exhibitfile = fopen($exhibitfilepath, "w") or die();
 
-	//$exhibitfile = plugin_dir_path(__DIR__) .'jekyll-build/' . 'exhibit-' .$exhibit->ID;
-        //file_put_contents($exhibitfile, $exhibittext);
 
 	fwrite($exhibitfile, "---\n");
-	//fwrite($exhibitfile, "name: " 			. $exhibit->post_title . "\n");
 	fwrite($exhibitfile, mfo_yaml_prep("name", $exhibit->post_title));
 	fwrite($exhibitfile, "slug: " 			. $exhibit->post_name . "\n");
 	fwrite($exhibitfile, "id: "   			. $exhibit->ID . "\n");
 	fwrite($exhibitfile, "status: " 		. get_post_meta($exhibit->ID, "wpcf-approval-status", true) . "\n");
 	fwrite($exhibitfile, "url: "  			. get_post_meta($exhibit->ID, "wpcf-website", true) . "\n");
-	//fwrite($exhibitfile, "excerpt: >\n  '"		. str_replace(array("\r"), "" , $exhibit->post_excerpt) . "'\n");
 
 	fwrite($exhibitfile, mfo_yaml_prep("excerpt", $exhibit->post_excerpt));
 	fwrite($exhibitfile, mfo_yaml_prep("description", get_post_meta($exhibit->ID, "wpcf-long-description", true)));
@@ -180,29 +156,12 @@ foreach ($exhibits_array as $exhibit) {
 	fwrite($exhibitfile, $m_output_text);
 	fwrite($exhibitfile, "---\n");
 	fclose($exhibitfile);
-	}
+	$exhibits_count++;
+} //end foreach
 
 
+echo $exhibits_count . " files written";
 
-
-
-
-
-//fail gracefully on no exibits returned
-if (!isset($e_output)) {
-	 $e_output[]= array();
-	 $e_output_count = 0;
-}
-else $e_output_count = count($e_output);
-
-
-//create the overall JSON array
-$output = array(
-		'accepteds_count' => $e_output_count,
-		//'accepteds' => $e_output,
-		);
-
-//send headers & JSON
-wp_send_json($output);
+mfo_log(1,"jekyll-build", "done...");
 
 ?>
