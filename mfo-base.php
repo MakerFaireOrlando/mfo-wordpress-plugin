@@ -181,6 +181,9 @@ function mfo_single_template($single) {
 add_filter( 'page_template', 'mfo_page_template' );
 function mfo_page_template( $page_template )
 {
+
+	/* YOU still have to have a wordpress page, this will just auto-apply the template!" */
+
 	$pagename = get_query_var('pagename');  
 
 	//mfo_log(4, "mfo_page_template", "pre: page_template=" . $page_template);
@@ -200,6 +203,7 @@ function mfo_page_template( $page_template )
 	array('events-json',		'json-eventlist.php'),
 	array('makers-json',		'json-makerlist.php'),
 	array('makers-json2',		'json-makerlist2.php'),
+	array('jekyll-build',		'jekyll-build.php'),
 	array('slack-find-exhibit',	'json-slack-maker.php'),
 	array('select-load-in-date-time','load-in.php'),
 	array('producer-loadin-report',	'loadin-report.php'),
@@ -1398,6 +1402,7 @@ add_action ('cred_save_data_5097', 'cred_save_data_exhibit_helper', 10 ,2 );
 function flush_json_from_cache() {
 	if (function_exists('w3tc_pgcache_flush_post')) {
 		//todo: remove hard-coded post ID; use url_to_postid( $url )  function?
+		mfo_log(3, "flush_json_from_cache()", "");
 		w3tc_pgcache_flush_post(5604); //purge the JSON output from the cache
 	}
 
