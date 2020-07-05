@@ -36,7 +36,7 @@ function mfo_yaml_prep($varname, $vartext)
 	else
 	{
 	  $out = $varname . ':' . "\n";
-	  return $vartext;
+	  return $out;
 	}
 }
 
@@ -73,13 +73,29 @@ foreach ($exhibits_array as $exhibit) {
 	unset($m_output);
 
 	//note that the photo url is the first element, hence the index at the end of the lines below
-	$photo_src = wp_get_attachment_image_src( get_post_thumbnail_id($exhibit->ID), 'large')[0];
+	$photo_src_thumb  = wp_get_attachment_image_src( get_post_thumbnail_id($exhibit->ID), 'thumbnail')[0];
+	$photo_src_medium = wp_get_attachment_image_src( get_post_thumbnail_id($exhibit->ID), 'medium')[0];
+	$photo_src_large  = wp_get_attachment_image_src( get_post_thumbnail_id($exhibit->ID), 'large')[0];
+	$photo_src_full   = wp_get_attachment_image_src( get_post_thumbnail_id($exhibit->ID), 'full')[0];
+
 	$maker_photo_src = wp_get_attachment_image_src( get_post_thumbnail_id($maker_id), 'large')[0];
 
+
+	//DO NOT CHANGE THIS ORDER AS THE JEKYLL CODE USES ARRAY OFFSET
+	$e_image_primary_text = "image-primary:" . "\n".
+                         "  thumbnail: " 	. $photo_src_thumb  . "\n" .
+                         "  medium: " 	. $photo_src_medium . "\n" .
+                         "  large: " 		. $photo_src_large  . "\n" .
+                         "  full: " 		. $photo_src_full   . "\n" ;
+
+
+/*
 	$images = get_post_meta($exhibit->ID, "wpcf-additional-photos");
 
 	//remove empty array items
 	$images = array_filter ($images);
+
+	$images_output_text = "images:" . "\n";
 
 	//get all the sizes
 	if (!empty ($images) ) {
@@ -102,7 +118,7 @@ foreach ($exhibits_array as $exhibit) {
 				'large'     => $large,
 				'full'      => $full);
 
-			$images_output_text = "images:" 		  . "\n".
+			$images_output_text . "  -" . $v  . ":\n".
 						"  - thumbnail: " . $thumb  . "\n".
 						"    medium: " 	. $medium . "\n".
 						"    large: "	. $large  . "\n".
@@ -116,7 +132,7 @@ foreach ($exhibits_array as $exhibit) {
 		$images_output_text="";
 	}
 
-
+*/
 
 	$embed_media = get_post_meta($exhibit->ID, "wpcf-embeddable-media", false);
 
@@ -129,11 +145,10 @@ foreach ($exhibits_array as $exhibit) {
 		);
 
 
-
 	$m_output_text = "maker:" 		  . "\n".
-			 "  - " . mfo_yaml_prep("name", get_the_title($maker_id)) .
-			 "    " . mfo_yaml_prep("description", html_entity_decode($maker->post_excerpt)) .
-		 	 "photo_link: " 	. $maker_photo_src   . "\n";
+			 "  " . mfo_yaml_prep("name", get_the_title($maker_id)) .
+			 "  " . mfo_yaml_prep("description", html_entity_decode($maker->post_excerpt)) .
+		 	 "  image-primary: " 	. $maker_photo_src   . "\n";
 
 
 
@@ -152,8 +167,15 @@ foreach ($exhibits_array as $exhibit) {
 	fwrite($exhibitfile, mfo_yaml_prep("description", get_post_meta($exhibit->ID, "wpcf-long-description", true)));
 
 	fwrite($exhibitfile, "location: " 		. strip_tags(get_the_term_list($exhibit->ID, "exhibit-location","",", ")) . "\n");
-	fwrite($exhibitfile, $images_output_text);
-	fwrite($exhibitfile, $m_output_text);
+
+	fwrite($exhibitfile, $e_image_primary_text);
+	fwrite($exhibitfile, $m_output_text);	//output the previously built maker info
+
+	date_default_timezone_set('America/New_York');
+	fwrite($exhibitfile, mfo_yaml_prep("last-modified-db", $exhibit->post_modified));
+	fwrite($exhibitfile, mfo_yaml_prep("last-exported", date('Y-d-m H:i:s', time())));
+
+
 	fwrite($exhibitfile, "---\n");
 	fclose($exhibitfile);
 	$exhibits_count++;
