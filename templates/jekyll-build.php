@@ -72,6 +72,7 @@ foreach ($exhibits_array as $exhibit) {
 	$maker = get_post($maker_id);
 	unset($m_output);
 
+
 	//note that the photo url is the first element, hence the index at the end of the lines below
 	$photo_src_thumb  = wp_get_attachment_image_src( get_post_thumbnail_id($exhibit->ID), 'thumbnail')[0];
 	$photo_src_medium = wp_get_attachment_image_src( get_post_thumbnail_id($exhibit->ID), 'medium')[0];
@@ -89,7 +90,7 @@ foreach ($exhibits_array as $exhibit) {
                          "  full: " 		. $photo_src_full   . "\n" ;
 
 
-/*
+
 	$images = get_post_meta($exhibit->ID, "wpcf-additional-photos");
 
 	//remove empty array items
@@ -98,43 +99,84 @@ foreach ($exhibits_array as $exhibit) {
 	$images_output_text = "images:" . "\n";
 
 	//get all the sizes
+	//https://toolset.com/documentation/customizing-sites-using-php/displaying-repeating-fields-one-kind/
+
 	if (!empty ($images) ) {
 		$field = wpcf_fields_get_field_by_slug ("additional-photos");
 		unset($images_output); //clear the array
 		foreach ( $images as $k=>$v ) {
-			$params = array ("size" => "thumbnail", "proportional"=>"false", "url" => "true");
-			$params ['field_value'] =$v;
+
+			$params = array ("size" => "thumbnail", "proportional"=>"false", "url" => "true", 'field_value'=> $v);
+			//$params ['field_value'] =$v;
+			//print_r($params);
 			$thumb =  types_render_field_single( $field, $params, null, '', $k);
+			//echo $thumb;
+
+/*
 			$params ['size'] ='medium';
 			$medium =  types_render_field_single( $field, $params, null, '', $k);
 			$params ['size'] ='large';
 			$large =  types_render_field_single( $field, $params, null, '', $k);
 			$params ['size'] ='full';
 			$full =  types_render_field_single( $field, $params, null, '', $k);
-
+*/
 			$images_output[] = array (
 				'thumbnail' => $thumb,
-				'medium'    => $medium,
-				'large'     => $large,
-				'full'      => $full);
+//				'medium'    => $medium,
+//				'large'     => $large,
+//				'full'      => $full
+				);
 
 			$images_output_text . "  -" . $v  . ":\n".
-						"  - thumbnail: " . $thumb  . "\n".
-						"    medium: " 	. $medium . "\n".
-						"    large: "	. $large  . "\n".
-						"    full: " 	. $full   . "\n";
+						"  thumbnail: " . $thumb  . "\n"; //swith pack to period
+//						"  medium: " 	. $medium . "\n".
+//						"  large: "	. $large  . "\n".
+//						"  full: " 	. $full   . "\n";
 
-
-		}
-	}
+			//echo $images_output_text;
+		}//end foreach image
+	} //end if
 	else {
 		$images_output[]="";
 		$images_output_text="";
-	}
+	} //end else
 
-*/
+
 
 	$embed_media = get_post_meta($exhibit->ID, "wpcf-embeddable-media", false);
+
+
+
+	//get categories
+	$terms = get_the_terms($exhibit->ID, "exhibit-category");
+	$first = true;
+	$combat_robot=0;
+
+	if (!empty($terms)) {
+		$terms_output_text = "categories:\n";
+
+		foreach ($terms as $term) {
+			//the decode is to handle ampersands in the category name
+			$terms_output_text .=  "  - id: " . $term->term_id . "\n";
+			$terms_output_text .=  "    slug: " . $term->slug . "\n";
+			$terms_output_text .=  "    name: " . htmlspecialchars_decode($term->name) . "\n";
+
+			if ($term->slug == "combat-robots") $combat_robot = 1;
+			} //end foreach term
+
+/* output just category name
+		foreach ($terms as $term) {
+			if ($first) {
+				$terms_output_text.= "  - ";
+				$first = false;
+			}
+			else $terms_output_text.= "    ";
+			//the decode is to handle ampersands in the category name
+			$terms_output_text .=  htmlspecialchars_decode($term->name) . "\n";
+			} //end foreach term
+*/
+	} //end if
+	else $images_output_text="";
 
 
 
@@ -157,19 +199,36 @@ foreach ($exhibits_array as $exhibit) {
 
 
 	fwrite($exhibitfile, "---\n");
-	fwrite($exhibitfile, mfo_yaml_prep("name", $exhibit->post_title));
+	//title is used by jekyll-seo-tag
+	fwrite($exhibitfile, mfo_yaml_prep("title", $exhibit->post_title));
 	fwrite($exhibitfile, "slug: " 			. $exhibit->post_name . "\n");
 	fwrite($exhibitfile, "id: "   			. $exhibit->ID . "\n");
 	fwrite($exhibitfile, "status: " 		. get_post_meta($exhibit->ID, "wpcf-approval-status", true) . "\n");
 	fwrite($exhibitfile, "url: "  			. get_post_meta($exhibit->ID, "wpcf-website", true) . "\n");
 
-	fwrite($exhibitfile, mfo_yaml_prep("excerpt", $exhibit->post_excerpt));
-	fwrite($exhibitfile, mfo_yaml_prep("description", get_post_meta($exhibit->ID, "wpcf-long-description", true)));
+	//description is used by jekyll-seo-tag so we used the excerpt for it, and renamed description to description-long
+	fwrite($exhibitfile, mfo_yaml_prep("description", $exhibit->post_excerpt));
+	fwrite($exhibitfile, mfo_yaml_prep("description-long", get_post_meta($exhibit->ID, "wpcf-long-description", true)));
 
 	fwrite($exhibitfile, "location: " 		. strip_tags(get_the_term_list($exhibit->ID, "exhibit-location","",", ")) . "\n");
 
+	//image is used by jekyll-seo-tag
+	fwrite($exhibitfile, "image: " . $photo_src_large . "\n");
 	fwrite($exhibitfile, $e_image_primary_text);
+
+
+	fwrite($exhibitfile, "website: " 		. get_post_meta($exhibit->ID, 'wpcf-website', true) . "\n");
+	fwrite($exhibitfile, "email: " 			. get_post_meta($exhibit->ID, 'wpcf-public-email', true) . "\n");
+	fwrite($exhibitfile, "twitter: " 		. get_post_meta($exhibit->ID, 'wpcf-twitter-url', true) . "\n");
+	fwrite($exhibitfile, "instagram: " 		. get_post_meta($exhibit->ID, 'wpcf-instagram-url', true) . "\n");
+	fwrite($exhibitfile, "facebook: " 		. get_post_meta($exhibit->ID, 'wpcf-facebook-url', true) . "\n");
+	fwrite($exhibitfile, "youtube: " 		. get_post_meta($exhibit->ID, 'wpcf-youtube-url', true) . "\n");
+
+	fwrite($exhibitfile, $terms_output_text);
+	fwrite($exhibitfile, "combat-robot: " . $combat_robot . "\n");
+
 	fwrite($exhibitfile, $m_output_text);	//output the previously built maker info
+
 
 	date_default_timezone_set('America/New_York');
 	fwrite($exhibitfile, mfo_yaml_prep("last-modified-db", $exhibit->post_modified));
@@ -182,7 +241,7 @@ foreach ($exhibits_array as $exhibit) {
 } //end foreach
 
 
-echo $exhibits_count . " files written";
+echo "\n$exhibits_count " . "files written";
 
 mfo_log(1,"jekyll-build", "done...");
 
