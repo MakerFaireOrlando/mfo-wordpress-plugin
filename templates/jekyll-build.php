@@ -44,7 +44,8 @@ function mfo_yaml_prep($varname, $vartext)
 
 $version = get_query_var("version", 1);
 
-mfo_log(1,"jekyll-build", "starting...");
+mfo_log(1,"jekyll-build", mfo_exhibits_year());
+
 
 $args = array(
   'post_type' => 'exhibit',
@@ -55,7 +56,8 @@ $args = array(
   'meta_query' => array(
 	array(
 		'key' 		=> 'wpcf-approval-year',
-		'value' 	=> mfo_event_year(),
+		'value' 	=> mfo_exhibits_year(),
+//		'value' 	=> mfo_event_year(),
 		'compare'	=> '='
 	)
   )
@@ -91,55 +93,31 @@ foreach ($exhibits_array as $exhibit) {
 
 
 
-	$images = get_post_meta($exhibit->ID, "wpcf-additional-photos");
 
-	//remove empty array items
-	$images = array_filter ($images);
+	 //https://toolset.com/forums/topic/get-the-image-id-of-the-repeatable-image-fields/
 
-	$images_output_text = "images:" . "\n";
+    $addl_images_output_text = "additional-images:\n";
+    $image_urls = get_post_meta($exhibit->ID,'wpcf-additional-photos');
 
-	//get all the sizes
-	//https://toolset.com/documentation/customizing-sites-using-php/displaying-repeating-fields-one-kind/
+    $id_list = array();
+    foreach ($image_urls as $image_url) {
+        if(!empty($image_url)){
+                 $attachment = $wpdb->get_col($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE guid='%s';", $image_url )); 
+		 if (!empty($attachment[0])) {
+		 	$t_url= wp_get_attachment_image_src($attachment[0], 'thumbnail');
+		 	$m_url= wp_get_attachment_image_src($attachment[0], 'medium');
+		 	$l_url= wp_get_attachment_image_src($attachment[0], 'large');
+		 	$f_url= wp_get_attachment_image_src($attachment[0], 'full');
+			$addl_images_output_text.= "  - " . $attachment[0]   . ":\n".
+				"    thumbnail: " . $t_url[0]  	. "\n" . 
+				"    medium: " 	. $m_url[0] 	. "\n" .
+				"    large: "	. $l_url[0]  	. "\n" .
+				"    full: " 	. $f_url[0]   	. "\n";
 
-	if (!empty ($images) ) {
-		$field = wpcf_fields_get_field_by_slug ("additional-photos");
-		unset($images_output); //clear the array
-		foreach ( $images as $k=>$v ) {
+		} //end if
 
-			$params = array ("size" => "thumbnail", "proportional"=>"false", "url" => "true", 'field_value'=> $v);
-			//$params ['field_value'] =$v;
-			//print_r($params);
-			$thumb =  types_render_field_single( $field, $params, null, '', $k);
-			//echo $thumb;
-
-/*
-			$params ['size'] ='medium';
-			$medium =  types_render_field_single( $field, $params, null, '', $k);
-			$params ['size'] ='large';
-			$large =  types_render_field_single( $field, $params, null, '', $k);
-			$params ['size'] ='full';
-			$full =  types_render_field_single( $field, $params, null, '', $k);
-*/
-			$images_output[] = array (
-				'thumbnail' => $thumb,
-//				'medium'    => $medium,
-//				'large'     => $large,
-//				'full'      => $full
-				);
-
-			$images_output_text . "  -" . $v  . ":\n".
-						"  thumbnail: " . $thumb  . "\n"; //swith pack to period
-//						"  medium: " 	. $medium . "\n".
-//						"  large: "	. $large  . "\n".
-//						"  full: " 	. $full   . "\n";
-
-			//echo $images_output_text;
-		}//end foreach image
-	} //end if
-	else {
-		$images_output[]="";
-		$images_output_text="";
-	} //end else
+         } // end if
+     } //end for
 
 
 
@@ -176,7 +154,7 @@ foreach ($exhibits_array as $exhibit) {
 			} //end foreach term
 */
 	} //end if
-	else $images_output_text="";
+// WHY WAS THIS HERE???	else $images_output_text="";
 
 
 
@@ -202,7 +180,8 @@ foreach ($exhibits_array as $exhibit) {
 	//title is used by jekyll-seo-tag
 	fwrite($exhibitfile, mfo_yaml_prep("title", $exhibit->post_title));
 	fwrite($exhibitfile, "slug: " 			. $exhibit->post_name . "\n");
-	fwrite($exhibitfile, "id: "   			. $exhibit->ID . "\n");
+	fwrite($exhibitfile, "permalink: /exhibits/" 		. trailingslashit($exhibit->post_name)  . "\n"); //add trailing slash
+	fwrite($exhibitfile, "exhibit-id: "   			. $exhibit->ID . "\n");
 	fwrite($exhibitfile, "status: " 		. get_post_meta($exhibit->ID, "wpcf-approval-status", true) . "\n");
 	fwrite($exhibitfile, "url: "  			. get_post_meta($exhibit->ID, "wpcf-website", true) . "\n");
 
@@ -215,6 +194,7 @@ foreach ($exhibits_array as $exhibit) {
 	//image is used by jekyll-seo-tag
 	fwrite($exhibitfile, "image: " . $photo_src_large . "\n");
 	fwrite($exhibitfile, $e_image_primary_text);
+	fwrite($exhibitfile, $addl_images_output_text);
 
 
 	fwrite($exhibitfile, "website: " 		. get_post_meta($exhibit->ID, 'wpcf-website', true) . "\n");
@@ -233,6 +213,7 @@ foreach ($exhibits_array as $exhibit) {
 	date_default_timezone_set('America/New_York');
 	fwrite($exhibitfile, mfo_yaml_prep("last-modified-db", $exhibit->post_modified));
 	fwrite($exhibitfile, mfo_yaml_prep("last-exported", date('Y-d-m H:i:s', time())));
+	fwrite($exhibitfile, "sitemap: false\n");
 
 
 	fwrite($exhibitfile, "---\n");
